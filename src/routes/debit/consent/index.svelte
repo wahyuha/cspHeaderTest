@@ -78,23 +78,23 @@
 			<img
 				class="icon-flex"
 				alt="nomor handphone"
-				src="images/logo-main.png"
+				src="icons/phone.png"
 				use:lazy={{ src: "icons/phone.png" }} />
 			<div class="content-flex">Nomor handphone</div>
 		</div>
 		<div class="flex-wrap">
 			<img
 				class="icon-flex"
-				alt="nomor handphone"
-				src="images/logo-main.png"
+				alt="akun LinkAja"
+				src="icons/avatar.png"
 				use:lazy={{ src: "icons/avatar.png" }} />
 			<div class="content-flex">Nama akun LinkAja</div>
 		</div>
 		<div class="flex-wrap">
 			<img
 				class="icon-flex"
-				alt="nomor handphone"
-				src="images/logo-main.png"
+				alt="saldo LinkAja"
+				src="icons/idr.png"
 				use:lazy={{ src: "icons/idr.png" }} />
 			<div class="content-flex no-border">Info saldo LinkAja</div>
 		</div>
