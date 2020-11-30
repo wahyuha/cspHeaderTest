@@ -1,4 +1,5 @@
 import path from 'path';
+import alias from '@rollup/plugin-alias';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
@@ -41,6 +42,15 @@ export default {
 				dedupe: ['svelte']
 			}),
 			commonjs(),
+			alias({
+        resolve: [".jsx", ".js", ".svelte", ".json"],
+        entries: {
+          "~": __dirname,
+          "@": __dirname + "/src",
+          "@components": __dirname + "/src/components",
+          "@routes": __dirname + "/src/routes",
+        },
+      }),
 
 			legacy && babel({
 				extensions: ['.js', '.mjs', '.html', '.svelte'],
