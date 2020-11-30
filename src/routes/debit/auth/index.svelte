@@ -38,7 +38,7 @@ import Meta from '../../../components/meta/index.svelte';
     width: 100%;
   }
 	.action-wrap {
-		margin-top: 16px;
+		margin-top: 8px;
 		padding: 16px;
 		background-color: #FFFFFF;
   }

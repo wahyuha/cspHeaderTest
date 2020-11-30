@@ -41,7 +41,7 @@
 		border: none;
 	}
 	.action-wrap {
-		margin-top: 16px;
+		margin-top: 8px;
 		padding: 16px 16px 32px;
 		background-color: #FFFFFF;
 	}
