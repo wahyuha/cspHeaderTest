@@ -27,7 +27,7 @@ import Meta from '../../../components/meta/index.svelte';
   }
 </style>
 
-<Meta title="Halaman Persetujuan" />
+<Meta title="Pembayaran Berhasil" />
 <div class="wrapper">
 	<div class="banner-wrap">
 		<img

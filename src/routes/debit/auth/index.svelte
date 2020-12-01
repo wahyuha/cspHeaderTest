@@ -79,7 +79,7 @@
   }
 </style>
 
-<Meta title="Halaman Persetujuan" />
+<Meta title="Masukkan nomor LinkAja" />
 <div class="wrapper">
 	<div class="banner-wrap">
 		<img

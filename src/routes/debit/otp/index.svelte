@@ -138,7 +138,7 @@
   }
 </style>
 
-<Meta title="Halaman Persetujuan" />
+<Meta title="Masukkan OTP" />
 <div class="wrapper">
 	<div class="banner-wrap">
 		<img
