@@ -95,7 +95,7 @@ import Meta from '../../../components/meta/index.svelte';
     </div>
     <div class="input-wrap">
       <div class="input-label">PIN LinkAja</div>
-      <input type="text" class="input-general" />
+      <input type="number" class="input-general" />
     </div>
 	</div>
 
