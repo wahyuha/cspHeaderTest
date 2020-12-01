@@ -1,6 +1,7 @@
 <script>
-	import { text } from 'svelte/internal';
-import Meta from '../../../components/meta/index.svelte';
+	import { goto} from "@sapper/app";
+	import { baseUrl } from '../../../constants/url'
+  import Meta from '../../../components/meta/index.svelte';
 	import { lazy } from "../../../helpers/img.js";
 </script>
 
@@ -91,11 +92,11 @@ import Meta from '../../../components/meta/index.svelte';
     <p class="login-info">Masukkan nomor dan PIN LinkAja kamu</p>
     <div class="input-wrap">
       <div class="input-label">Nomor Handphone</div>
-      <input type="text" class="input-general" />
+      <input type="number" class="input-general" />
     </div>
     <div class="input-wrap">
       <div class="input-label">PIN LinkAja</div>
-      <input type="number" class="input-general" />
+      <input type="password" class="input-general" />
     </div>
 	</div>
 
@@ -116,7 +117,7 @@ import Meta from '../../../components/meta/index.svelte';
 				src="icons/arrow-right.png"
 				use:lazy={{ src: "icons/arrow-right.png" }} />
 		</div>
-    <button class="action-button">Lanjut</button>
+    <button class="action-button" on:click={() => goto(`${baseUrl}/debit/otp`)}>Lanjut</button>
     <div class="counter">Berakhir dalam 05:00</div>
 	</div>
 </div>

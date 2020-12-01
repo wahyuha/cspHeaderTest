@@ -1,4 +1,6 @@
 <script>
+	import { goto} from "@sapper/app";
+	import { baseUrl } from '../../../constants/url'
 	import Meta from '../../../components/meta/index.svelte';
 	import { lazy } from "../../../helpers/img.js";
 </script>
@@ -61,6 +63,9 @@
 		width: 100%;
 		padding: 14px;
 	}
+	.action-button:active {
+		background-color: #fa7575;
+	}
 </style>
 
 <Meta title="Halaman Persetujuan" />
@@ -102,6 +107,6 @@
 
 	<div class="action-wrap">
 		<p class="action-info">Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a class="tnc-link">Syarat dan Ketentuan</a> yang berlaku</p>
-		<button class="action-button">Lanjut</button>
+		<button class="action-button" on:click={() => goto(`${baseUrl}/debit/auth`)}>Lanjut</button>
 	</div>
 </div>
