@@ -37,47 +37,11 @@ import Meta from '../../../components/meta/index.svelte';
     width: 36px;
     margin-right: 8px;
   }
-  .input-label {
-    font-weight: 700;
-  }
-  .input-wrap {
-    padding-bottom: 16px;
-  }
-  .input-general {
-    background: #F8F8FC;
-    border: 1px solid #E1E1ED;
-    box-sizing: border-box;
-    border-radius: 6px;
-    font-size: 12px;
-    padding: 12px;
-    width: 100%;
-  }
   .pt-16 {
     padding-top: 16px;
   }
 	.action-wrap {
 		padding: 16px;
-  }
-  .pad-pin {
-    padding: 0 0 16px;
-  }
-  .flex-wrap {
-		display: flex;
-		align-items: center;
-	}
-	.icon-flex {
-		width: 24px;
-		padding: 8px 16px 8px 8px;
-	}
-  .icon-right {
-		width: 6px;
-		padding: 8px;
-	}
-	.content-flex {
-		width: 100%;
-  }
-  .flex-title {
-    font-weight: 700;
   }
 	.action-button {
 		font-size: 14px;
