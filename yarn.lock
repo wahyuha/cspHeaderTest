@@ -1567,6 +1567,11 @@ safe-buffer@^5.1.0:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
 
+sapper-page-loading-bar@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/sapper-page-loading-bar/-/sapper-page-loading-bar-1.0.0.tgz#ea699799bfba6723dfe35f940811bec9a25057c6"
+  integrity sha512-qUFEZdW9NgR76fG3Tq8Xx8tIqH4eqsO1jdXd3fHoI6MmBzd2eHxX3SW77UtUhs9AE2r5AV3G0E5dDM+oL5J3rQ==
+
 sapper@^0.28.0:
   version "0.28.10"
   resolved "https://registry.yarnpkg.com/sapper/-/sapper-0.28.10.tgz#fa3341f8e04fba7bc8b6c5faedb6cff7c3ac406b"

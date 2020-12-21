@@ -106,7 +106,7 @@
 	</div>
 
 	<div class="action-wrap">
-		<p class="action-info">Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a class="tnc-link">Syarat dan Ketentuan</a> yang berlaku</p>
+		<p class="action-info">Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a href class="tnc-link">Syarat dan Ketentuan</a> yang berlaku</p>
 		<button class="action-button" on:click={() => goto(`${baseUrl}/debit/auth`)}>Lanjut</button>
 	</div>
 </div>
