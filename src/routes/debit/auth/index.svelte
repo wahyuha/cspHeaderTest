@@ -38,6 +38,11 @@
     padding: 12px;
     width: 100%;
   }
+  .mask-password {
+    -webkit-text-security: disc;
+    -moz-webkit-text-security: disc;
+    -moz-text-security: disc;
+  }
 	.action-wrap {
 		margin-top: 8px;
 		padding: 16px;
@@ -96,7 +101,7 @@
     </div>
     <div class="input-wrap">
       <div class="input-label">PIN LinkAja</div>
-      <input type="password" class="input-general" />
+      <input type="number" class="input-general mask-password" pattern="[0-9]*" inputmode="numeric" min="1111" max="9999" />
     </div>
 	</div>
 
