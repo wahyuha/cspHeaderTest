@@ -49,6 +49,7 @@ export default {
           "@": __dirname + "/src",
           "@components": __dirname + "/src/components",
           "@routes": __dirname + "/src/routes",
+          "@utils": __dirname + "/src/utils",
         },
       }),
 

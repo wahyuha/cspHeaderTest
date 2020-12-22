@@ -191,10 +191,10 @@ function updateWebpackConfig() {
 			/entry: config\.server\.entry\(\)/,
 			`entry: { server: config.server.entry().server.replace(/\\.js$/, '.ts') }`
 		],
-		[
-			/entry: config\.serviceworker\.entry\(\)/,
-			`entry: { 'service-worker': config.serviceworker.entry()['service-worker'].replace(/\\.js$/, '.ts') }`
-		],
+		// [
+		// 	/entry: config\.serviceworker\.entry\(\)/,
+		// 	`entry: { 'service-worker': config.serviceworker.entry()['service-worker'].replace(/\\.js$/, '.ts') }`
+		// ],
 		// Add preprocess to the svelte config, this is tricky because there's no easy signifier.
 		// Instead we look for 'hydratable: true,'
 		[
