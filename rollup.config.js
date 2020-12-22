@@ -46,8 +46,10 @@ export default {
         resolve: [".jsx", ".js", ".svelte", ".json"],
         entries: {
           "~": __dirname,
-          "@": __dirname + "/src",
-          "@components": __dirname + "/src/components",
+					"@": __dirname + "/src",
+					"@constants": __dirname + "/src/constants",
+					"@components": __dirname + "/src/components",
+					"@helpers": __dirname + "/src/helpers",
           "@routes": __dirname + "/src/routes",
           "@utils": __dirname + "/src/utils",
         },
@@ -83,6 +85,18 @@ export default {
 		input: config.server.input(),
 		output: config.server.output(),
 		plugins: [
+			alias({
+        resolve: [".jsx", ".js", ".svelte", ".json"],
+        entries: {
+          "~": __dirname,
+          "@": __dirname + "/src",
+          "@constants": __dirname + "/src/constants",
+          "@components": __dirname + "/src/components",
+          "@helpers": __dirname + "/src/helpers",
+          "@routes": __dirname + "/src/routes",
+          "@utils": __dirname + "/src/utils",
+        },
+      }),
 			replace({
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode)

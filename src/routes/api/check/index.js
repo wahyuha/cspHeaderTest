@@ -1,4 +1,4 @@
-import http from '../../../utils/http';
+import http from '@utils/http';
 
 export async function get(req, res) {
   const sessionID = req.query.s;

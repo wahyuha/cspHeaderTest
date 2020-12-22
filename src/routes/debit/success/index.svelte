@@ -1,7 +1,6 @@
 <script>
-	import { text } from 'svelte/internal';
-import Meta from '../../../components/meta/index.svelte';
-	import { lazy } from "../../../helpers/img.js";
+  import Meta from '@components/meta/index.svelte';
+	import { lazy } from "@helpers/img.js";
 </script>
 
 <style>

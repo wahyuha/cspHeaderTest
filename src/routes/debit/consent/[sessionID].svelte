@@ -8,10 +8,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto} from "@sapper/app";
-	import { baseUrl } from '../../../constants/url'
-	import Meta from '../../../components/meta/index.svelte';
-	import { clientHttp } from '../../../utils/http';
-	import { lazy } from "../../../helpers/img.js";
+	import { baseUrl } from '@constants/url'
+	import Meta from '@components/meta/index.svelte';
+	import { clientHttp } from '@utils/http';
+	import { lazy } from "@helpers/img.js";
 
 	export let sessionID
 	let partnerName = 'partner link aja'

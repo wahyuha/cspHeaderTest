@@ -1,8 +1,8 @@
 <script>
 	import { goto} from "@sapper/app";
-	import { baseUrl } from '../../../constants/url'
-  import Meta from '../../../components/meta/index.svelte';
-	import { lazy } from "../../../helpers/img.js";
+	import { baseUrl } from '@constants/url'
+  import Meta from '@components/meta/index.svelte';
+	import { lazy } from "@helpers/img.js";
 </script>
 
 <style>
