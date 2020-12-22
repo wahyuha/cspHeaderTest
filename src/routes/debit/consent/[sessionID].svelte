@@ -1,8 +1,33 @@
+<script context="module">
+	export async function preload(page, session) {
+    const { sessionID } = page.params;
+		return { sessionID }
+	}
+</script>
+
 <script>
+	import { onMount } from 'svelte';
 	import { goto} from "@sapper/app";
 	import { baseUrl } from '../../../constants/url'
 	import Meta from '../../../components/meta/index.svelte';
+	import { clientHttp } from '../../../utils/http';
 	import { lazy } from "../../../helpers/img.js";
+
+	export let sessionID
+	let partnerName = 'partner link aja'
+	let loaded = false
+
+	onMount(async () => {
+		await clientHttp().get(`/api/check?s=${sessionID}`)
+			.then(response => {
+				const { data } = response.data
+				partnerName = data.partnerName
+			})
+			.catch(e => console.log(e))
+			.finally(() => {
+				loaded = true
+			})
+  });
 </script>
 
 <style>
@@ -21,6 +46,12 @@
 	.info {
 		margin: 0;
 	}
+	.partner-blur {
+		color: transparent;
+		text-shadow: #000 0 0 10px;
+		transition: 0.4s;
+	}
+	.partner-name { font-weight: 700 }
 	.form-display {
 		padding: 0 16px;
 		background-color: #FFFFFF;
@@ -76,7 +107,7 @@
 			alt="LinkAja"
 			src="images/logo-main.png"
 			use:lazy={{ src: "images/logo-main.png" }} />
-		<p class="info">Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke [Nama Partner]</p>
+		<p class="info">Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke <span class={loaded ? "partner-name" : "partner-blur"}>{partnerName}</span></p>
 	</div>
 	<div class="form-display">
 		<div class="flex-wrap">
@@ -107,6 +138,11 @@
 
 	<div class="action-wrap">
 		<p class="action-info">Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a href class="tnc-link">Syarat dan Ketentuan</a> yang berlaku</p>
-		<button class="action-button" on:click={() => goto(`${baseUrl}/debit/auth`)}>Lanjut</button>
+		<button
+			class="action-button"
+			disabled={!loaded}
+			on:click={() => goto(`${baseUrl}/debit/auth`)}>
+			Lanjut
+		</button>
 	</div>
 </div>
