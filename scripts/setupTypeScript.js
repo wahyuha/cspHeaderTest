@@ -101,10 +101,6 @@ function updateSingleSvelteFile({ view, vars, contextModule }) {
 function updateSvelteFiles() {
 	[
 		{
-			view: 'components/Nav',
-			vars: [{ name: 'segment', type: 'string' }]
-		},
-		{
 			view: 'routes/_layout',
 			vars: [{ name: 'segment', type: 'string' }]
 		},
