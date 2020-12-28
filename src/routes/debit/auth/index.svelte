@@ -1,6 +1,6 @@
 <script>
   import { goto } from "@sapper/app";
-  import { clientHttp } from '@utils/http';
+  import clientHttp from '@utils/http/client';
 	import { baseUrl } from '@constants/url'
   import { lazy } from "@helpers/img.js";
   import Meta from '@components/meta/index.svelte';
@@ -8,7 +8,7 @@
   let loaded = false
   
   const onSubmit = async () => {
-		await clientHttp().get(`/api/login`)
+		await clientHttp.get(`/api/login`)
 			.then(response => {
         const { data } = response
 				if (data.status === "00") {

@@ -10,7 +10,7 @@
 	import { goto} from "@sapper/app";
 	import { baseUrl } from '@constants/url'
 	import Meta from '@components/meta/index.svelte';
-	import { clientHttp } from '@utils/http';
+	import clientHttp from '@utils/http/client';
 	import { lazy } from "@helpers/img.js";
 
 	export let sessionID
@@ -18,7 +18,7 @@
 	let loaded = false
 
 	onMount(async () => {
-		await clientHttp().get(`/api/check?s=${sessionID}`)
+		await clientHttp.get(`/api/check?s=${sessionID}`)
 			.then(response => {
 				const { data } = response.data
 				partnerName = data.partnerName

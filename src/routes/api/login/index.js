@@ -1,4 +1,4 @@
-import http from '@utils/http';
+import httpServer from '@utils/http/server';
 import { encrypt } from '@utils/crypto';
 
 export async function get(req, res) {
@@ -9,7 +9,7 @@ export async function get(req, res) {
   const pin = req.params.pin;
   const encryptedPin = encrypt(pin, fingerprint);
   try {
-    const { data } = await http().post('/1.0/bind/login', {
+    const { data } = await httpServer.post('/1.0/bind/login', {
       sessionID,
       pin: encryptedPin,
     });
