@@ -1,8 +1,28 @@
 <script>
-	import { goto} from "@sapper/app";
+  import { goto } from "@sapper/app";
+  import { clientHttp } from '@utils/http';
 	import { baseUrl } from '@constants/url'
+  import { lazy } from "@helpers/img.js";
   import Meta from '@components/meta/index.svelte';
-	import { lazy } from "@helpers/img.js";
+
+  let loaded = false
+  
+  const onSubmit = async () => {
+		await clientHttp().get(`/api/login`)
+			.then(response => {
+        const { data } = response
+				if (data.status === "00") {
+          goto(`${baseUrl}/debit/otp`);
+        } else {
+          // show error layout
+          console.log(`login failed: ${data.message}`);
+        }
+			})
+			.catch(e => console.log(e))
+			.finally(() => {
+				loaded = true
+			})
+  };
 </script>
 
 <style>
@@ -11,6 +31,7 @@
 		min-height: 100vh;
 	}
 	.banner-wrap {
+    background-color: #FFFFFF;
 		overflow: hidden;
   }
   .banner-img {
@@ -87,7 +108,9 @@
 <Meta title="Masukkan nomor LinkAja" />
 <div class="wrapper">
 	<div class="banner-wrap">
-		<img
+    <img
+      width="420"
+      height="124"
 			class="banner-img"
 			alt="Authentication LinkAja"
 			src="images/login-banner.png"
@@ -122,7 +145,7 @@
 				src="icons/arrow-right.png"
 				use:lazy={{ src: "icons/arrow-right.png" }} />
 		</div>
-    <button class="action-button" on:click={() => goto(`${baseUrl}/debit/otp`)}>Lanjut</button>
+    <button class="action-button" on:click={onSubmit}>Lanjut</button>
     <div class="counter">Berakhir dalam 05:00</div>
 	</div>
 </div>
