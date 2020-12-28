@@ -1,18 +1,23 @@
 <script>
-  import { goto } from "@sapper/app";
+  import { goto, stores } from "@sapper/app";
   import clientHttp from '@utils/http/client';
 	import { baseUrl } from '@constants/url'
   import { lazy } from "@helpers/img.js";
   import Meta from '@components/meta/index.svelte';
 
+  let pin
   let loaded = false
   
+  const { session } = stores();
+
   const onSubmit = async () => {
-		await clientHttp.get(`/api/login`)
+    const params = { pin }
+		await clientHttp.post(`/api/login`, params)
 			.then(response => {
         const { data } = response
+        $session.customerNumber = data.data.customerNumber;
 				if (data.status === "00") {
-          goto(`${baseUrl}/debit/otp`);
+          setTimeout(() => goto(`${baseUrl}/debit/otp`), 100)
         } else {
           // show error layout
           console.log(`login failed: ${data.message}`);
@@ -124,7 +129,7 @@
     </div>
     <div class="input-wrap">
       <div class="input-label">PIN LinkAja</div>
-      <input type="number" class="input-general mask-password" pattern="[0-9]*" inputmode="numeric" min="1111" max="9999" />
+      <input bind:value={pin} type="number" class="input-general mask-password" pattern="[0-9]*" inputmode="numeric" min="1111" max="9999" />
     </div>
 	</div>
 

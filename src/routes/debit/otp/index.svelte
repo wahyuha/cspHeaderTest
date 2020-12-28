@@ -1,9 +1,12 @@
 <script>
-  import { goto} from "@sapper/app";
+  import { goto, stores } from "@sapper/app";
+  import clientHttp from '@utils/http/client';
   import { onMount } from "svelte";
 	import { baseUrl } from '@constants/url'
   import Meta from '@components/meta/index.svelte';
   import { lazy } from "@helpers/img.js";
+
+  const { session } = stores();
 
   const KEYBOARD = {
     BACKSPACE: 8,
@@ -13,16 +16,37 @@
 
   let inputs = [0];
   let pins = {};
-
+  let loaded = false;
+  let customerNumber;
+  
   export let pin;
   export let size = 6;
 
   onMount(async () => {
+    customerNumber = $session.customerNumber;
     inputs = await createArray(size);
     pins = await createValueSlot(inputs);
     pin = calcPin(pins);
     document.getElementById("pin0").focus();
   });
+
+  const onSubmit = async () => {
+    const params = { otp: pin }
+		await clientHttp.post(`/api/otp`, params)
+			.then(response => {
+        const { data } = response
+				if (data.status === "00") {
+          goto(`${baseUrl}/debit/success`)
+        } else {
+          // show error layout
+          console.log(`login failed: ${data.message}`);
+        }
+      })
+			.catch(e => console.log(e))
+			.finally(() => {
+				loaded = true
+			})
+  };
   
   const calcPin = pins => {
     if (Object.values(pins).length) {
@@ -148,7 +172,7 @@
 			use:lazy={{ src: "images/login-banner.png" }} />
   </div>
 	<div class="form-wrap">
-    <p class="pin-info">Masukkan kode verifikasi yang dikirim melalui SMS ke nomor *********9356</p>
+    <p class="pin-info">Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || '*************'}</p>
     <div class="pin-wrap">
       {#if inputs.length}
         {#each inputs as item, i}
@@ -172,7 +196,7 @@
 	</div>
 
 	<div class="action-wrap">
-    <button class="action-button" on:click={() => goto(`${baseUrl}/debit/success`)}>Lanjut</button>
+    <button class="action-button" on:click={onSubmit}>Lanjut</button>
     <div class="counter">Berakhir dalam 05:00</div>
 	</div>
 </div>

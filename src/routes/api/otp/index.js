@@ -6,19 +6,18 @@ export async function post(req, res) {
 
   // TODO: create finger print
   const fingerprint = "01ERY9050186RN1VRTQZTA76BX"
-  const pin = req.body.pin || '';
-  const encryptedPin = encrypt(`${pin}`, fingerprint)
+  const otp = req.body.otp || '';
+  const encryptedOtp = encrypt(`${otp}`, fingerprint)
 
   try {
-    const response = await httpServer.post('/1.0/bind/login', {
+    const response = await httpServer.post('/1.0/bind/otp', {
       sessionID,
-      pin: encryptedPin,
+      otp: encryptedOtp,
     });
     const { data: { data, status, message } } = response;
 
     if (status === "00") {
-      req.session.customerState = data.state;
-      req.session.customerNumber = data.customerNumber;
+      req.session.state = data.state;
     }
     res.json({ data, status, message })
   } catch (error) {

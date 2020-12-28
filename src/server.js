@@ -11,11 +11,22 @@ const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
 app.use(json({ limit: "2mb" }), urlencoded({ limit: "2mb", extended: true }));
-app.use(session({ secret: 'kocheng', cookie: { maxAge: 60 * 60 * 1000 }}))
+app.use(session({
+	secret: 'kocheng',
+	cookie: { maxAge: 60 * 60 * 1000 },
+}))
 app.use(
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
-		sapper.middleware()
+		sapper.middleware({
+			session: req => {
+				return {
+					sessionId: req.session.sessionId,
+					customerState: req.session.customerState,
+					customerNumber: req.session.customerNumber,
+				}
+			}
+		})
 	)
 	.listen(PORT, err => {
 		if (err) console.log('error', err);
