@@ -1,7 +1,7 @@
 <script context="module">
 	export async function preload(page, session) {
-    const { sessionID } = page.params;
-		return { sessionID }
+    const { s } = page.query;
+		return { sessionID: s }
 	}
 </script>
 
