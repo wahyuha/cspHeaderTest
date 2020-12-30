@@ -32,7 +32,7 @@
 
   const onSubmit = async () => {
     const params = { otp: pin }
-		await clientHttp.post(`/api/otp`, params)
+		await clientHttp.post(`/otp`, params)
 			.then(response => {
         const { data } = response
 				if (data.status === "00") {

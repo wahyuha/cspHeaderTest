@@ -2,6 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@configs": ["src/configs"],
+      "@configs/*": ["src/configs/*"],
       "@constants": ["src/constants"],
       "@constants/*": ["src/constants/*"],
       "@components": ["src/components"],

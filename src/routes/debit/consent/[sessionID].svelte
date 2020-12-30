@@ -18,7 +18,7 @@
 	let loaded = false
 
 	onMount(async () => {
-		await clientHttp.get(`/api/check?s=${sessionID}`)
+		await clientHttp.get(`/check?s=${sessionID}`)
 			.then(response => {
 				const { data } = response.data
 				partnerName = data.partnerName

@@ -7,6 +7,7 @@ import url from '@rollup/plugin-url';
 import svelte from 'rollup-plugin-svelte';
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
+import loadDotEnv from './src/configs/envar';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
@@ -25,6 +26,7 @@ export default {
 		output: config.client.output(),
 		plugins: [
 			replace({
+				...loadDotEnv(),
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
@@ -47,6 +49,7 @@ export default {
         entries: {
           "~": __dirname,
 					"@": __dirname + "/src",
+					"@configs": __dirname + "/src/configs",
 					"@constants": __dirname + "/src/constants",
 					"@components": __dirname + "/src/components",
 					"@helpers": __dirname + "/src/helpers",

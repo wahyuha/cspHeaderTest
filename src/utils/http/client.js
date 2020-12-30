@@ -1,8 +1,9 @@
 import httpBase from './base';
+import { apiUrlClient } from '@constants/url';
 
 export default class httpClient extends httpBase {
   createApiUrl() {
-    this.apiUrl = 'http://localhost:5000/'
+    this.apiUrl = apiUrlClient
     return this
   }
 

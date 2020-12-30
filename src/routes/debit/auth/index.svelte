@@ -12,7 +12,7 @@
 
   const onSubmit = async () => {
     const params = { pin }
-		await clientHttp.post(`/api/login`, params)
+		await clientHttp.post(`/login`, params)
 			.then(response => {
         const { data } = response
         $session.customerNumber = data.data.customerNumber;

@@ -1,7 +1,8 @@
 import httpBase from './base';
+import { apiUrlServer } from '@constants/url';
 export default class httpServer extends httpBase {
   createApiUrl() {
-    this.apiUrl = 'http://prahu-svc.linkaja.dev'
+    this.apiUrl = apiUrlServer
     return this
   }
 

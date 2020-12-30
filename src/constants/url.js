@@ -1,1 +1,3 @@
-export const baseUrl = 'http://localhost:5000';
+export const baseUrl = `${process.env.APP_URL}`;
+export const apiUrlServer = process.env.API_URL;
+export const apiUrlClient = `${process.env.APP_URL}/api`;
