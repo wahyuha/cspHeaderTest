@@ -3,31 +3,37 @@
   import clientHttp from '@utils/http/client';
 	import { baseUrl } from '@constants/url'
   import { lazy } from "@helpers/img.js";
+  import { publicError } from '@utils/error';
   import Meta from '@components/meta/index.svelte';
+  import InputPIN from '@components/input/pin.svelte'
   import Button from '@components/button/index.svelte';
 
   let pin
-  let loaded = false
-  
+  let loading = false
+  let error
+
   const { session } = stores();
 
   const onSubmit = async () => {
+    loading = true
+    error = ''
     const params = { pin }
 		await clientHttp.post(`/login`, params)
 			.then(response => {
-        const { data } = response
-        $session.customerNumber = data.data.customerNumber;
-				if (data.status === "00") {
-          setTimeout(() => goto(`${baseUrl}/debit/otp`), 100)
+        const { data, status } = response.data
+        $session.customerNumber = data.customerNumber;
+				if (status === "00") {
+          goto(`${baseUrl}/debit/otp`)
+        } else if (status === "78") { // change with constant
+          goto(`${baseUrl}/debit/error/blocked`)
         } else {
-          // show error layout
-          console.log(`login failed: ${data.message}`);
+          error = publicError(status)
         }
 			})
-			.catch(e => console.log(e))
+			.catch(e => error = publicError())
 			.finally(() => {
-				loaded = true
-			})
+				loading = false
+      })
   };
 </script>
 
@@ -57,11 +63,6 @@
     font-size: 12px;
     padding: 12px;
     width: 100%;
-  }
-  .mask-password {
-    -webkit-text-security: disc;
-    -moz-webkit-text-security: disc;
-    -moz-text-security: disc;
   }
 	.action-wrap {
 		margin-top: 8px;
@@ -111,7 +112,7 @@
     </div>
     <div class="input-wrap">
       <div class="ff-b">PIN LinkAja</div>
-      <input bind:value={pin} type="number" class="input-general mask-password" pattern="[0-9]*" inputmode="numeric" min="1111" max="9999" />
+      <InputPIN bind:pin={pin} error={error} />
     </div>
 	</div>
 
@@ -133,8 +134,9 @@
 				use:lazy={{ src: "icons/arrow-right.png" }} />
 		</div>
     <Button
-			disabled={loaded}
-			onClick={onSubmit}
+			disabled={loading}
+      onClick={onSubmit}
+      bind:loading={loading}
 		>
 			Lanjut
 		</Button>
