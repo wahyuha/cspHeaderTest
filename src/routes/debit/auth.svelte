@@ -4,6 +4,7 @@
 	import { baseUrl } from '@constants/url'
   import { lazy } from "@helpers/img.js";
   import Meta from '@components/meta/index.svelte';
+  import Button from '@components/button/index.svelte';
 
   let pin
   let loaded = false
@@ -31,10 +32,6 @@
 </script>
 
 <style>
-	.wrapper {
-		background-color: #E1E1ED;
-		min-height: 100vh;
-	}
 	.banner-wrap {
     background-color: #FFFFFF;
 		overflow: hidden;
@@ -95,15 +92,6 @@
   .flex-title {
     font-weight: 700;
   }
-	.action-button {
-		font-size: 14px;
-		font-weight: 700;
-		background-color: #FF2C2C;
-		border-radius: 6px;
-		color: #FFF;
-		width: 100%;
-		padding: 14px;
-  }
   .counter {
     padding: 16px 0 8px;
     text-align: center;
@@ -125,7 +113,7 @@
     <p class="login-info">Masukkan nomor dan PIN LinkAja kamu</p>
     <div class="input-wrap">
       <div class="input-label">Nomor Handphone</div>
-      <input type="number" class="input-general" />
+      <input type="number" disabled class="input-general" />
     </div>
     <div class="input-wrap">
       <div class="input-label">PIN LinkAja</div>
@@ -150,7 +138,12 @@
 				src="icons/arrow-right.png"
 				use:lazy={{ src: "icons/arrow-right.png" }} />
 		</div>
-    <button class="action-button" on:click={onSubmit}>Lanjut</button>
+    <Button
+			disabled={loaded}
+			onClick={onSubmit}
+		>
+			Lanjut
+		</Button>
     <div class="counter">Berakhir dalam 05:00</div>
 	</div>
 </div>

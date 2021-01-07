@@ -4,9 +4,7 @@
 </script>
 
 <style>
-	.wrapper {
-		background-color: #FFFFFF;
-		min-height: 100vh;
+	.t-c {
     text-align: center;
 	}
 	.banner-wrap {
@@ -27,7 +25,7 @@
 </style>
 
 <Meta title="Pembayaran Berhasil" />
-<div class="wrapper">
+<div class="wrapper-clean t-c">
 	<div class="banner-wrap">
 		<img
 			class="banner-img"
