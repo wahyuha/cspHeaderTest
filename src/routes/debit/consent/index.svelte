@@ -1,13 +1,15 @@
 <script context="module">
 	export async function preload(page) {
-    const { s } = page.query;
+		const { s } = page.query;
+		
+		if (!s) this.error(404, 'Not found')
 		return { sessionID: s }
 	}
 </script>
 
 <script>
 	import { onMount } from 'svelte';
-	import { goto} from "@sapper/app";
+	import { goto } from "@sapper/app";
 	import { baseUrl } from '@constants/url'
 	import Meta from '@components/meta/index.svelte';
 	import clientHttp from '@utils/http/client';
@@ -22,8 +24,13 @@
 	onMount(async () => {
 		await clientHttp.get(`/check?s=${sessionID}`)
 			.then(response => {
-				const { data } = response.data
-				partnerName = data.partnerName
+				const { data, status } = response.data
+				if (status === "00") {
+					partnerName = data.partnerName
+				} else {
+					const queryCode = status ? `?code=${status}` : ''
+					goto(`${baseUrl}/debit/error${queryCode}`)
+				}
 			})
 			.catch(e => console.log(e))
 			.finally(() => {
