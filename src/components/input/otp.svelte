@@ -89,7 +89,6 @@
     box-sizing: border-box;
     border-radius: 6px;
     font-size: 16px;
-    font-weight: 700;
     padding: 8px 12px;
     text-align: center;
     width: 36px;
@@ -101,7 +100,7 @@
   {#if inputs.length}
     {#each inputs as item, i}
       <input
-        class="otp-input"
+        class="otp-input ff-b"
         bind:this={elms[i]}
         bind:value={otps[i]}
         maxLength="1"

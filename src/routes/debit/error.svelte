@@ -22,7 +22,6 @@
 	}
   .tt-info {
     font-size: 16px;
-    font-weight: 700;
     line-height: 24px;
   }
 	.info {
@@ -41,7 +40,7 @@
 			src="images/general-error.png"
       use:lazy={{ src: "images/general-error.png" }}
     />
-    <h2 class="tt-info">Halaman Gagal Dimuat</h2>
+    <h2 class="tt-info ff-b">Halaman Gagal Dimuat</h2>
 		<p class="info">Hal ini dapat terjadi karena koneksi internet tidak stabil, sesi berakhir atau hal lainnya. Coba dalam beberapa saat lagi, ya!</p>
 		<Button
 			type="fit"

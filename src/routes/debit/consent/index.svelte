@@ -49,7 +49,6 @@
 		text-shadow: #000 0 0 10px;
 		transition: 0.4s;
 	}
-	.partner-name { font-weight: 700 }
 	.action-wrap {
 		margin-top: 8px;
 		padding: 16px 16px 32px;
@@ -66,7 +65,7 @@
 			alt="LinkAja"
 			src="images/logo-main.png"
 			use:lazy={{ src: "images/logo-main.png" }} />
-		<p class="info">Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke <span class={loaded ? "partner-name" : "partner-blur"}>{partnerName}</span></p>
+		<p class="info">Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke <span class={loaded ? "ff-b" : "partner-blur"}>{partnerName}</span></p>
 	</div>
 	<DisplayedInfo />
 

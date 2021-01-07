@@ -46,9 +46,6 @@
   .login-info {
     margin: 0 0 16px;
   }
-  .input-label {
-    font-weight: 700;
-  }
   .input-wrap {
     padding-bottom: 16px;
   }
@@ -89,9 +86,6 @@
 	.content-flex {
 		width: 100%;
   }
-  .flex-title {
-    font-weight: 700;
-  }
   .counter {
     padding: 16px 0 8px;
     text-align: center;
@@ -112,11 +106,11 @@
 	<div class="form-wrap">
     <p class="login-info">Masukkan nomor dan PIN LinkAja kamu</p>
     <div class="input-wrap">
-      <div class="input-label">Nomor Handphone</div>
+      <div class="ff-b">Nomor Handphone</div>
       <input type="number" disabled class="input-general" />
     </div>
     <div class="input-wrap">
-      <div class="input-label">PIN LinkAja</div>
+      <div class="ff-b">PIN LinkAja</div>
       <input bind:value={pin} type="number" class="input-general mask-password" pattern="[0-9]*" inputmode="numeric" min="1111" max="9999" />
     </div>
 	</div>
@@ -129,7 +123,7 @@
 				src="icons/call.png"
         use:lazy={{ src: "icons/call.png" }} />
       <div class="content-flex">
-        <div class="flex-title">Lupa PIN?</div>
+        <div class="ff-b">Lupa PIN?</div>
         <span>Cek cara Reset PIN di sini</span>
       </div>
       <img

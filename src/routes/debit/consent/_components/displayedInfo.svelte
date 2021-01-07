@@ -19,7 +19,6 @@
 		padding: 16px 0;
 		border-bottom: 1px solid #E1E1ED;
 		width: 100%;
-		font-weight: 700;
 	}
 	.no-border {
 		border: none;
@@ -33,7 +32,7 @@
       alt="nomor handphone"
       src="icons/phone.png"
       use:lazy={{ src: "icons/phone.png" }} />
-    <div class="content-flex">Nomor handphone</div>
+    <div class="content-flex ff-b">Nomor handphone</div>
   </div>
   <div class="flex-wrap">
     <img
@@ -41,7 +40,7 @@
       alt="akun LinkAja"
       src="icons/avatar.png"
       use:lazy={{ src: "icons/avatar.png" }} />
-    <div class="content-flex">Nama akun LinkAja</div>
+    <div class="content-flex ff-b">Nama akun LinkAja</div>
   </div>
   <div class="flex-wrap">
     <img
@@ -49,6 +48,6 @@
       alt="saldo LinkAja"
       src="icons/idr.png"
       use:lazy={{ src: "icons/idr.png" }} />
-    <div class="content-flex no-border">Info saldo LinkAja</div>
+    <div class="content-flex ff-b no-border">Info saldo LinkAja</div>
   </div>
 </div>

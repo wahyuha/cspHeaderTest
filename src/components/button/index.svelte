@@ -4,9 +4,9 @@
 	export let onClick;
 	export let type = "normal"; // normal | fit
 	
-	let style = "action-button full";
+	let style = "action-button ff-b full";
   if (type === "fit") {
-    style = "action-button fit-content";
+    style = "action-button ff-b fit-content";
 	}
 
 	function handleClick(e) {
@@ -19,7 +19,6 @@
 <style>
 	.action-button {
 		font-size: 14px;
-		font-weight: 700;
 		background-color: #FF2C2C;
 		border-radius: 6px;
 		color: #FFF;

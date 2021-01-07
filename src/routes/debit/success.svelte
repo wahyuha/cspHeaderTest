@@ -17,10 +17,9 @@
   }
   .success-title {
     font-size: 16px;
-    font-weight: 700;
   }
   .success-text {
-    font-size: 12px;
+    padding: 0 16px;
   }
 </style>
 
@@ -33,6 +32,6 @@
 			src="images/success.png"
 			use:lazy={{ src: "images/success.png" }} />
   </div>
-  <h2 class="success-title">Penyambungan Berhasil!</h2>
+  <h2 class="success-title ff-b">Penyambungan Berhasil!</h2>
   <p class="success-text">Tunggu sebentar, ya, kamu akan segera diarahkan kembali ke situs partner</p>
 </div>
