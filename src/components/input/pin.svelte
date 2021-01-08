@@ -1,4 +1,6 @@
 <script>
+  import KEYCODE from '@constants/keyCode'
+
   export let pin;
   export let error;
 
@@ -7,8 +9,7 @@
   if (error) style = `${style} input-error`
 
   function validateByLength(e) {
-    const BACKSPACE_CODE = 8
-    if (pin && `${pin}`.length >= 6 && e.keyCode !== BACKSPACE_CODE) {
+    if (pin && `${pin}`.length >= 6 && !Object.values(KEYCODE).includes(e.keyCode)) {
       e.preventDefault();
       return false
     }
