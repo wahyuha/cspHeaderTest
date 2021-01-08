@@ -3,10 +3,19 @@
 	export let disabled;
 	export let onClick;
 	export let type = "normal"; // normal | fit
+	export let outline;
+	export { className as class };
+
+	let className;
 	
-	let style = "action-button ff-b full";
+	let style = `action-button ff-b ${className}`;
   if (type === "fit") {
-    style = "action-button ff-b fit-content";
+    style = `${style} action-button ff-b fit-content`;
+	} else {
+    style = `${style} action-button ff-b full`;
+	}
+	if (outline) {
+		style = `${style} outline`
 	}
 
 	function handleClick(e) {
@@ -30,9 +39,21 @@
 	.fit-content {
 		padding: 14px 36px;
 	}
+	.outline {
+		background: none;
+		border: solid 1px #FF2C2C;
+		color: #FF2C2C;
+	}
 	.action-button:active {
 		background-color: #fa7575;
+		outline: none;
 	}
+	.outline:active {
+		background-color: #F8F8FC;
+	}
+	.m-x-2 {
+    margin: 0 8px;
+  }
 </style>
 
 <button

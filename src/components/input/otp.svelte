@@ -1,24 +1,29 @@
 <script>
   import { onMount } from "svelte";
-
+  import KEYCODE from '@constants/keyCode'
+  
+  export let otp;
+  export let error;
+  export let autoSubmit;
+  
   const KEYBOARD = {
     BACKSPACE: 8,
     DELETE: 46,
     ANDROID_BACKSPACE: 229,
   };
-
+  
+  let size = 6;
   let inputs = [0];
   let otps = {};
   let elms = [];
-  
-  export let otp;
-  export let size = 6;
+
+  $: style = error ? 'otp-input ff-b input-error' : 'otp-input ff-b';
 
   onMount(async () => {
     inputs = await createArray(size);
     otps = await createValueSlot(inputs);
     otp = calcOtp(otps);
-    setTimeout(() => elms[0].focus(), 100)
+    setTimeout(() => !error && elms[0].focus(), 100)
   });
   
   const calcOtp = otps => {
@@ -31,19 +36,9 @@
     let nextOtp = e.target.nextElementSibling;
     let prevOtp = e.target.previousElementSibling;
     let regx = new RegExp(/^\d+$/);
-    if (
-      (e.keyCode == KEYBOARD.BACKSPACE ||
-        e.keyCode == KEYBOARD.DELETE ||
-        e.keyCode == KEYBOARD.ANDROID_BACKSPACE) &&
-      !prevOtp
-    ) {
+    if (Object.values(KEYCODE).includes(e.keyCode) && !prevOtp) {
       otps[i] = "";
-    } else if (
-      (e.keyCode == KEYBOARD.BACKSPACE ||
-        e.keyCode == KEYBOARD.DELETE ||
-        e.keyCode == KEYBOARD.ANDROID_BACKSPACE) &&
-      prevOtp
-    ) {
+    } else if (Object.values(KEYCODE).includes(e.keyCode) && prevOtp) {
       otps[i] = "";
       prevOtp.focus();
     } else if (nextOtp) {
@@ -56,6 +51,10 @@
         nextOtp.focus();
       }, 0);
     } else {
+      setTimeout(() => {
+        elms[i].blur()
+        autoSubmit && autoSubmit();
+      }, 1000)
       if (regx.test(e.key)) {
         otps[i] = e.key;
       } else {
@@ -65,9 +64,17 @@
 
     otp = calcOtp(otps);
   };
+
+  function resetErrorIfAny() {
+    if (error) {
+      error = ''
+    }
+  }
+
   const createArray = size => {
     return new Array(size);
   };
+
   const createValueSlot = arr => {
     return arr.reduce((obj, item) => {
       return {
@@ -94,13 +101,22 @@
     width: 36px;
     margin-right: 8px;
   }
+  .input-error {
+    border: 1px solid #D90102;
+  }
+  .error-text {
+    color: #D90102;
+    font-size: 12px;
+    padding: 4px 0;
+    padding-top: 16px;
+  }
 </style>
 
 <div class="otp-wrap">
   {#if inputs.length}
     {#each inputs as item, i}
       <input
-        class="otp-input ff-b"
+        class={style}
         bind:this={elms[i]}
         bind:value={otps[i]}
         maxLength="1"
@@ -109,8 +125,11 @@
         pattern="\d{1}"
         maxlength="1"
         on:keydown|preventDefault={event => changeHandler(event, i)}
+        on:click={resetErrorIfAny}
         placeholder="" />
     {/each}
   {/if}
 </div>
-  
+{#if error}
+  <div class="error-text pt-16">{error}</div>
+{/if}
