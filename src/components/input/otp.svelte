@@ -17,6 +17,7 @@
   let otps = {};
   let elms = [];
 
+  $: styleWrap = error ? 'otp-wrap shake-me' : 'otp-wrap';
   $: style = error ? 'otp-input ff-b input-error' : 'otp-input ff-b';
 
   onMount(async () => {
@@ -112,7 +113,7 @@
   }
 </style>
 
-<div class="otp-wrap">
+<div class={styleWrap}>
   {#if inputs.length}
     {#each inputs as item, i}
       <input

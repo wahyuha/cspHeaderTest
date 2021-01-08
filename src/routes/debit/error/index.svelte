@@ -1,5 +1,6 @@
 <script>
-	import { goto} from "@sapper/app";
+	import { goto } from "@sapper/app";
+	import { fade } from 'svelte/transition';
 	import { baseUrl } from '@constants/url'
 	import Meta from '@components/meta/index.svelte';
 	import { lazy } from "@helpers/img.js";
@@ -18,6 +19,7 @@
   }
 	.error-image {
 		width: 100%;
+		min-height: 164px;
 		margin: 8px auto;
 	}
   .tt-info {
@@ -36,12 +38,14 @@
 	<div class="page-wrap full-height">
 		<img
 			class="error-image"
-			alt="LinkAja"
+			alt="LinkAja error page"
 			src="images/general-error.png"
       use:lazy={{ src: "images/general-error.png" }}
     />
     <h2 class="tt-info ff-b">Halaman Gagal Dimuat</h2>
-		<p class="info">Hal ini dapat terjadi karena koneksi internet tidak stabil, sesi berakhir atau hal lainnya. Coba dalam beberapa saat lagi, ya!</p>
+		<p class="info" in:fade="{{ duration: 300 }}">
+			Hal ini dapat terjadi karena koneksi internet tidak stabil, sesi berakhir atau hal lainnya. Coba dalam beberapa saat lagi, ya!
+		</p>
 		<Button
 			type="fit"
 			onClick={() => goto(`${baseUrl}/debit/consent`)}

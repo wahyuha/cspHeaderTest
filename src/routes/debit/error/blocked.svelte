@@ -1,9 +1,18 @@
 <script>
-	import { goto} from "@sapper/app";
+	import { onMount } from 'svelte';
+	import { popOut } from '@utils/animation';
+	import { goto } from "@sapper/app";
 	import { baseUrl } from '@constants/url'
 	import Meta from '@components/meta/index.svelte';
 	import { lazy } from "@helpers/img.js";
 	import Button from '@components/button/index.svelte';
+
+	let animate = false
+
+	onMount(async () => {
+    setTimeout(() => animate = true, 100)
+  });
+
 </script>
 
 <style>
@@ -28,10 +37,12 @@
 		margin: 0;
     color: #52575C;
     padding-bottom: 40px;
-  }
+	}
 </style>
 
 <Meta title="Akun Terblokir" />
+
+{#if animate}
 <div class="wrapper">
 	<div class="page-wrap full-height">
 		<img
@@ -39,14 +50,17 @@
 			alt="Akun Terblokir"
 			src="images/blocked.png"
       use:lazy={{ src: "images/blocked.png" }}
-    />
-    <h2 class="tt-info ff-b">Akun LinkAja Kamu Terblokir</h2>
-		<p class="info">Kamu sudah 3 kali salah memasukkan PIN. Hubungi Call Center LinkAja di 150911 untuk reset PIN LinkAja kamu</p>
-		<Button
-			type="fit"
-			onClick={() => goto(`${baseUrl}/debit/exit`)}
-		>
-			Tutup
-		</Button>
+		/>
+		<div in:popOut="{{ duration: 700 }}">
+			<h2 class="tt-info ff-b">Akun LinkAja Kamu Terblokir</h2>
+			<p class="info">Kamu sudah 3 kali salah memasukkan PIN. Hubungi Call Center LinkAja di 150911 untuk reset PIN LinkAja kamu</p>
+		</div>
+			<Button
+				type="fit"
+				onClick={() => goto(`${baseUrl}/debit/exit`)}
+				>
+				Tutup
+			</Button>
   </div>
 </div>
+{/if}

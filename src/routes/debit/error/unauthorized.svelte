@@ -1,9 +1,10 @@
 <script>
-	import { goto} from "@sapper/app";
+	import { goto } from "@sapper/app";
 	import { baseUrl } from '@constants/url'
+  import { lazy } from "@helpers/img.js";
+  import { popOut } from '@utils/animation';
 	import Meta from '@components/meta/index.svelte';
-	import { lazy } from "@helpers/img.js";
-	import Button from '@components/button/index.svelte';
+  import Button from '@components/button/index.svelte';
 </script>
 
 <style>
@@ -46,8 +47,10 @@
 			src="images/unauthorized.png"
       use:lazy={{ src: "images/unauthorized.png" }}
     />
-    <h2 class="tt-info ff-b">Penyambungan Akun Belum Berhasil</h2>
-    <p class="info">Kamu sudah 3 kali salah memasukkan kode verifikasi. Silakan ulangi proses penyambungan akun dari awal, ya!</p>
+    <div in:popOut="{{ duration: 700 }}">
+      <h2 class="tt-info ff-b">Penyambungan Akun Belum Berhasil</h2>
+      <p class="info">Kamu sudah 3 kali salah memasukkan kode verifikasi. Silakan ulangi proses penyambungan akun dari awal, ya!</p>
+    </div>
     <div class="d-flex space-between">
       <Button
         outline

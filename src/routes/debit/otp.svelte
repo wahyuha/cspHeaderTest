@@ -2,6 +2,7 @@
   import { goto, stores } from "@sapper/app";
   import clientHttp from '@utils/http/client';
   import { onMount } from "svelte";
+  import { fade } from 'svelte/transition';
 	import { baseUrl } from '@constants/url'
   import { lazy } from "@helpers/img.js";
   import { publicError } from '@utils/error';
@@ -54,6 +55,7 @@
   }
   .banner-img {
     width: 100%;
+    min-height: 90px;
   }
   .form-wrap {
 		padding: 16px;
@@ -81,12 +83,15 @@
 	<div class="banner-wrap">
 		<img
 			class="banner-img"
-			alt="Authentication LinkAja"
+			alt="OTP LinkAja"
 			src="images/login-banner.png"
 			use:lazy={{ src: "images/login-banner.png" }} />
   </div>
+  
 	<div class="form-wrap">
-    <p class="pin-info">Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || '*************'}</p>
+    <p class="pin-info" in:fade="{{ duration: 300 }}">
+      Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || '*************'}
+    </p>
     <InputOTP
       bind:otp={otp}
       autoSubmit={autoSubmit}
@@ -98,14 +103,14 @@
     </div>
 	</div>
 
-	<div class="action-wrap">
+	<div class="action-wrap" in:fade="{{ duration: 500 }}">
     <Button
       disabled={loading}
       bind:loading={loading}
 			onClick={onSubmit}
 		>
 			Lanjut
-		</Button>
+    </Button>
     <div class="counter">Berakhir dalam 05:00</div>
-	</div>
+  </div>
 </div>
