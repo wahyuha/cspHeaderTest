@@ -3,38 +3,49 @@
   import clientHttp from '@utils/http/client';
   import { onMount } from "svelte";
 	import { baseUrl } from '@constants/url'
-  import Meta from '@components/meta/index.svelte';
   import { lazy } from "@helpers/img.js";
+  import { publicError } from '@utils/error';
+  import Meta from '@components/meta/index.svelte';
   import Button from '@components/button/index.svelte';
   import InputOTP from '@components/input/otp.svelte'
 
   const { session } = stores();
 
   let otp;
-  let eligible = true;
   let customerNumber;
+  
+  let loading = false
+  let error
 
   onMount(async () => {
     customerNumber = $session.customerNumber;
   });
 
   const onSubmit = async () => {
+    loading = true
+    error = ''
     const params = { otp }
 		await clientHttp.post(`/otp`, params)
 			.then(response => {
-        const { data } = response
-				if (data.status === "00") {
+        const { data, status } = response.data
+        if (status === "00") {
           goto(`${baseUrl}/debit/success`)
+        } else if (status === "LA909") {
+          goto(`${baseUrl}/debit/error/unauthorized`)
         } else {
-          // show error layout
-          console.log(`login failed: ${data.message}`);
+          error = publicError(status)
         }
       })
-			.catch(e => console.log(e))
+			.catch(e => error = publicError())
 			.finally(() => {
-				// loaded = true
+				loading = false
 			})
   };
+
+  const autoSubmit = async () => {
+    loading = true
+    await onSubmit()
+  }
 </script>
 
 <style>
@@ -76,7 +87,11 @@
   </div>
 	<div class="form-wrap">
     <p class="pin-info">Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || '*************'}</p>
-    <InputOTP bind:otp={otp} />
+    <InputOTP
+      bind:otp={otp}
+      autoSubmit={autoSubmit}
+      error={error}
+    />
     <div class="pt-16">
       <div>Belum menerima kode?</div>
       <div>Tunggu <span class="resend-timer">00:59</span> untuk Kirim Ulang</div>
@@ -85,7 +100,8 @@
 
 	<div class="action-wrap">
     <Button
-      disabled={!eligible}
+      disabled={loading}
+      bind:loading={loading}
 			onClick={onSubmit}
 		>
 			Lanjut
