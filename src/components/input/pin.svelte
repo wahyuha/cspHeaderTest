@@ -5,8 +5,8 @@
   export let error;
 
   let input
-  let style = 'input-general mask-password'
-  if (error) style = `${style} input-error`
+  
+  $: style = error ? 'input-general mask-password input-error shake-me' : 'input-general mask-password';
 
   function validateByLength(e) {
     if (pin && `${pin}`.length >= 6 && !Object.values(KEYCODE).includes(e.keyCode)) {

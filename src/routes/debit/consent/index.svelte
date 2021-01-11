@@ -46,6 +46,7 @@
 	}
 	.logo {
 		width: 48px;
+		height: 48px;
 		margin: 8px 0;
 	}
 	.info {
@@ -72,7 +73,9 @@
 			alt="LinkAja"
 			src="images/logo-main.png"
 			use:lazy={{ src: "images/logo-main.png" }} />
-		<p class="info">Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke <span class={loaded ? "ff-b" : "partner-blur"}>{partnerName}</span></p>
+		<p class="info">
+			Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke <span class={loaded ? "ff-b" : "partner-blur"}>{partnerName}</span>
+		</p>
 	</div>
 	<DisplayedInfo />
 

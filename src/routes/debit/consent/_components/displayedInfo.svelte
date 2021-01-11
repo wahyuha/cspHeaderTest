@@ -12,7 +12,8 @@
 		align-items: center;
 	}
 	.icon-flex {
-		width: 24px;
+    width: 24px;
+    height: 24px;
 		padding: 8px 16px 8px 8px;
 	}
 	.content-flex {

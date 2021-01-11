@@ -1,5 +1,6 @@
 <script>
   import { goto, stores } from "@sapper/app";
+  import { fade } from 'svelte/transition';
   import clientHttp from '@utils/http/client';
 	import { baseUrl } from '@constants/url'
   import { lazy } from "@helpers/img.js";
@@ -44,6 +45,7 @@
   }
   .banner-img {
     width: 100%;
+    min-height: 90px;
   }
   .form-wrap {
     background-color: #FFFFFF;
@@ -97,14 +99,12 @@
 <div class="wrapper">
 	<div class="banner-wrap">
     <img
-      width="420"
-      height="124"
 			class="banner-img"
 			alt="Authentication LinkAja"
 			src="images/login-banner.png"
 			use:lazy={{ src: "images/login-banner.png" }} />
   </div>
-	<div class="form-wrap">
+	<div class="form-wrap" in:fade="{{ duration: 300 }}">
     <p class="login-info">Masukkan nomor dan PIN LinkAja kamu</p>
     <div class="input-wrap">
       <div class="ff-b">Nomor Handphone</div>

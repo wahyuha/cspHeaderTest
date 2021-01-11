@@ -1,6 +1,7 @@
 <script>
+  import { fly } from 'svelte/transition';
   import Meta from '@components/meta/index.svelte';
-	import { lazy } from "@helpers/img.js";
+  import { lazy } from "@helpers/img.js";
 </script>
 
 <style>
@@ -25,13 +26,15 @@
 
 <Meta title="Pembayaran Berhasil" />
 <div class="wrapper-clean t-c">
-	<div class="banner-wrap">
+	<div class="banner-wrap" in:fly="{{ y: 300, duration: 700 }}">
 		<img
 			class="banner-img"
 			alt="Authentication LinkAja"
 			src="images/success.png"
 			use:lazy={{ src: "images/success.png" }} />
   </div>
-  <h2 class="success-title ff-b">Penyambungan Berhasil!</h2>
-  <p class="success-text">Tunggu sebentar, ya, kamu akan segera diarahkan kembali ke situs partner</p>
+  <div in:fly="{{ y: -200, duration: 1700 }}">
+    <h2 class="success-title ff-b">Penyambungan Berhasil!</h2>
+    <p class="success-text">Tunggu sebentar, ya, kamu akan segera diarahkan kembali ke situs partner</p>
+  </div>
 </div>
