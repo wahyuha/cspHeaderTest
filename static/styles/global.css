@@ -18,12 +18,13 @@ body {
 	font-size: 14px;
 	line-height: 1.5;
 	background-color: #FFFFFF;
-	color: #333;
+	color:#52575C;
 }
 
 .ff-b {
 	font-family: "Muli-Bold", "system-ui";
 	font-weight: 700;
+	color: #282D31;
 }
 
 h1, h2, h3, h4, h5, h6 {

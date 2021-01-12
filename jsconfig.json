@@ -12,6 +12,8 @@
       "@helpers/*": ["src/helpers/*"],
       "@routes": ["src/routes"],
       "@routes/*": ["src/routes/*"],
+      "stores": ["src/stores"],
+      "@stores/*": ["src/stores/*"],
       "@utils": ["src/utils"],
       "@utils/*": ["src/utils/*"],
     }

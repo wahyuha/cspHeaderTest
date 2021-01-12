@@ -18,7 +18,8 @@
     min-height: 100vh;
   }
 	.error-image {
-		width: 100%;
+    width: 100%;
+    min-height: 164px;
 		margin: 8px auto;
 	}
   .tt-info {
