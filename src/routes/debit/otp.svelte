@@ -8,6 +8,7 @@
   import { publicError } from '@utils/error';
   import Meta from '@components/meta/index.svelte';
   import Button from '@components/button/index.svelte';
+  import Counter from '@components/counter/index.svelte';
   import InputOTP from '@components/input/otp.svelte'
 
   const { session } = stores();
@@ -72,10 +73,6 @@
   .resend-timer {
     color: #FF2C2C;
   }
-  .counter {
-    padding: 16px 0 8px;
-    text-align: center;
-  }
 </style>
 
 <Meta title="Masukkan OTP" />
@@ -111,6 +108,6 @@
 		>
 			Lanjut
     </Button>
-    <div class="counter">Berakhir dalam 05:00</div>
+    <Counter />
   </div>
 </div>

@@ -8,6 +8,7 @@
   import Meta from '@components/meta/index.svelte';
   import InputPIN from '@components/input/pin.svelte'
   import Button from '@components/button/index.svelte';
+  import Counter from '@components/counter/index.svelte';
 
   let pin
   let loading = false
@@ -89,10 +90,6 @@
 	.content-flex {
 		width: 100%;
   }
-  .counter {
-    padding: 16px 0 8px;
-    text-align: center;
-  }
 </style>
 
 <Meta title="Masukkan nomor LinkAja" />
@@ -139,7 +136,7 @@
       bind:loading={loading}
 		>
 			Lanjut
-		</Button>
-    <div class="counter">Berakhir dalam 05:00</div>
+    </Button>
+    <Counter />
 	</div>
 </div>
