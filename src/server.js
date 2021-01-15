@@ -37,6 +37,9 @@ app.use((req, res, next) => {
   next();
 });
 
+//healthcheck
+app.use("/ping", require("express-healthcheck")());
+
 app.use(
   json({ limit: "2mb" }),
   urlencoded({ limit: "2mb", extended: true }),

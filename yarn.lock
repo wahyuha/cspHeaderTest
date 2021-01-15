@@ -2173,6 +2173,11 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+express-healthcheck@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/express-healthcheck/-/express-healthcheck-0.1.0.tgz#cabec78129c4cb90cd7fb894dfae21b82e27cb07"
+  integrity sha1-yr7HgSnEy5DNf7iU364huC4nywc=
+
 express-mung@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/express-mung/-/express-mung-0.5.1.tgz#403ca3710745a208c676f1024314f1ead139919a"
