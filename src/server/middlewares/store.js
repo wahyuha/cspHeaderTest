@@ -5,7 +5,7 @@ let store;
 
 const FileStore = new sessionFileStore(session);
 store = new FileStore({
-  // path: '.sessions',
+  path: '.sessions',
   ttl: 1800,
 });
 
