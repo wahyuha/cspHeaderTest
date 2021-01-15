@@ -4,11 +4,13 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "dev": "sapper dev -p 5000",
-    "build": "sapper build --legacy",
-    "export": "sapper export --legacy",
+    "dev": "cp .env.dev .env && yarn replace-env && sapper dev -p 5000",
+    "build": "sapper build -p 5010 --legacy && cp package.json __sapper__/build && cp -r static __sapper__/build",
     "start": "node __sapper__/build",
-    "replace-env": "bash bash/replace-env.sh .env"
+    "replace-env": "bash bash/replace-env.sh .env",
+    "build-development": "cp .env.development.j2 .env && yarn replace-env && yarn build",
+    "build-staging": "cp .env.staging.j2 .env && yarn replace-env && yarn build",
+    "build-production": "cp .env.production.j2 .env && yarn replace-env && yarn build"
   },
   "dependencies": {
     "axios": "^0.21.0",
