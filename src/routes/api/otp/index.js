@@ -5,12 +5,12 @@ export async function post(req, res) {
   const sessionID = req.session.sessionID;
 
   // TODO: create finger print
-  const fingerprint = "01ERY9050186RN1VRTQZTA76BX"
+  const requestId = req.session.requestId;
   const otp = req.body.otp || '';
-  const encryptedOtp = encrypt(`${otp}`, fingerprint)
+  const encryptedOtp = encrypt(`${otp}`, requestId)
 
   try {
-    const response = await httpServer.post('/1.0/bind/otp', {
+    const response = await httpServer(req.session).post('/1.0/bind/otp', {
       sessionID,
       otp: encryptedOtp,
     });

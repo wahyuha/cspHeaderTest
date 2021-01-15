@@ -15,16 +15,17 @@
   let error
 
   const { session } = stores();
+  const sessionClient = $session;
 
   const onSubmit = async () => {
     loading = true
     error = ''
     const params = { pin }
-		await clientHttp.post(`/login`, params)
+		await clientHttp(sessionClient).post(`/pin`, params)
 			.then(response => {
         const { data, status } = response.data
-        $session.customerNumber = data.customerNumber;
 				if (status === "00") {
+          $session.customerNumber = data.customerNumber;
           goto(`${baseUrl}/debit/otp`)
         } else if (status === "78") { // change with constant
           goto(`${baseUrl}/debit/error/blocked`)
@@ -32,7 +33,7 @@
           error = publicError(status)
         }
 			})
-			.catch(e => error = publicError())
+			.catch(e => {console.log(e); error = publicError()})
 			.finally(() => {
 				loading = false
       })

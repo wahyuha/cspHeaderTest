@@ -2,15 +2,14 @@ import httpServer from '@utils/http/server';
 import { encrypt } from '@utils/crypto';
 
 export async function post(req, res) {
-  const sessionID = req.session.sessionID;
+  const sessionID = req.session.extSessionId;
 
-  // TODO: create finger print
-  const fingerprint = "01ERY9050186RN1VRTQZTA76BX"
-  const pin = req.body.pin || '';
-  const encryptedPin = encrypt(`${pin}`, fingerprint)
+  const requestId = req.session.requestId;
+  const pin = req.body.pin || "";
+  const encryptedPin = encrypt(`${pin}`, requestId);
 
   try {
-    const response = await httpServer.post('/1.0/bind/login', {
+    const response = await httpServer(req.session).post('/1.0/bind/login', {
       sessionID,
       pin: encryptedPin,
     });
@@ -20,7 +19,7 @@ export async function post(req, res) {
       req.session.customerState = data.state;
       req.session.customerNumber = data.customerNumber;
     }
-    res.json({ data, status, message })
+    res.json({ data, status, message });
   } catch (error) {
     res.json({error})
   }

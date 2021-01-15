@@ -12,6 +12,7 @@
   import InputOTP from '@components/input/otp.svelte'
 
   const { session } = stores();
+  const sessionClient = $session;
 
   let otp;
   let customerNumber;
@@ -27,7 +28,7 @@
     loading = true
     error = ''
     const params = { otp }
-		await clientHttp.post(`/otp`, params)
+		await clientHttp(sessionClient).post(`/otp`, params)
 			.then(response => {
         const { data, status } = response.data
         if (status === "00") {

@@ -1,15 +1,6 @@
-<script context="module">
-	export async function preload(page) {
-		const { s } = page.query;
-		
-		if (!s) this.error(404, 'Not found')
-		return { sessionID: s }
-	}
-</script>
-
 <script>
 	import { onMount } from 'svelte';
-	import { goto } from "@sapper/app";
+	import { goto, stores } from "@sapper/app";
 	import { baseUrl } from '@constants/url'
 	import Meta from '@components/meta/index.svelte';
 	import clientHttp from '@utils/http/client';
@@ -17,12 +8,14 @@
   import DisplayedInfo from './_components/displayedInfo.svelte'
 	import Button from '@components/button/index.svelte';
 
-	export let sessionID
-	let partnerName = 'partner link aja'
+	const { session } = stores();
+	const sessionClient = $session;
+
+	let partnerName = 'merchant LinkAja'
 	let loaded = false
 
 	onMount(async () => {
-		await clientHttp.get(`/check?s=${sessionID}`)
+		await clientHttp(sessionClient).get(`/check`)
 			.then(response => {
 				const { data, status } = response.data
 				if (status === "00") {
@@ -83,7 +76,7 @@
 		<p class="action-info">Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a href class="tnc-link">Syarat dan Ketentuan</a> yang berlaku</p>
 		<Button
 			disabled={!loaded}
-			onClick={() => goto(`${baseUrl}/debit/auth`)}
+			onClick={() => goto(`${baseUrl}/debit/pin`)}
 		>
 			Lanjut
 		</Button>
