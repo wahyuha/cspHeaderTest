@@ -15,8 +15,9 @@
 	let loaded = false
 
 	onMount(async () => {
-		await clientHttp(sessionClient).get(`/check`)
+		await clientHttp(sessionClient).post(`/check`)
 			.then(response => {
+				console.log(response);
 				const { data, status } = response.data
 				if (status === "00") {
 					partnerName = data.partnerName
@@ -25,7 +26,10 @@
 					goto(`${baseUrl}/debit/error${queryCode}`)
 				}
 			})
-			.catch(e => console.log(e))
+			.catch(e => {
+				console.error(e);
+				goto(`${baseUrl}/debit/error?code=999`)
+			})
 			.finally(() => {
 				loaded = true
 			})

@@ -1,4 +1,4 @@
-export async function get(req, res) {
+export async function post(req, res) {
   // check isValidSession
   const partnerName = req.session.partnerName;
   const state = req.session.state;
@@ -10,8 +10,8 @@ export async function get(req, res) {
     })
   } else {
     res.json({
-      data: { partnerName },
-      status: "990"
+      data: {},
+      status: "999"
     })
   }
 }
