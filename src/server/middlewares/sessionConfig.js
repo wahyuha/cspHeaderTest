@@ -11,9 +11,8 @@ const sessionConfig = () => {
   return function(req, res, next) {
     if (getPathName(req.url) === "/debit/init") {
       req.session.extSessionId = getPathQuery(req.url).s;
-      // req.session.backToStoreURL = ""; // no need to initiate
       req.session.requestId = uuidv4();
-      // req.session.tid = uuidv4();
+      req.session.tid = uuidv4();
       // req.session.salt = newToken();
       req.session.sessionId = newToken();
       req.session.aesKey = newToken();

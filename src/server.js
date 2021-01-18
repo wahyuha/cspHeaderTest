@@ -18,7 +18,7 @@ const static_path =
   NODE_ENV === "development" ? "static" : "__sapper__/build/static";
 
 // security header
-app.use(helmet.contentSecurityPolicy());
+// app.use(helmet.contentSecurityPolicy());
 app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
 app.use(helmet.noSniff());
 app.use(helmet.hidePoweredBy());

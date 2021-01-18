@@ -1,13 +1,17 @@
-import httpServer from '@utils/http/server';
-
 export async function get(req, res) {
-  const sessionID = req.session.extSessionId;
-  // validate sessionID
-  try {
-    const { data } = await httpServer(req.session).post('/1.0/bind/check', { sessionID });
+  // check isValidSession
+  const partnerName = req.session.partnerName;
+  const state = req.session.state;
 
-    res.json({ ...data })
-  } catch (error) {
-    res.json({error})
+  if (state === 'BindingStateAgreement' && partnerName) {
+    res.json({
+      data: { partnerName },
+      status: "00"
+    })
+  } else {
+    res.json({
+      data: { partnerName },
+      status: "990"
+    })
   }
 }

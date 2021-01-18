@@ -1,5 +1,6 @@
 import session from "express-session";
 import sessionFileStore from "session-file-store";
+import { cookieConfig } from "@server/middlewares/cookieConfig";
 
 let store;
 
@@ -8,14 +9,6 @@ store = new FileStore({
   path: '.sessions',
   ttl: 1800,
 });
-
-export const cookieConfig = {
-  path: "/",
-  maxAge: 60 * 60 * 1000,
-  // httpOnly: true,
-  // secure: sessionEnv.cookie.secure,
-  // SameSite: "strict",
-};
 
 export const sessionStore = {
   secret: 'kocheng',
