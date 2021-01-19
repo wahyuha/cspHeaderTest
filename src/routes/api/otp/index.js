@@ -1,10 +1,16 @@
 import httpServer from '@utils/http/server';
 import { encrypt } from '@utils/crypto';
+import { isValidSession } from "@utils/session";
 
 export async function post(req, res) {
-  const sessionID = req.session.sessionID;
+  if (!isValidSession(req)) {
+    res.json({
+      data: {},
+      status: "999"
+    })
+  }
 
-  // TODO: create finger print
+  const sessionID = req.session.sessionID;
   const requestId = req.session.requestId;
   const otp = req.body.otp || '';
   const encryptedOtp = encrypt(`${otp}`, requestId)

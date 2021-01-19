@@ -1,7 +1,15 @@
+import { isValidSession } from "@utils/session";
+
 export async function post(req, res) {
-  // check isValidSession
-  const partnerName = req.session.partnerName;
-  const state = req.session.state;
+  if (!isValidSession(req)) {
+    res.json({
+      data: {},
+      status: "999"
+    })
+  }
+  const session = req.session;
+  const partnerName = session.partnerName;
+  const state = session.state;
 
   if (state === 'BindingStateAgreement' && partnerName) {
     res.json({
@@ -11,7 +19,7 @@ export async function post(req, res) {
   } else {
     res.json({
       data: {},
-      status: "999"
+      status: "990"
     })
   }
 }

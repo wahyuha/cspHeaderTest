@@ -1,9 +1,16 @@
 import httpServer from '@utils/http/server';
 import { encrypt } from '@utils/crypto';
+import { isValidSession } from "@utils/session";
 
 export async function post(req, res) {
-  const sessionID = req.session.extSessionId;
+  if (!isValidSession(req)) {
+    res.json({
+      data: {},
+      status: "999"
+    })
+  }
 
+  const sessionID = req.session.extSessionId;
   const requestId = req.session.requestId;
   const pin = req.body.pin || "";
   const encryptedPin = encrypt(`${pin}`, requestId);

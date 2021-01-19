@@ -2,6 +2,7 @@ import sirv from "sirv";
 import express from "express";
 import helmet from "helmet";
 import { json, urlencoded } from "body-parser";
+import cookieParser from "cookie-parser";
 import session from "express-session";
 import compression from "compression";
 import * as sapper from "@sapper/server";
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 app.use("/ping", require("express-healthcheck")());
 
 app.use(
+  cookieParser(),
   json({ limit: "2mb" }),
   urlencoded({ limit: "2mb", extended: true }),
   session(sessionStore),
