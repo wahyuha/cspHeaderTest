@@ -4,8 +4,8 @@
 	import PageLoadingBar from "sapper-page-loading-bar/PageLoadingBar.svelte";
 
 	const { preloading } = stores();
-	let color1 = '#FF7475';
-	let color2 = '#C2F3FF';
+	let color1 = "#FF7475";
+	let color2 = "#C2F3FF";
 </script>
 
 <style>

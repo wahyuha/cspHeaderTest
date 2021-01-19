@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { apiUrlClient } from '@constants/url';
+import axios from "axios";
+import { apiUrlClient } from "@constants/url";
 import { decrypt, encrypt } from "@utils/cryptoClient";
 
 class httpClient {
@@ -15,38 +15,38 @@ class httpClient {
       .createHeaders()
       .createInstance()
       .requestInterceptor()
-      .responseInterceptor()
+      .responseInterceptor();
   }
 
   createApiUrl() {
-    this.apiUrl = apiUrlClient
-    return this
+    this.apiUrl = apiUrlClient;
+    return this;
   }
 
   createHeaders() {
-    this.headers = {}
-    return this
+    this.headers = {};
+    return this;
   }
 
   addHeaders(headers) {
     this.headers = {
       ...this.headers,
-      ...headers
-    }
-    return this
+      ...headers,
+    };
+    return this;
   }
 
   createInstance() {
     this.instance = axios.create({
       baseURL: this.apiUrl,
       timeout: this.timeout,
-      headers: this.headers
+      headers: this.headers,
     });
-    return this
+    return this;
   }
 
   requestInterceptor() {
-    const session = this.session
+    const session = this.session;
     this.instance.interceptors.request.use(
       function (config){
         if (config.data !== undefined) {
@@ -65,12 +65,12 @@ class httpClient {
       function (error) {
         return Promise.reject(error);
       }
-    )
-    return this
+    );
+    return this;
   }
 
   responseInterceptor() {
-    const session = this.session
+    const session = this.session;
 
     this.instance.interceptors.response.use(
       function (response) {
@@ -83,31 +83,31 @@ class httpClient {
       function (error) {
         return Promise.reject(error);
       }
-    )
+    );
 
-    return this
+    return this;
   }
 
   get(url) {
-    return this.instance.get(url)
+    return this.instance.get(url);
   }
 
   post(url, data) {
-    return this.instance.post(url, data)
+    return this.instance.post(url, data);
   }
 }
 
 export default (session) => {
   async function get(url) {
-    return await new httpClient(session).get(url)
+    return await new httpClient(session).get(url);
   }
 
   async function post(url, data) {
-    return await new httpClient(session).post(url, data)
+    return await new httpClient(session).post(url, data);
   }
 
   return {
     get,
-    post
-  }
-}
+    post,
+  };
+};

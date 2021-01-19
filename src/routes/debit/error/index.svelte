@@ -1,10 +1,10 @@
 <script>
 	import { goto } from "@sapper/app";
-	import { fade } from 'svelte/transition';
-	import { baseUrl } from '@constants/url'
-	import Meta from '@components/meta/index.svelte';
+	import { fade } from "svelte/transition";
+	import { baseUrl } from "@constants/url";
+	import Meta from "@components/meta/index.svelte";
 	import { lazy } from "@helpers/img.js";
-	import Button from '@components/button/index.svelte';
+	import Button from "@components/button/index.svelte";
 </script>
 
 <style>

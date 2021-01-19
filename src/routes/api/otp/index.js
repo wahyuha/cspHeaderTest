@@ -1,22 +1,22 @@
-import httpServer from '@utils/http/server';
-import { encrypt } from '@utils/crypto';
+import httpServer from "@utils/http/server";
+import { encrypt } from "@utils/crypto";
 import { isValidSession } from "@utils/session";
 
 export async function post(req, res) {
   if (!isValidSession(req)) {
     res.json({
       data: {},
-      status: "999"
-    })
+      status: "999",
+    });
   }
 
   const sessionID = req.session.sessionID;
   const requestId = req.session.requestId;
-  const otp = req.body.otp || '';
-  const encryptedOtp = encrypt(`${otp}`, requestId)
+  const otp = req.body.otp || "";
+  const encryptedOtp = encrypt(`${otp}`, requestId);
 
   try {
-    const response = await httpServer(req.session).post('/1.0/bind/otp', {
+    const response = await httpServer(req.session).post("/1.0/bind/otp", {
       sessionID,
       otp: encryptedOtp,
     });
@@ -25,8 +25,8 @@ export async function post(req, res) {
     if (status === "00") {
       req.session.state = data.state;
     }
-    res.json({ data, status, message })
+    res.json({ data, status, message });
   } catch (error) {
-    res.json({error})
+    res.json({error});
   }
 }

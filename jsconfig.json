@@ -19,7 +19,7 @@
       "@stores": ["src/stores"],
       "@stores/*": ["src/stores/*"],
       "@utils": ["src/utils"],
-      "@utils/*": ["src/utils/*"],
+      "@utils/*": ["src/utils/*"]
     }
   }
 }

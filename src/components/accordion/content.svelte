@@ -1,5 +1,5 @@
 <script>
-  import { cubicOut, cubicIn } from "svelte/easing";
+  import { cubicOut, cubicIn, cubicInOut } from "svelte/easing";
 
   export let open;
 
@@ -21,8 +21,8 @@
       easing: easing$1,
       css: t => {
         return (
-          `overflow: hidden;` +
-          `opacity: 0;` +
+          "overflow: hidden;" +
+          "opacity: 0;" +
           `height: ${t * height}px;` +
           `padding-top: ${t * padding_top}px;` +
           `padding-bottom: ${t * padding_bottom}px;` +

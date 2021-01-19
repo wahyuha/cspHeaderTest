@@ -1,17 +1,17 @@
 <script>
-	import { onMount } from 'svelte';
-	import { popOut } from '@utils/animation';
+	import { onMount } from "svelte";
+	import { popOut } from "@utils/animation";
 	import { goto } from "@sapper/app";
-	import { baseUrl } from '@constants/url'
-	import Meta from '@components/meta/index.svelte';
+	import { baseUrl } from "@constants/url";
+	import Meta from "@components/meta/index.svelte";
 	import { lazy } from "@helpers/img.js";
-	import Button from '@components/button/index.svelte';
+	import Button from "@components/button/index.svelte";
 
-	let animate = false
+	let animate = false;
 
 	onMount(async () => {
-    setTimeout(() => animate = true, 100)
-  });
+  setTimeout(() => animate = true, 100);
+});
 
 </script>
 

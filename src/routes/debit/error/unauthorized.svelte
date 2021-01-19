@@ -1,10 +1,10 @@
 <script>
 	import { goto } from "@sapper/app";
-	import { baseUrl } from '@constants/url'
-  import { lazy } from "@helpers/img.js";
-  import { popOut } from '@utils/animation';
-	import Meta from '@components/meta/index.svelte';
-  import Button from '@components/button/index.svelte';
+	import { baseUrl } from "@constants/url";
+import { lazy } from "@helpers/img.js";
+import { popOut } from "@utils/animation";
+	import Meta from "@components/meta/index.svelte";
+import Button from "@components/button/index.svelte";
 </script>
 
 <style>

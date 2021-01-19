@@ -1,15 +1,15 @@
-import crypto from 'crypto';
-import CryptoJS from 'crypto-js';
+import crypto from "crypto";
+import CryptoJS from "crypto-js";
 
-const ALGORITHM = 'aes-256-cbc';
-const BLOCK_SIZE = 16
+const ALGORITHM = "aes-256-cbc";
+const BLOCK_SIZE = 16;
 
 export const encrypt = (plain, fingerprint) => {
   const key = CryptoJS.MD5(fingerprint).toString();
   const cipher = aesEncrypt(plain, key);
 
   return cipher;
-}
+};
 
 export const aesEncrypt = (plainText, aesKey) => {
   const iv = crypto.randomBytes(BLOCK_SIZE);
@@ -17,9 +17,9 @@ export const aesEncrypt = (plainText, aesKey) => {
   let cipherText;
 
   try {
-    cipherText = cipher.update(plainText, 'utf8', 'hex');
-    cipherText += cipher.final('hex');
-    cipherText = iv.toString('hex') + cipherText
+    cipherText = cipher.update(plainText, "utf8", "hex");
+    cipherText += cipher.final("hex");
+    cipherText = iv.toString("hex") + cipherText;
   } catch (e) {
     cipherText = null;
   }

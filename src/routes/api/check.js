@@ -4,22 +4,22 @@ export async function post(req, res) {
   if (!isValidSession(req)) {
     res.json({
       data: {},
-      status: "999"
-    })
+      status: "999",
+    });
   }
   const session = req.session;
   const partnerName = session.partnerName;
   const state = session.state;
 
-  if (state === 'BindingStateAgreement' && partnerName) {
+  if (state === "BindingStateAgreement" && partnerName) {
     res.json({
       data: { partnerName },
-      status: "00"
-    })
+      status: "00",
+    });
   } else {
     res.json({
       data: {},
-      status: "990"
-    })
+      status: "990",
+    });
   }
 }

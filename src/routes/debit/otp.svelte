@@ -1,15 +1,15 @@
 <script>
   import { goto, stores } from "@sapper/app";
-  import clientHttp from '@utils/http/client';
+  import clientHttp from "@utils/http/client";
   import { onMount } from "svelte";
-  import { fade } from 'svelte/transition';
-	import { baseUrl } from '@constants/url'
+  import { fade } from "svelte/transition";
+import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { publicError } from '@utils/error';
-  import Meta from '@components/meta/index.svelte';
-  import Button from '@components/button/index.svelte';
-  import Counter from '@components/counter/index.svelte';
-  import InputOTP from '@components/input/otp.svelte'
+  import { publicError } from "@utils/error";
+  import Meta from "@components/meta/index.svelte";
+  import Button from "@components/button/index.svelte";
+  import Counter from "@components/counter/index.svelte";
+  import InputOTP from "@components/input/otp.svelte";
 
   const { session } = stores();
   const sessionClient = $session;
@@ -17,38 +17,38 @@
   let otp;
   let customerNumber;
   
-  let loading = false
-  let error
+  let loading = false;
+  let error;
 
   onMount(async () => {
     customerNumber = $session.customerNumber;
   });
 
   const onSubmit = async () => {
-    loading = true
-    error = ''
-    const params = { otp }
-		await clientHttp(sessionClient).post(`/otp`, params)
-			.then(response => {
-        const { data, status } = response.data
+    loading = true;
+    error = "";
+    const params = { otp };
+    await clientHttp(sessionClient).post("/otp", params)
+      .then(response => {
+        const { status } = response.data;
         if (status === "00") {
-          goto(`${baseUrl}/debit/success`)
+          goto(`${baseUrl}/debit/success`);
         } else if (status === "LA909") {
-          goto(`${baseUrl}/debit/error/unauthorized`)
+          goto(`${baseUrl}/debit/error/unauthorized`);
         } else {
-          error = publicError(status)
+          error = publicError(status);
         }
       })
-			.catch(e => error = publicError())
-			.finally(() => {
-				loading = false
-			})
+      .catch(() => error = publicError())
+      .finally(() => {
+        loading = false;
+      });
   };
 
   const autoSubmit = async () => {
-    loading = true
-    await onSubmit()
-  }
+    loading = true;
+    await onSubmit();
+  };
 </script>
 
 <style>
@@ -88,7 +88,7 @@
   
 	<div class="form-wrap">
     <p class="pin-info" in:fade="{{ duration: 300 }}">
-      Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || '*************'}
+      Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || "*************"}
     </p>
     <InputOTP
       bind:otp={otp}

@@ -6,14 +6,14 @@ let store;
 
 const FileStore = new sessionFileStore(session);
 store = new FileStore({
-  path: '.sessions',
+  path: ".sessions",
   ttl: 1800,
 });
 
 export const sessionStore = {
-  secret: 'kocheng',
+  secret: "kocheng",
   resave: false,
-  name: 'dd',
+  name: "dd",
   saveUninitialized: false,
   unset: "destroy",
   cookie: cookieConfig,

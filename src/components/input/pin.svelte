@@ -1,24 +1,24 @@
 <script>
-  import KEYCODE from '@constants/keyCode'
+  import KEYCODE from "@constants/keyCode";
 
   export let pin;
   export let error;
 
-  let input
+  let input;
   
-  $: style = error ? 'input-general mask-password input-error shake-me' : 'input-general mask-password';
+  $: style = error ? "input-general mask-password input-error shake-me" : "input-general mask-password";
 
   function validateByLength(e) {
     if (pin && `${pin}`.length >= 6 && !Object.values(KEYCODE).includes(e.keyCode)) {
       e.preventDefault();
-      return false
+      return false;
     }
-    if (error) error = ''
+    if (error) error = "";
   }
 
-  function autoUnfocus(e) {
+  function autoUnfocus() {
     if (pin && `${pin}`.length >= 6) {
-      setTimeout(() => input.blur(), 500)
+      setTimeout(() => input.blur(), 500);
     }
   }
 </script>

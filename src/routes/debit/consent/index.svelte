@@ -1,39 +1,39 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount } from "svelte";
 	import { goto, stores } from "@sapper/app";
-	import { baseUrl } from '@constants/url'
-	import Meta from '@components/meta/index.svelte';
-	import clientHttp from '@utils/http/client';
-  import { lazy } from "@helpers/img.js";
-  import DisplayedInfo from './_components/displayedInfo.svelte'
-	import Button from '@components/button/index.svelte';
+	import { baseUrl } from "@constants/url";
+	import Meta from "@components/meta/index.svelte";
+	import clientHttp from "@utils/http/client";
+import { lazy } from "@helpers/img.js";
+import DisplayedInfo from "./_components/displayedInfo.svelte";
+	import Button from "@components/button/index.svelte";
 
 	const { session } = stores();
 	const sessionClient = $session;
 
-	let partnerName = 'merchant LinkAja'
-	let loaded = false
+	let partnerName = "merchant LinkAja";
+	let loaded = false;
 
 	onMount(async () => {
-		await clientHttp(sessionClient).post(`/check`)
-			.then(response => {
-				console.log(response);
-				const { data, status } = response.data
-				if (status === "00") {
-					partnerName = data.partnerName
-				} else {
-					const queryCode = status ? `?code=${status}` : ''
-					goto(`${baseUrl}/debit/error${queryCode}`)
-				}
-			})
-			.catch(e => {
-				console.error(e);
-				goto(`${baseUrl}/debit/error?code=999`)
-			})
-			.finally(() => {
-				loaded = true
-			})
-  });
+	  await clientHttp(sessionClient).post("/check")
+	    .then(response => {
+	      console.log(response);
+	      const { data, status } = response.data;
+	      if (status === "00") {
+	        partnerName = data.partnerName;
+	      } else {
+	        const queryCode = status ? `?code=${status}` : "";
+	        goto(`${baseUrl}/debit/error${queryCode}`);
+	      }
+	    })
+	    .catch(e => {
+	      console.error(e);
+	      goto(`${baseUrl}/debit/error?code=999`);
+	    })
+	    .finally(() => {
+	      loaded = true;
+	    });
+});
 </script>
 
 <style>

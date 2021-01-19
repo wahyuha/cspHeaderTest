@@ -1,30 +1,24 @@
 <script>
   import { onMount } from "svelte";
-  import KEYCODE from '@constants/keyCode'
+  import KEYCODE from "@constants/keyCode";
   
   export let otp;
   export let error;
   export let autoSubmit;
-  
-  const KEYBOARD = {
-    BACKSPACE: 8,
-    DELETE: 46,
-    ANDROID_BACKSPACE: 229,
-  };
   
   let size = 6;
   let inputs = [0];
   let otps = {};
   let elms = [];
 
-  $: styleWrap = error ? 'otp-wrap shake-me' : 'otp-wrap';
-  $: style = error ? 'otp-input ff-b input-error' : 'otp-input ff-b';
+  $: styleWrap = error ? "otp-wrap shake-me" : "otp-wrap";
+  $: style = error ? "otp-input ff-b input-error" : "otp-input ff-b";
 
   onMount(async () => {
     inputs = await createArray(size);
     otps = await createValueSlot(inputs);
     otp = calcOtp(otps);
-    setTimeout(() => !error && elms[0].focus(), 100)
+    setTimeout(() => !error && elms[0].focus(), 100);
   });
   
   const calcOtp = otps => {
@@ -53,9 +47,9 @@
       }, 0);
     } else {
       setTimeout(() => {
-        elms[i].blur()
+        elms[i].blur();
         autoSubmit && autoSubmit();
-      }, 1000)
+      }, 1000);
       if (regx.test(e.key)) {
         otps[i] = e.key;
       } else {
@@ -68,7 +62,7 @@
 
   function resetErrorIfAny() {
     if (error) {
-      error = ''
+      error = "";
     }
   }
 

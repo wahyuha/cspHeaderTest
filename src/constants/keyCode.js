@@ -4,4 +4,4 @@ const KEYCODE = {
   ANDROID_BACKSPACE: 229,
 };
 
-export default KEYCODE
+export default KEYCODE;

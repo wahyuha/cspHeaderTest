@@ -1,6 +1,6 @@
 <script>
-  import { fly } from 'svelte/transition';
-  import Meta from '@components/meta/index.svelte';
+  import { fly } from "svelte/transition";
+  import Meta from "@components/meta/index.svelte";
   import { lazy } from "@helpers/img.js";
 </script>
 

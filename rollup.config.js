@@ -1,19 +1,19 @@
-import path from 'path';
-import alias from '@rollup/plugin-alias';
-import resolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
-import commonjs from '@rollup/plugin-commonjs';
-import url from '@rollup/plugin-url';
-import svelte from 'rollup-plugin-svelte';
-import babel from '@rollup/plugin-babel';
+import path from "path";
+import alias from "@rollup/plugin-alias";
+import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
+import commonjs from "@rollup/plugin-commonjs";
+import url from "@rollup/plugin-url";
+import svelte from "rollup-plugin-svelte";
+import babel from "@rollup/plugin-babel";
 import json from "@rollup/plugin-json";
-import { terser } from 'rollup-plugin-terser';
-import loadDotEnv from './src/configs/envar';
-import config from 'sapper/config/rollup.js';
-import pkg from './package.json';
+import { terser } from "rollup-plugin-terser";
+import loadDotEnv from "./src/configs/envar";
+import config from "sapper/config/rollup.js";
+import pkg from "./package.json";
 
 const mode = process.env.NODE_ENV;
-const dev = mode === 'development';
+const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
 const onwarn = (warning, onwarn) =>

@@ -79,9 +79,8 @@
       2
     ],
     "quotes": [
-      2,
-      "single", { "avoidEscape": true },
-      "double", { "avoidEscape": true }
+      "error",
+      "double"
     ],
     "semi": [
       "error",

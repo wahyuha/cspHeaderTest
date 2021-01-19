@@ -1,42 +1,42 @@
 <script>
   import { goto, stores } from "@sapper/app";
-  import { fade } from 'svelte/transition';
-  import clientHttp from '@utils/http/client';
-	import { baseUrl } from '@constants/url'
+  import { fade } from "svelte/transition";
+  import clientHttp from "@utils/http/client";
+import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { publicError } from '@utils/error';
-  import Meta from '@components/meta/index.svelte';
-  import InputPIN from '@components/input/pin.svelte'
-  import Button from '@components/button/index.svelte';
-  import Counter from '@components/counter/index.svelte';
+  import { publicError } from "@utils/error";
+  import Meta from "@components/meta/index.svelte";
+  import InputPIN from "@components/input/pin.svelte";
+  import Button from "@components/button/index.svelte";
+  import Counter from "@components/counter/index.svelte";
 
-  let pin
-  let loading = false
-  let error
+  let pin;
+  let loading = false;
+  let error;
 
   const { session } = stores();
   const sessionClient = $session;
 
   const onSubmit = async () => {
-    loading = true
-    error = ''
-    const params = { pin }
-		await clientHttp(sessionClient).post(`/pin`, params)
-			.then(response => {
-        const { data, status } = response.data
-				if (status === "00") {
+    loading = true;
+    error = "";
+    const params = { pin };
+    await clientHttp(sessionClient).post("/pin", params)
+      .then(response => {
+        const { data, status } = response.data;
+        if (status === "00") {
           $session.customerNumber = data.customerNumber;
-          goto(`${baseUrl}/debit/otp`)
+          goto(`${baseUrl}/debit/otp`);
         } else if (status === "78") { // change with constant
-          goto(`${baseUrl}/debit/error/blocked`)
+          goto(`${baseUrl}/debit/error/blocked`);
         } else {
-          error = publicError(status)
+          error = publicError(status);
         }
-			})
-			.catch(e => {console.log(e); error = publicError()})
-			.finally(() => {
-				loading = false
       })
+      .catch(e => {console.log(e); error = publicError();})
+      .finally(() => {
+        loading = false;
+      });
   };
 </script>
 

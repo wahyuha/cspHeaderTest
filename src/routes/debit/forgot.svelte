@@ -1,12 +1,12 @@
 <script>
-	import Meta from '@components/meta/index.svelte';
-  import { lazy } from "@helpers/img.js";
-  import Accordion from "@components/accordion/index.svelte";
-  import Section from "@components/accordion/section.svelte";
-  import ButtonClose from '@components/button/close.svelte';
-  import FORGOT_CONSTANTS from '@constants/forgot';
+	import Meta from "@components/meta/index.svelte";
+import { lazy } from "@helpers/img.js";
+import Accordion from "@components/accordion/index.svelte";
+import Section from "@components/accordion/section.svelte";
+import ButtonClose from "@components/button/close.svelte";
+import FORGOT_CONSTANTS from "@constants/forgot";
 
-  let accordion = "";
+let accordion = "";
 </script>
 
 <style>

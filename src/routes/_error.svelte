@@ -4,13 +4,13 @@
 	export let status;
 	export let error;
 
-	const dev = process.env.NODE_ENV === 'development';
+	const dev = process.env.NODE_ENV === "development";
 
-	let label = 'Halaman Gagal Dimuat'
-	let description = 'Terjadi kesalahan pada server kami. Coba dalam beberapa saat lagi, ya!'
+	let label = "Halaman Gagal Dimuat";
+	let description = "Terjadi kesalahan pada server kami. Coba dalam beberapa saat lagi, ya!";
 	if (status === 404) {
-		label = 'Waduh, halaman ini tidak ada'
-		description = 'Mungkin kamu salah jalan atau alamat. Ayo balik sebelum gelap!'
+	  label = "Waduh, halaman ini tidak ada";
+	  description = "Mungkin kamu salah jalan atau alamat. Ayo balik sebelum gelap!";
 	}
 
 </script>

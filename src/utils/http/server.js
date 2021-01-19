@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { apiUrlServer } from '@constants/url';
+import axios from "axios";
+import { apiUrlServer } from "@constants/url";
 
 class httpServer {
 
@@ -15,43 +15,42 @@ class httpServer {
       .createHeaders()
       .createInstance()
       .requestInterceptor()
-      .responseInterceptor()
+      .responseInterceptor();
   }
 
   createApiUrl() {
-    this.apiUrl = apiUrlServer
-    return this
+    this.apiUrl = apiUrlServer;
+    return this;
   }
 
   createHeaders() {
     const requestId = this.session.requestId;
     if (requestId) {
       this.headers = {
-        'X-Request-ID': requestId
-      }
+        "X-Request-ID": requestId,
+      };
     }
-    return this
+    return this;
   }
 
   addHeaders(headers) {
     this.headers = {
       ...this.headers,
-      ...headers
-    }
-    return this
+      ...headers,
+    };
+    return this;
   }
 
   createInstance() {
     this.instance = axios.create({
       baseURL: this.apiUrl,
       timeout: this.timeout,
-      headers: this.headers
+      headers: this.headers,
     });
-    return this
+    return this;
   }
 
   requestInterceptor() {
-    const session = this.session
     this.instance.interceptors.request.use(
       function (config){
         return config;
@@ -59,13 +58,11 @@ class httpServer {
       function (error) {
         return Promise.reject(error);
       }
-    )
-    return this
+    );
+    return this;
   }
 
   responseInterceptor() {
-    const session = this.session
-
     this.instance.interceptors.response.use(
       function (response) {
 
@@ -74,31 +71,31 @@ class httpServer {
       function (error) {
         return Promise.reject(error);
       }
-    )
+    );
 
-    return this
+    return this;
   }
 
   get(url) {
-    return this.instance.get(url)
+    return this.instance.get(url);
   }
 
   post(url, data) {
-    return this.instance.post(url, data)
+    return this.instance.post(url, data);
   }
 }
 
 export default (session) => {
   async function get(url) {
-    return await new httpServer(session).get(url)
+    return await new httpServer(session).get(url);
   }
 
   async function post(url, data) {
-    return await new httpServer(session).post(url, data)
+    return await new httpServer(session).post(url, data);
   }
 
   return {
     get,
-    post
-  }
-}
+    post,
+  };
+};

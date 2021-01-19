@@ -21,7 +21,7 @@ const sessionConfig = () => {
       req.session.aesDel = newtokenDelimeter();
       req.session.rsaDel = newtokenDelimeter();
 
-      res.cookie('tid', tid, cookieConfig);
+      res.cookie("tid", tid, cookieConfig);
     }
     res.locals.nonce = uuidv4();
     next();

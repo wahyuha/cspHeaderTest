@@ -9,19 +9,19 @@
 	let className;
 	
 	let style = `action-button ff-b ${className}`;
-  if (type === "fit") {
-    style = `${style} action-button ff-b fit-content`;
+if (type === "fit") {
+  style = `${style} action-button ff-b fit-content`;
 	} else {
-    style = `${style} action-button ff-b full`;
+  style = `${style} action-button ff-b full`;
 	}
 	if (outline) {
-		style = `${style} outline`
+	  style = `${style} outline`;
 	}
 
 	function handleClick(e) {
-		loading = true
-		e.preventDefault()
-		onClick()
+	  loading = true;
+	  e.preventDefault();
+	  onClick();
 	}
 </script>
 
