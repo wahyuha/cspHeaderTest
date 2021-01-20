@@ -20,16 +20,19 @@ export async function get(req, res) {
         req.session.backToStoreUri = backToStoreUri;
         req.session.backToStoreFailedUri = backToStoreFailedUri;
         res.redirect("/debit/consent");
+        return false;
       }
       if(state === "BindingStateLogin") {
         res.redirect("/debit/otp");
+        return false;
       } else if(state === "BindingStateVerified") {
         res.redirect("/debit/success");
+        return false;
       }
       res.redirect("/debit/error?code=991");
+      return false;
     }
     res.redirect(`/debit/error?code=${status}`);
-    
     return false;
   } catch (error) {
     res.redirect("/debit/error?code=992");
