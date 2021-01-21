@@ -1,0 +1,11 @@
+variables:
+  HOME_APP: "/var/www"
+  IGNORE_DIR: "$HOME_APP/$CI_PROJECT_NAME/logs\n
+               $HOME_APP/$CI_PROJECT_NAME\n
+               /var/log/$CI_PROJECT_NAME"
+  BUILD_ARCHIVES: "__sapper__ ; package.json"
+
+include:
+  - project: 'automation/pipelines'
+    ref: master
+    file: 'nodejs-v1-u-gitlab-ci.yml'
