@@ -11,6 +11,9 @@
     "build-development": "cp .env.development.j2 .env && npm run replace-env && npm run build",
     "build-staging": "cp .env.staging.j2 .env && npm run replace-env && npm run build",
     "build-production": "cp .env.production.j2 .env && npm run replace-env && npm run build",
+    "development": "npm run start",
+    "staging": "npm run start",
+    "production": "npm run start",
     "lint": "npx eslint --fix \"{,src/**/}*.{js,svelte,json}\""
   },
   "dependencies": {
