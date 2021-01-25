@@ -39,9 +39,10 @@ app.use((req, res, next) => {
 });
 
 //healthcheck
-app.use("/ping", require("express-healthcheck")());
+app.use("/dd/ping", require("express-healthcheck")());
 
 app.use(
+  '/dd',
   cookieParser(),
   json({ limit: "2mb" }),
   urlencoded({ limit: "2mb", extended: true }),
