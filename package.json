@@ -8,12 +8,13 @@
     "build": "sapper build -p 4019 --legacy && cp package.json __sapper__/build && cp -r static __sapper__/build",
     "start": "node __sapper__/build",
     "replace-env": "bash bash/replace-env.sh .env",
-    "build-development": "cp .env.development.j2 .env && npm run replace-env && npm run build",
-    "build-staging": "cp .env.staging.j2 .env && npm run replace-env && npm run build",
-    "build-production": "cp .env.production.j2 .env && npm run replace-env && npm run build",
+    "build-development": "cp .env.development.j2 .env && npm run replace-env && npm run build && npm run install",
+    "build-staging": "cp .env.staging.j2 .env && npm run replace-env && npm run build && npm run install",
+    "build-production": "cp .env.production.j2 .env && npm run replace-env && npm run build && npm run install",
     "development": "npm run start",
     "staging": "npm run start",
     "production": "npm run start",
+    "install": "npm --prefix __sapper__/build install --only=production --no-optional __sapper__/build",
     "lint": "npx eslint --fix \"{,src/**/}*.{js,svelte,json}\""
   },
   "dependencies": {
