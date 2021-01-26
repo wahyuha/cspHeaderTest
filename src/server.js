@@ -13,6 +13,7 @@ import resEncrypt from "@middlewares/resEncrypt";
 
 const app = express();
 
+const basePath = process.env.BASE_PATH || '';
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === "development";
 const static_path =
@@ -42,7 +43,7 @@ app.use((req, res, next) => {
 app.use("/dd/ping", require("express-healthcheck")());
 
 app.use(
-  '/dd',
+  basePath,
   cookieParser(),
   json({ limit: "2mb" }),
   urlencoded({ limit: "2mb", extended: true }),
