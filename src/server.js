@@ -10,6 +10,7 @@ import { sessionStore } from "@middlewares/store";
 import initSession from "@middlewares/sessionConfig";
 import reqDecrypt from "@middlewares/reqDecrypt";
 import resEncrypt from "@middlewares/resEncrypt";
+import { basePath } from "@constants/url";
 
 const app = express();
 
@@ -42,7 +43,7 @@ app.use((req, res, next) => {
 app.use("/dd/ping", require("express-healthcheck")());
 
 app.use(
-  '/dd',
+  basePath,
   cookieParser(),
   json({ limit: "2mb" }),
   urlencoded({ limit: "2mb", extended: true }),

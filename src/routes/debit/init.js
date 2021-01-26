@@ -1,4 +1,5 @@
 import httpServer from "@utils/http/server";
+import { basePath } from "@constants/url";
 
 export async function get(req, res) {
   const sessionID = req.query.s;
@@ -19,23 +20,23 @@ export async function get(req, res) {
         req.session.state = state;
         req.session.backToStoreUri = backToStoreUri;
         req.session.backToStoreFailedUri = backToStoreFailedUri;
-        res.redirect("/debit/consent");
+        res.redirect(`${basePath}/debit/consent`);
         return false;
       }
       if(state === "BindingStateLogin") {
-        res.redirect("/debit/otp");
+        res.redirect(`${basePath}/debit/otp`);
         return false;
       } else if(state === "BindingStateVerified") {
-        res.redirect("/debit/success");
+        res.redirect(`${basePath}/debit/success`);
         return false;
       }
-      res.redirect("/debit/error?code=991");
+      res.redirect(`${basePath}/debit/error?code=991`);
       return false;
     }
-    res.redirect(`/debit/error?code=${status}`);
+    res.redirect(`${basePath}/debit/error?code=${status}`);
     return false;
   } catch (error) {
-    res.redirect("/debit/error?code=992");
+    res.redirect(`${basePath}/debit/error?code=992`);
     return false;
   }
 }
