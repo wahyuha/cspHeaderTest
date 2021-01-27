@@ -10,6 +10,7 @@
   import Button from "@components/button/index.svelte";
   import Counter from "@components/counter/index.svelte";
   import InputOTP from "@components/input/otp.svelte";
+  import LoaderBlocking from "@components/loader/blocking.svelte";
 
   const { session } = stores();
   const sessionClient = $session;
@@ -19,6 +20,7 @@
   
   let loading = false;
   let error;
+  let showLoaderFirst = false;
 
   onMount(async () => {
     customerNumber = $session.customerNumber;
@@ -87,7 +89,7 @@
   </div>
   
 	<div class="form-wrap">
-    <p class="pin-info" in:fade="{{ duration: 300 }}">
+    <p class="pin-info" in:fade={{ duration: 300 }}>
       Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || "*************"}
     </p>
     <InputOTP
@@ -101,7 +103,7 @@
     </div>
 	</div>
 
-	<div class="action-wrap" in:fade="{{ duration: 500 }}">
+	<div class="action-wrap" in:fade={{ duration: 500 }}>
     <Button
       disabled={loading}
       bind:loading={loading}
@@ -109,6 +111,9 @@
 		>
 			Lanjut
     </Button>
-    <Counter />
+    <Counter on:limit={() => { showLoaderFirst = true }} />
   </div>
 </div>
+{#if showLoaderFirst}
+  <LoaderBlocking />
+{/if}

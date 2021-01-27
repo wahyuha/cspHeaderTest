@@ -45,12 +45,12 @@
 		<img
 			class="error-image"
 			alt="Penyambungan Akun Belum Berhasil"
-			src="images/unauthorized.png"
-      use:lazy={{ src: "images/unauthorized.png" }}
+			src="images/timeout.png"
+      use:lazy={{ src: "images/timeout.png" }}
     />
     <div in:popOut="{{ duration: 700 }}">
       <h2 class="tt-info ff-b">Penyambungan Akun Belum Berhasil</h2>
-      <p class="info">Kamu sudah 3 kali salah memasukkan kode verifikasi. Silakan ulangi proses penyambungan akun dari awal, ya!</p>
+      <p class="info">Kamu sudah melewati batas waktu yang telah ditentukan. Mohon ulangi proses dari awal, ya!</p>
     </div>
     <div class="d-flex space-between">
       <Button

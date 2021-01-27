@@ -1,22 +1,28 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
   import { timer, ticking, reset } from "@stores/timer";
   import { pad } from "@utils/common";
   import { goto } from "@sapper/app";
   import { baseUrl } from "@constants/url";
 
+  const dispatch = createEventDispatcher();
+
   $: minutes = Math.floor($timer / 60);
   $: seconds = Math.floor($timer - minutes * 60);
 
+  let timerInt;
+
   function listenEvent() {
     if ($timer <= 0) {
+      clearInterval(timerInt);
+      dispatch('limit', true);
       reset();
-      setTimeout(() => goto(`${baseUrl}/debit/error/unauthorized`), 1000);
+      setTimeout(() => goto(`${baseUrl}/debit/error/timeout`), 2000);
     }
   }
 
   onMount(() => {
-    setInterval(() => {
+    timerInt = setInterval(() => {
       ticking();
       listenEvent();
     }, 1000);

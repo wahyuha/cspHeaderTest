@@ -12,11 +12,13 @@
   import Counter from "@components/counter/index.svelte";
   import Modal from "@components/modal/full.svelte";
 	import ForgotTrigger from "@components/forgot/trigger.svelte";
-	import ForgotContent from "@components/forgot/index.svelte";
+  import ForgotContent from "@components/forgot/index.svelte";
+  import LoaderBlocking from "@components/loader/blocking.svelte";
 
   let pin;
   let loading = false;
   let error;
+  let showLoaderFirst = false;
 
   const { session } = stores();
   const sessionClient = $session;
@@ -113,7 +115,7 @@
 		>
 			Lanjut
     </Button>
-    <Counter />
+    <Counter on:limit={() => { showLoaderFirst = true }} />
 	</div>
 </div>
 {#if forgotModal}
@@ -121,5 +123,7 @@
 		on:cancel={() => (forgotModal = false)}
 		on:close={() => (forgotModal = false)}>
 		<ForgotContent />
-	</Modal>
+  </Modal>
+{:else if showLoaderFirst}
+  <LoaderBlocking />
 {/if}
