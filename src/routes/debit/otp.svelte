@@ -3,7 +3,7 @@
   import clientHttp from "@utils/http/client";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-import { baseUrl } from "@constants/url";
+  import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
   import { publicError } from "@utils/error";
   import Meta from "@components/meta/index.svelte";

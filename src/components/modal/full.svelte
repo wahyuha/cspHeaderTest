@@ -29,10 +29,6 @@
     height: 100%;
   }
 
-  .modal-content {
-    padding-top: 16px;
-  }
-
   .close {
     position: absolute;
     top: 0;
@@ -41,7 +37,7 @@
   }
 
   .content {
-    padding: 16px;
+    padding: 0 16px 16px;
   }
 
   .modal-header {
@@ -71,7 +67,7 @@
         {/if}
     </div>
 
-    <div class="content modal-content">
+    <div class="content">
       <slot />
     </div>
   </div>

@@ -18,7 +18,7 @@ const FORGOT_CONSTANTS = {
     "Klik tombol pada email atau buka link yang tertera",
   ],
   call: [
-    "Hubungi Call Center LinkAja di <strong>150911</strong>",
+    "Hubungi Call Center LinkAja di <b>150911</b>",
     "Beritahukan tim LinkAja bahwa kamu ingin reset PIN kamu",
     "Lalu kamu cukup ikuti arahan dari tim LinkAja, ya!",
   ],

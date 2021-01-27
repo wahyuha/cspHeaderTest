@@ -9,6 +9,9 @@
   import InputPIN from "@components/input/pin.svelte";
   import Button from "@components/button/index.svelte";
   import Counter from "@components/counter/index.svelte";
+  import Modal from "@components/modal/full.svelte";
+	import ForgotTrigger from "@components/forgot/trigger.svelte";
+	import ForgotContent from "@components/forgot/index.svelte";
 
   let pin;
   let loading = false;
@@ -16,6 +19,8 @@
 
   const { session } = stores();
   const sessionClient = $session;
+
+  $: forgotModal = false;
 
   const onSubmit = async () => {
     loading = true;
@@ -73,24 +78,6 @@
 		padding: 16px;
 		background-color: #FFFFFF;
   }
-  .pad-pin {
-    padding: 0 0 16px;
-  }
-  .flex-wrap {
-		display: flex;
-		align-items: center;
-	}
-	.icon-flex {
-		width: 24px;
-		padding: 8px 16px 8px 8px;
-	}
-  .icon-right {
-		width: 6px;
-		padding: 8px;
-	}
-	.content-flex {
-		width: 100%;
-  }
 </style>
 
 <Meta title="Masukkan nomor LinkAja" />
@@ -115,22 +102,7 @@
 	</div>
 
 	<div class="action-wrap">
-		<div class="flex-wrap pad-pin">
-			<img
-				class="icon-flex"
-				alt="Call LinkAja"
-				src="icons/call.png"
-        use:lazy={{ src: "icons/call.png" }} />
-      <div class="content-flex">
-        <div class="ff-b">Lupa PIN?</div>
-        <span>Cek cara Reset PIN di sini</span>
-      </div>
-      <img
-				class="icon-right"
-				alt="go to forgot pin"
-				src="icons/arrow-right.png"
-				use:lazy={{ src: "icons/arrow-right.png" }} />
-		</div>
+		<ForgotTrigger on:close={() => (forgotModal = true)} />
     <Button
 			disabled={loading}
       onClick={onSubmit}
@@ -141,3 +113,10 @@
     <Counter />
 	</div>
 </div>
+{#if forgotModal}
+	<Modal
+		on:cancel={() => (forgotModal = false)}
+		on:close={() => (forgotModal = false)}>
+		<ForgotContent />
+	</Modal>
+{/if}

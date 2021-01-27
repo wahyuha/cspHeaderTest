@@ -1,21 +1,20 @@
 <script>
 	import Meta from "@components/meta/index.svelte";
-import { lazy } from "@helpers/img.js";
-import Accordion from "@components/accordion/index.svelte";
-import Section from "@components/accordion/section.svelte";
-import ButtonClose from "@components/button/close.svelte";
-import FORGOT_CONSTANTS from "@constants/forgot";
+  import { lazy } from "@helpers/img.js";
+  import Accordion from "@components/accordion/index.svelte";
+  import Section from "@components/accordion/section.svelte";
+  import FORGOT_CONSTANTS from "@constants/forgot";
 
-let accordion = "";
+  let accordion = "";
 </script>
 
 <style>
 	.direction-wrap {
-		padding: 16px;
+		padding: 0;
 	}
 	.info {
     margin: 0;
-    padding: 24px 0 16px;
+    padding: 0 0 16px;
   }
   .icon-header {
     width: 24px;
@@ -47,7 +46,6 @@ let accordion = "";
 <Meta title="Lupa PIN" />
 <div class="wrapper-clean">
 	<div class="direction-wrap">
-		<ButtonClose />
 		<p class="info">
 			Lupa PIN akun LinkAja kamu? Reset PIN kamu dengan metode yang tersedia, yuk!
     </p>
@@ -68,7 +66,7 @@ let accordion = "";
             {#each FORGOT_CONSTANTS.question as stringValue, i}
               <div class="item-flex">
                 <span class="item-num">{i+1}</span>
-                {stringValue}
+                <span>{@html stringValue}</span>
               </div>
             {/each}
           </div>
@@ -88,7 +86,7 @@ let accordion = "";
             {#each FORGOT_CONSTANTS.email as stringValue, i}
               <div class="item-flex">
                 <span class="item-num">{i+1}</span>
-                {stringValue}
+                <span>{@html stringValue}</span>
               </div>
             {/each}
           </div>
@@ -108,7 +106,7 @@ let accordion = "";
             {#each FORGOT_CONSTANTS.call as stringValue, i}
               <div class="item-flex">
                 <span class="item-num">{i+1}</span>
-                {stringValue}
+                <span>{@html stringValue}</span>
               </div>
             {/each}
           </div>

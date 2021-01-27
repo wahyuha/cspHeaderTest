@@ -1,11 +1,14 @@
 <style>
   .tnc-list {
-    font-size: 12px;
+    padding-top: 16px;
   }
+  h2{ font-size: 12px }
+  p{ font-size: 12px }
   ol {
     padding-left: 24px;
   }
   li {
+    font-size: 12px;
     padding: 0 0 16px 12px;
   }
 </style>
