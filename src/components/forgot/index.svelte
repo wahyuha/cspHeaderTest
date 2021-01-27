@@ -31,6 +31,7 @@
   .item-flex {
     display: flex;
     padding: 4px 0 8px;
+    font-size: 12px;
   }
   .item-num {
     padding: 4px 8px;
@@ -39,7 +40,7 @@
     border-radius: 10%;
     display: inline-table;
     margin-right: 16px;
-    font-size: 12px;
+    font-size: 10px;
   }
 </style>
 
@@ -58,7 +59,7 @@
               alt="Pertanyaan Keamanan"
               src="icons/question.png"
               use:lazy={{ src: "icons/question.png" }} />
-            <span class="ff-b" bind:this={accordion}>
+            <span class="ff-b f14" bind:this={accordion}>
               Pertanyaan Keamanan
             </span>
           </div>
@@ -78,7 +79,7 @@
               alt="Email"
               src="icons/email.png"
               use:lazy={{ src: "icons/email.png" }} />
-            <span class="ff-b" bind:this={accordion}>
+            <span class="ff-b f14" bind:this={accordion}>
               Email
             </span>
           </div>
@@ -98,7 +99,7 @@
               alt="Call Center"
               src="icons/call.png"
               use:lazy={{ src: "icons/call.png" }} />
-            <span class="ff-b" bind:this={accordion}>
+            <span class="ff-b f14" bind:this={accordion}>
               Call Center
             </span>
           </div>

@@ -13,31 +13,34 @@
   }
 
   .arrow-right:before {
-    float: right;
-    color: #f32656;
-    font-size: 18px;
-    font-weight: 700;
-    content: '▿';
+    display: block;
+    width: 16px;
+    height: 16px;
+    content: "";
+    background-image: url('/dd/icons/arrow-right.png');
+    background-size: 16px;
+  }
+
+  .arrowUp:before {
+    display: block;
+    width: 16px;
+    height: 16px;
+    content: "";
+    background-image: url('/dd/icons/arrow-right.png');
+    background-size: 16px;
     transform: rotate(-90deg);
     -webkit-transform: rotate(-90deg);
   }
 
-  .arrowUp:before {
-    float: right;
-    color: #f32656;
-    font-size: 16px;
-    font-weight: 700;
-    content: '▿';
-    transform: rotate(-180deg);
-    -webkit-transform: rotate(-180deg);
-  }
-
   .arrowDown:before {
-    float: right;
-    color: #f32656;
-    font-size: 16px;
-    font-weight: 700;
-    content: '▿';
+    display: block;
+    width: 16px;
+    height: 16px;
+    content: "";
+    background-image: url('/dd/icons/arrow-right.png');
+    background-size: 16px;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
   }
 </style>
 

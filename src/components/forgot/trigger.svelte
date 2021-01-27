@@ -18,8 +18,7 @@
 		padding: 8px 16px 8px 8px;
 	}
   .icon-right {
-		width: 6px;
-		padding: 8px;
+		width: 16px;
 	}
 	.content-flex {
 		width: 100%;
