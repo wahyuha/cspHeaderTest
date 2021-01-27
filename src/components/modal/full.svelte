@@ -35,8 +35,9 @@
 
   .close {
     position: absolute;
-    top: 22px;
-    left: 16px;
+    top: 0;
+    left: 0;
+    padding: 16px;
   }
 
   .content {
