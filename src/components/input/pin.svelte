@@ -32,6 +32,8 @@
     font-size: 12px;
     padding: 12px;
     width: 100%;
+    outline: none;
+    -webkit-appearance: none;
   }
   .input-error {
     border: 1px solid #D90102;

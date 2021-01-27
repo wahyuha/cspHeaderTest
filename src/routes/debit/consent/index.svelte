@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from "svelte";
 	import { goto, stores } from "@sapper/app";
+	import { setCustomerNumber } from "@stores/customer";
 	import Meta from "@components/meta/index.svelte";
 	import clientHttp from "@utils/http/client";
 	import { baseUrl } from "@constants/url";
@@ -22,7 +23,8 @@
 	    .then(response => {
 	      const { data, status } = response.data;
 	      if (status === "00") {
-	        partnerName = data.partnerName;
+					partnerName = data.partnerName;
+					setCustomerNumber(data.customerNumber);
 	      } else {
 	        const queryCode = status ? `?code=${status}` : "";
 	        goto(`${baseUrl}/debit/error${queryCode}`);

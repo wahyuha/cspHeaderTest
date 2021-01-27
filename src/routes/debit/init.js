@@ -11,11 +11,13 @@ export async function get(req, res) {
       backToStoreUri,
       backToStoreFailedUri,
       partnerName,
+      customerNumber,
     }, status } = data;
 
     if(status === "00") {
       if (state === "BindingStateAgreement") {
         req.session.partnerName = partnerName;
+        req.session.customerNumber = customerNumber;
         req.session.state = state;
         req.session.backToStoreUri = backToStoreUri;
         req.session.backToStoreFailedUri = backToStoreFailedUri;

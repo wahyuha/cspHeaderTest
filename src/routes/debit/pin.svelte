@@ -5,6 +5,7 @@
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
   import { publicError } from "@utils/error";
+  import { customer } from "@stores/customer";
   import Meta from "@components/meta/index.svelte";
   import InputPIN from "@components/input/pin.svelte";
   import Button from "@components/button/index.svelte";
@@ -72,6 +73,8 @@
     font-size: 12px;
     padding: 12px;
     width: 100%;
+    outline: none;
+    -webkit-appearance: none;
   }
 	.action-wrap {
 		margin-top: 8px;
@@ -93,7 +96,7 @@
     <p class="login-info">Masukkan nomor dan PIN LinkAja kamu</p>
     <div class="input-wrap">
       <div class="ff-b">Nomor Handphone</div>
-      <input type="number" disabled class="input-general" />
+      <input type="text" value={$customer.number} disabled class="input-general" />
     </div>
     <div class="input-wrap">
       <div class="ff-b">PIN LinkAja</div>

@@ -9,11 +9,12 @@ export async function post(req, res) {
   }
   const session = req.session;
   const partnerName = session.partnerName;
+  const customerNumber = session.customerNumber;
   const state = session.state;
 
   if (state === "BindingStateAgreement" && partnerName) {
     res.json({
-      data: { partnerName },
+      data: { partnerName, customerNumber },
       status: "00",
     });
   } else {
