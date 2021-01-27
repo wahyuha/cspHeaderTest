@@ -1,23 +1,25 @@
 <script>
 	import { onMount } from "svelte";
 	import { goto, stores } from "@sapper/app";
-	import { baseUrl } from "@constants/url";
 	import Meta from "@components/meta/index.svelte";
 	import clientHttp from "@utils/http/client";
-import { lazy } from "@helpers/img.js";
-import DisplayedInfo from "./_components/displayedInfo.svelte";
+	import { baseUrl } from "@constants/url";
+	import { lazy } from "@helpers/img.js";
+	import DisplayedInfo from "./_components/displayedInfo.svelte";
 	import Button from "@components/button/index.svelte";
+	import Modal from "@components/modal/full.svelte";
+	import TncContent from "./_components/tncContent.svelte";
 
 	const { session } = stores();
 	const sessionClient = $session;
 
 	let partnerName = "merchant LinkAja";
 	let loaded = false;
+	$: showModal = false;
 
 	onMount(async () => {
 	  await clientHttp(sessionClient).post("/check")
 	    .then(response => {
-	      console.log(response);
 	      const { data, status } = response.data;
 	      if (status === "00") {
 	        partnerName = data.partnerName;
@@ -77,7 +79,7 @@ import DisplayedInfo from "./_components/displayedInfo.svelte";
 	<DisplayedInfo />
 
 	<div class="action-wrap">
-		<p class="action-info">Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a href class="tnc-link">Syarat dan Ketentuan</a> yang berlaku</p>
+		<p class="action-info">Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a href on:click={(e) => {e.preventDefault(); showModal = true}} class="tnc-link">Syarat dan Ketentuan</a> yang berlaku</p>
 		<Button
 			disabled={!loaded}
 			onClick={() => goto(`${baseUrl}/debit/pin`)}
@@ -86,3 +88,10 @@ import DisplayedInfo from "./_components/displayedInfo.svelte";
 		</Button>
 	</div>
 </div>
+{#if showModal}
+	<Modal
+		on:cancel={() => (showModal = false)}
+		on:close={() => (showModal = false)}>
+		<TncContent />
+	</Modal>
+{/if}

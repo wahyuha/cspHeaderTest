@@ -2,7 +2,7 @@
   import { goto, stores } from "@sapper/app";
   import { fade } from "svelte/transition";
   import clientHttp from "@utils/http/client";
-import { baseUrl } from "@constants/url";
+  import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
   import { publicError } from "@utils/error";
   import Meta from "@components/meta/index.svelte";
