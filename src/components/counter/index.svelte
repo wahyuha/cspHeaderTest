@@ -26,6 +26,10 @@
       ticking();
       listenEvent();
     }, 1000);
+
+    return () => {
+			clearInterval(timerInt);
+		};
   });
 </script>
 

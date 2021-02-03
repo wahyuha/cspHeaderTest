@@ -10,7 +10,7 @@ export async function post(req, res) {
     });
   }
 
-  const sessionID = req.session.sessionID;
+  const sessionID = req.session.extSessionId;
   const requestId = req.session.requestId;
   const otp = req.body.otp || "";
   const encryptedOtp = encrypt(`${otp}`, requestId);
