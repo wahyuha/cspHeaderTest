@@ -10,7 +10,10 @@
   import Button from "@components/button/index.svelte";
   import Counter from "@components/counter/index.svelte";
   import InputOTP from "@components/input/otp.svelte";
+  import Modal from "@components/modal/full.svelte";
   import LoaderBlocking from "@components/loader/blocking.svelte";
+  import ResendOTP from "./_components/resend.svelte";
+  import LimitOTP from "./_components/limited.svelte";
 
   const { session } = stores();
   const sessionClient = $session;
@@ -21,6 +24,7 @@
   let loading = false;
   let error;
   let showLoaderFirst = false;
+  let showModal = false;
 
   onMount(async () => {
     customerNumber = $session.customerNumber;
@@ -67,14 +71,8 @@
   .pin-info {
     margin: 0 0 16px;
   }
-  .pt-16 {
-    padding-top: 16px;
-  }
 	.action-wrap {
 		padding: 16px;
-  }
-  .resend-timer {
-    color: #FF2C2C;
   }
 </style>
 
@@ -97,10 +95,7 @@
       autoSubmit={autoSubmit}
       error={error}
     />
-    <div class="pt-16">
-      <div>Belum menerima kode?</div>
-      <div>Tunggu <span class="resend-timer">00:59</span> untuk Kirim Ulang</div>
-    </div>
+    <ResendOTP on:limit={() => { showModal = true }} />
 	</div>
 
 	<div class="action-wrap" in:fade={{ duration: 500 }}>
@@ -116,4 +111,10 @@
 </div>
 {#if showLoaderFirst}
   <LoaderBlocking />
+{:else if showModal}
+	<Modal
+		on:cancel={() => (showModal = false)}
+		on:close={() => (showModal = false)}>
+		<LimitOTP onClick={() => (showModal = false)} />
+	</Modal>
 {/if}
