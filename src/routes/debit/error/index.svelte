@@ -1,10 +1,13 @@
 <script>
-	import { goto } from "@sapper/app";
+	import { goto, stores } from "@sapper/app";
 	import { fade } from "svelte/transition";
 	import { baseUrl } from "@constants/url";
 	import Meta from "@components/meta/index.svelte";
 	import { lazy } from "@helpers/img.js";
 	import Button from "@components/button/index.svelte";
+
+	const { session } = stores();
+	const { extSessionId } = $session;
 </script>
 
 <style>
@@ -48,7 +51,7 @@
 		</p>
 		<Button
 			type="fit"
-			onClick={() => goto(`${baseUrl}/debit/consent`)}
+			onClick={() => goto(`${baseUrl}/debit/init?s=${extSessionId}`)}
 		>
 			Muat Ulang
 		</Button>

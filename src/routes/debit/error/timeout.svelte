@@ -1,10 +1,13 @@
 <script>
-	import { goto } from "@sapper/app";
+	import { goto, stores } from "@sapper/app";
 	import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
   import { popOut } from "@utils/animation";
 	import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
+
+  const { session } = stores();
+	const { extSessionId } = $session;
 </script>
 
 <style>
@@ -62,7 +65,7 @@
       </Button>
       <Button
         class="m-x-2"
-        onClick={() => goto(`${baseUrl}/debit/consent`)}
+        onClick={() => goto(`${baseUrl}/debit/init?s=${extSessionId}`)}
         >
         Ulangi Proses
       </Button>
