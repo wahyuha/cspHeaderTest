@@ -1,5 +1,8 @@
 <script>
 	import { lazy } from "@helpers/img.js";
+	import { goto } from "@sapper/app";
+	import { baseUrl } from "@constants/url";
+	import Button from "@components/button/index.svelte";
 
 	export let status;
 	export let error;
@@ -10,7 +13,7 @@
 	let description = "Terjadi kesalahan pada server kami. Coba dalam beberapa saat lagi, ya!";
 	if (status === 404) {
 	  label = "Waduh, halaman ini tidak ada";
-	  description = "Mungkin kamu salah jalan atau alamat. Ayo balik sebelum gelap!";
+	  description = "Mungkin kamu salah jalan atau alamat. Ayo balik aja!";
 	}
 
 </script>
@@ -54,6 +57,12 @@
     />
     <h2 class="tt-info ff-b">{label}</h2>
 		<p class="info">{description}</p>
+		<Button
+			type="fit"
+			onClick={() => goto(`${baseUrl}/debit/exit`)}
+			>
+			Tutup
+		</Button>
 		{#if dev && error.stack}
 			<pre>{error.stack}</pre>
 		{/if}
