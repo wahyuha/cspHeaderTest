@@ -15,12 +15,13 @@ export async function get(req, res) {
     }, status } = data;
 
     if(status === "00") {
+      req.session.partnerName = partnerName;
+      req.session.customerNumber = customerNumber;
+      req.session.state = state;
+      req.session.backToStoreUri = backToStoreUri;
+      req.session.backToStoreFailedUri = backToStoreFailedUri;
+
       if (state === "BindingStateAgreement") {
-        req.session.partnerName = partnerName;
-        req.session.customerNumber = customerNumber;
-        req.session.state = state;
-        req.session.backToStoreUri = backToStoreUri;
-        req.session.backToStoreFailedUri = backToStoreFailedUri;
         res.redirect(`/dd/debit/consent`);
         return false;
       }

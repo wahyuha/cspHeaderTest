@@ -1,7 +1,17 @@
 <script>
+  import { onMount } from "svelte";
   import { fly } from "svelte/transition";
+  import { goto } from "@sapper/app";
+  import { customer } from "@stores/customer";
   import Meta from "@components/meta/index.svelte";
   import { lazy } from "@helpers/img.js";
+
+  onMount(async () => {
+    const backToStoreUri = $customer.backToStoreUri;
+    setTimeout(() => {
+      backToStoreUri && goto(backToStoreUri);
+    }, 3000)
+  });
 </script>
 
 <style>

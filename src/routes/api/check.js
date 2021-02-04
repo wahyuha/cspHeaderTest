@@ -14,7 +14,12 @@ export async function post(req, res) {
 
   if (state === "BindingStateAgreement" && partnerName) {
     res.json({
-      data: { partnerName, customerNumber },
+      data: {
+        partnerName,
+        customerNumber,
+        backToStoreUri: session.backToStoreUri,
+        backToStoreFailedUri: session.backToStoreFailedUri
+      },
       status: "00",
     });
   } else {
