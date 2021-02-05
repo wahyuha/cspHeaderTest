@@ -24,8 +24,7 @@ export async function get(req, res) {
       if (state === "BindingStateAgreement") {
         res.redirect(`/dd/debit/consent`);
         return false;
-      }
-      if(state === "BindingStateLogin") {
+      } else if(state === "BindingStateLogin") {
         res.redirect(`/dd/debit/otp`);
         return false;
       } else if(state === "BindingStateVerified") {
