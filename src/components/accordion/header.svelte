@@ -4,6 +4,7 @@
 
 <style>
   .header {
+    padding: 0 16px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;

@@ -14,7 +14,7 @@
 	}
 	.info {
     margin: 0;
-    padding: 0 0 16px;
+    padding: 0 16px 16px;
   }
   .icon-header {
     width: 24px;

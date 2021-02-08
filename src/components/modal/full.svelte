@@ -34,10 +34,11 @@
     top: 0;
     left: 0;
     padding: 16px;
+    width: 18px;
   }
 
   .content {
-    padding: 0 16px 16px;
+    padding: 0 0 16px;
   }
 
   .modal-header {

@@ -36,8 +36,15 @@
   }
 </script>
 
+<style>
+  .content {
+    padding: 0 16px;
+  }
+</style>
+
 {#if open}
   <div
+    class="content"
     in:customslide={{ easing: cubicIn }}
     out:customslide={{ easing: cubicOut }}>
     <slot />

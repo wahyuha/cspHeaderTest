@@ -37,7 +37,7 @@ if (type === "fit") {
 		width: 100%;
 	}
 	.fit-content {
-		padding: 14px 36px;
+		padding: 14px 60px;
 	}
 	.outline {
 		background: none;

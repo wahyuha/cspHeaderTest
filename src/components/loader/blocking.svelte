@@ -28,7 +28,7 @@
     background-color: #FFF;
     box-shadow: 0px 0px 1px rgba(81, 113, 145, 0.48), 0px 0px 56px rgba(81, 113, 145, 0.08), 0px 14px 42px rgba(81, 113, 145, 0.16);
     border-radius: 6px;
-    padding: 16px;
+    padding: 12px;
     left: calc(50% - 48px);
     position: absolute;
     text-align: center;
@@ -37,7 +37,7 @@
     z-index: 101;
   }
   .content-text {
-    padding-top: 8px;
+    line-height: 1rem;
   }
   .lds-ring {
     margin: 0;
@@ -56,6 +56,6 @@
     <div/><div/><div/><div/>
   </div>
   <div class="content-text">
-    Loading ...
+    Loading
   </div>
 </div>
