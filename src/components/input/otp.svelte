@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import KEYCODE from "@constants/keyCode";
+
+  const { BACKSPACE, LEFT_ARROW, RIGHT_ARROW, DELETE, SPACEBAR } = KEYCODE;
   
   export let otp;
   export let error;
@@ -27,37 +29,81 @@
     } else return "";
   };
 
-  const changeHandler = function(e, i) {
+  const handleKeydown = function(e, i) {
     let nextOtp = e.target.nextElementSibling;
     let prevOtp = e.target.previousElementSibling;
-    let regx = new RegExp(/^\d+$/);
-    if (Object.values(KEYCODE).includes(e.keyCode) && !prevOtp) {
+    if ((e.keyCode === BACKSPACE || e.key === 'Backspace') && i > 0) {
       otps[i] = "";
-    } else if (Object.values(KEYCODE).includes(e.keyCode) && prevOtp) {
+      setTimeout(() => {
+        prevOtp.focus();
+      }, 100)
+    } else if ((e.keyCode === DELETE || e.key === 'Delete') && i > 0) {
       otps[i] = "";
+      setTimeout(() => {
+        prevOtp.focus();
+      }, 100)
+    } else if ((e.keyCode === LEFT_ARROW || e.key === 'ArrowLeft') && i > 0) {
       prevOtp.focus();
-    } else if (nextOtp) {
-      if (regx.test(e.key)) {
-        otps[i] = e.key;
-      } else {
-        return;
-      }
-      setTimeout(() => {
-        nextOtp.focus();
-      }, 0);
-    } else {
-      setTimeout(() => {
-        elms[i].blur();
-        autoSubmit && autoSubmit();
-      }, 1000);
-      if (regx.test(e.key)) {
-        otps[i] = e.key;
-      } else {
-        return;
-      }
-    }
+    } else if ((e.keyCode === RIGHT_ARROW || e.key === 'ArrowRight') && i < size-1) {
+      nextOtp.focus();
+    } else if (
+      e.keyCode === SPACEBAR ||
+      e.key === ' ' ||
+      e.key === 'Spacebar' ||
+      e.key === 'Space'
+    ) {} 
+    // enable this to support edit existing
+    // else {
+    //   setTimeout(() => {
+    //     nextOtp.focus();
+    //   }, 100)
+    // }
 
     otp = calcOtp(otps);
+  };
+
+  const isInputValueValid = value => {
+    const isTypeValid = !isNaN(parseInt(value, 10));
+
+    return isTypeValid && value.trim().length === 1;
+  };
+
+  const handleChange = (e, i) => {
+    const { value } = e.target;
+
+    if (isInputValueValid(value)) {
+      otps[i] = value;
+    }
+  };
+
+  const handleInput = (e, i) => {
+    let nextOtp = e.target.nextElementSibling;
+    let prevOtp = e.target.previousElementSibling;
+
+    if (isInputValueValid(e.target.value)) {
+      if (i <= (size - 2)) {
+        setTimeout(() => {
+          nextOtp.focus();
+        }, 100)
+      } else if (i >= size-1) {
+        otp = calcOtp(otps);
+        setTimeout(() => {
+          autoSubmit && autoSubmit();
+        }, 700)
+      }
+    } else {
+      // workaround for keyCode "229 Unidentified" on Android.
+      const { nativeEvent } = e;
+
+      if (nativeEvent &&
+        nativeEvent.data === null &&
+        nativeEvent.inputType === 'deleteContentBackward'
+      ) {
+        e.preventDefault();
+        otps[i] = "";
+        prevOtp.focus();
+      }
+    }
   };
 
   function resetErrorIfAny() {
@@ -119,7 +165,9 @@
         type="tel"
         pattern="\d{1}"
         maxlength="1"
-        on:keydown|preventDefault={event => changeHandler(event, i)}
+        on:change={event => handleChange(event, i)}
+        on:keydown={event => handleKeydown(event, i)}
+        on:input={event => handleInput(event, i)}
         on:click={resetErrorIfAny}
         placeholder="" />
     {/each}
