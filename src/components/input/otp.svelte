@@ -168,6 +168,7 @@
         on:change={event => handleChange(event, i)}
         on:keydown={event => handleKeydown(event, i)}
         on:input={event => handleInput(event, i)}
+        on:focus={e => e.target.select()}
         on:click={resetErrorIfAny}
         placeholder="" />
     {/each}

@@ -48,12 +48,13 @@
       prevOtp.focus();
     } else if ((e.keyCode === RIGHT_ARROW || e.key === 'ArrowRight') && i < size-1) {
       nextOtp.focus();
-    } else if (
-      e.keyCode === SPACEBAR ||
-      e.key === ' ' ||
-      e.key === 'Spacebar' ||
-      e.key === 'Space'
-    ) {} 
+    } 
+    // else if (
+    //   e.keyCode === SPACEBAR ||
+    //   e.key === ' ' ||
+    //   e.key === 'Spacebar' ||
+    //   e.key === 'Space'
+    // ) {} 
     // enable this to support edit existing
     // else {
     //   setTimeout(() => {
@@ -171,6 +172,7 @@
         on:change={event => handleChange(event, i)}
         on:keydown={event => handleKeydown(event, i)}
         on:input={event => handleInput(event, i)}
+        on:focus={e => e.target.select()}
         autocomplete="off"
         maxLength="1"
         id={`otp${i}`}
@@ -182,7 +184,7 @@
     {/each}
   {/if}
 </div>
-<button on:click={() => { otp.length === size ? alert(otp) : alert('not yet') }}>Go</button>
+<button on:click={() => { alert(otp)}}>Go</button>
 {#if error}
   <div class="error-text pt-16">{error}</div>
 {/if}
