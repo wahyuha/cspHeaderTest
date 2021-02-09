@@ -51,13 +51,9 @@
       e.key === ' ' ||
       e.key === 'Spacebar' ||
       e.key === 'Space'
-    ) {} 
-    // enable this to support edit existing
-    // else {
-    //   setTimeout(() => {
-    //     nextOtp.focus();
-    //   }, 100)
-    // }
+    ) {
+      e.preventDefault();
+    } 
 
     otp = calcOtp(otps);
   };

@@ -48,13 +48,14 @@
       prevOtp.focus();
     } else if ((e.keyCode === RIGHT_ARROW || e.key === 'ArrowRight') && i < size-1) {
       nextOtp.focus();
+    } else if (
+      e.keyCode === SPACEBAR ||
+      e.key === ' ' ||
+      e.key === 'Spacebar' ||
+      e.key === 'Space'
+    ) {
+      e.preventDefault();
     } 
-    // else if (
-    //   e.keyCode === SPACEBAR ||
-    //   e.key === ' ' ||
-    //   e.key === 'Spacebar' ||
-    //   e.key === 'Space'
-    // ) {} 
     // enable this to support edit existing
     // else {
     //   setTimeout(() => {
