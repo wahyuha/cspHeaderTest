@@ -10,6 +10,14 @@ import { sessionStore } from "@middlewares/store";
 import initSession from "@middlewares/sessionConfig";
 import reqDecrypt from "@middlewares/reqDecrypt";
 import resEncrypt from "@middlewares/resEncrypt";
+import reqLogger from "@middlewares/reqLogger";
+import resLogger from "@middlewares/resLogger";
+import { initDebugLog, enableDebugLog, disableDebugLog } from "@server/utils/console";
+
+initDebugLog();
+process.env.DEBUG_MODE_FILE === "true"
+  ? enableDebugLog()
+  : disableDebugLog();
 
 const app = express();
 
@@ -52,7 +60,9 @@ app.use(
   sirv(static_path, { dev }),
   initSession(),
   reqDecrypt(),
+  reqLogger(),
   resEncrypt(),
+  resLogger(),
   sapper.middleware({
     session: (req) => {
       return {

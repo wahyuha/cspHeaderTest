@@ -32,3 +32,19 @@ export const isAPIRoute = uri => {
 export const isSkipPath = path => {
   return ["/"].includes(path);
 };
+
+export const isFileRoute = uri => {
+  var ext = uri.split(".").pop();
+  const list = [
+    "jpg",
+    "png",
+    "webp",
+    "html",
+    "css",
+    "js",
+    "ico",
+    "woff2",
+    "map",
+  ];
+  return list.indexOf(ext) > -1 && uri.indexOf("/client/") > -1;
+};
