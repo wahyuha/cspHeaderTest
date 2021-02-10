@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { cookieConfig } from "@server/middlewares/cookieConfig";
+import { cookieName } from "@server/utils/env";
 
 import {
   getPathName,
@@ -21,7 +22,7 @@ const sessionConfig = () => {
       req.session.aesDel = newtokenDelimeter();
       req.session.rsaDel = newtokenDelimeter();
 
-      res.cookie("tid", tid, cookieConfig);
+      res.cookie(cookieName.trans, tid, cookieConfig);
     }
     res.locals.nonce = uuidv4();
     next();

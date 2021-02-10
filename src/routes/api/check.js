@@ -6,6 +6,8 @@ export async function post(req, res) {
       data: {},
       status: "999",
     });
+
+    return false;
   }
   const session = req.session;
   const partnerName = session.partnerName;

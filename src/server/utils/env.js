@@ -10,6 +10,6 @@ export const sessionEnv = {
 };
 
 export const cookieName = {
-  journey: 'tal',
-  trans: 'jal',
+  rid: 'req',
+  trans: 'tid',
 };

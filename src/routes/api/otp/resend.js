@@ -7,6 +7,8 @@ export async function post(req, res) {
       data: {},
       status: "999",
     });
+
+    return false;
   }
 
   const sessionID = req.session.extSessionId;

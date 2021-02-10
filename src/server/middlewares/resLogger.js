@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 import { isFileRoute, getPathName, isSkipPath } from "@server/utils/common";
 import { logEnd } from "@constants/logger";
 import { decryptResp } from "@server/utils/crypto";
-import { cookieConfig } from "@server/middlewares/cookieConfig";
+// import { cookieConfig } from "@server/middlewares/cookieConfig";
 import { sessionEnv, cookieName } from "@server/utils/env";
 
 const resLogger = () => {
@@ -53,25 +53,20 @@ const resLogger = () => {
         console.end(req.session.requestId, req.session.tid, logEnd, pth, mte);
 
         // create new transId to client for next session verification
-        if (!isFileRoute(req.url)) {
-          // const oldTid = req.session.tid;
-          req.session.tid = uuidv4();
-          // console.process(req.session.requestId, oldTid, "SEND-NEW-TID", {
-          //   session: req.session,
-          // });
-        }
+        // if (!isFileRoute(req.url)) {
+        //   req.session.tid = uuidv4();
+        // }
 
-        if (res.statusCode !== 500) {
-          // cookie for journeyId & transactionId
-          res.cookie(cookieName.journey, req.session.requestId, cookieConfig);
-          res.cookie(cookieName.trans, req.session.tid, cookieConfig);
-        }
+        // if (res.statusCode !== 500) {
+        //   res.cookie(cookieName.rid, req.session.requestId, cookieConfig);
+        //   res.cookie(cookieName.trans, req.session.tid, cookieConfig);
+        // }
 
         // destroy sesion after finish deliver page general error
         if (req.url === "/debit/error") {
           req.session.destroy();
           res.cookie(sessionEnv.cookie.name, "", { expires: new Date(0) });
-          res.cookie(cookieName.journey, "", { expires: new Date(0) });
+          res.cookie(cookieName.rid, "", { expires: new Date(0) });
           res.cookie(cookieName.trans, "", { expires: new Date(0) });
         }
 

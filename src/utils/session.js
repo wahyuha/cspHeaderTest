@@ -1,3 +1,5 @@
+import {getPathName } from "@server/utils/common";
+
 export const isValidSession = req => {
   const s = req.session;
   const extsId = s.extSessionId !== undefined && s.extSessionId !== "";
