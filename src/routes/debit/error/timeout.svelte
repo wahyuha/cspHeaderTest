@@ -65,9 +65,9 @@
       </Button>
       <Button
         class="m-x-2"
-        onClick={() => goto(`${baseUrl}/debit/init?s=${extSessionId}`)}
+        onClick={() => goto(`${baseUrl}/debit/reinit?s=${extSessionId}`)}
         >
-        Ulangi Proses
+        Ulangi
       </Button>
   </div>
   </div>

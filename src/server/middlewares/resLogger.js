@@ -1,14 +1,13 @@
-// import { v4 as uuidv4 } from "uuid";
-
 import { isFileRoute, getPathName, isSkipPath } from "@server/utils/common";
 import { logEnd } from "@constants/logger";
 import { decryptResp } from "@server/utils/crypto";
-// import { cookieConfig } from "@server/middlewares/cookieConfig";
 import { sessionEnv, cookieName } from "@server/utils/env";
 
 const resLogger = () => {
   return function(req, res, next) {
-    if (!isFileRoute(req.url) && !isSkipPath(getPathName(req.url))) {
+    if (!isFileRoute(req.url) 
+      && !isSkipPath(getPathName(req.url)) 
+      && getPathName(req.url) !== "/debit/reinit") {
       const pathName = getPathName(req.url);
       let oldSend = res.end;
       res.end = function(data) {
@@ -49,9 +48,9 @@ const resLogger = () => {
           domain: req.headers["host"],
           pathname: pathName,
         };
+
         console.tdr(req.session.requestId, req.session.tid, pth, mtdr);
         console.end(req.session.requestId, req.session.tid, logEnd, pth, mte);
-
         // create new transId to client for next session verification
         // if (!isFileRoute(req.url)) {
         //   req.session.tid = uuidv4();

@@ -51,7 +51,7 @@
 		</p>
 		<Button
 			type="fit"
-			onClick={() => goto(`${baseUrl}/debit/init?s=${extSessionId}`)}
+			onClick={() => goto(`${baseUrl}/debit/reinit?s=${extSessionId}`)}
 		>
 			Muat Ulang
 		</Button>
