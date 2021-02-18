@@ -1,6 +1,6 @@
 <style>
   .tnc-list {
-    padding-top: 16px;
+    padding: 16px;
   }
   h2{ font-size: 12px }
   p{ font-size: 12px }
