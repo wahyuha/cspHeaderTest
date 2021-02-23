@@ -1,4 +1,5 @@
 import sirv from "sirv";
+import nocache from "nocache";
 import express from "express";
 import helmet from "helmet";
 import { json, urlencoded } from "body-parser";
@@ -49,6 +50,8 @@ app.use((req, res, next) => {
 
 //healthcheck
 app.use("/dd/ping", require("express-healthcheck")());
+
+app.use(nocache());
 
 app.use(
   basePath,
