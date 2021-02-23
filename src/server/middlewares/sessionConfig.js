@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-import { cookieConfig } from "@server/middlewares/cookieConfig";
-import { cookieName } from "@server/utils/env";
+// import { cookieConfig } from "@server/middlewares/cookieConfig";
+import { cookieConfig, cookieName } from "@server/utils/env";
 import { getPathName, getPathQuery, newToken, newtokenDelimeter } from "@server/utils/common.js";
 
 const sessionConfig = () => {

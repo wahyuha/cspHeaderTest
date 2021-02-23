@@ -1,4 +1,4 @@
-import { sessionEnv, cookieName } from "@server/utils/env";
+import { cookieConfigRemove, cookieName } from "@server/utils/env";
 import httpServer from "@utils/http/server";
 
 export async function get(req, res) {
@@ -11,9 +11,9 @@ export async function get(req, res) {
   }
 
   await req.session.destroy();
-  await res.cookie(sessionEnv.cookie.name, "", { expires: new Date(0) });
-  await res.cookie(cookieName.rid, "", { expires: new Date(0) });
-  await res.cookie(cookieName.trans, "", { expires: new Date(0) });
+  await res.cookie("dd", "", cookieConfigRemove);
+  await res.cookie(cookieName.rid, "", cookieConfigRemove);
+  await res.cookie(cookieName.trans, "", cookieConfigRemove);
 
   res.redirect(`/dd/debit/init?s=${sessionID}`);
   return false;

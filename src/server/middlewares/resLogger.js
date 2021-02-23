@@ -1,7 +1,7 @@
 import { isFileRoute, getPathName, isSkipPath } from "@server/utils/common";
 import { logEnd } from "@constants/logger";
 import { decryptResp } from "@server/utils/crypto";
-import { sessionEnv, cookieName } from "@server/utils/env";
+import { cookieConfig, cookieConfigRemove, cookieName } from "@server/utils/env";
 
 const resLogger = () => {
   return function(req, res, next) {
@@ -64,9 +64,9 @@ const resLogger = () => {
         // destroy sesion after finish deliver page general error
         if (req.url === "/debit/error") {
           req.session.destroy();
-          res.cookie(sessionEnv.cookie.name, "", { expires: new Date(0) });
-          res.cookie(cookieName.rid, "", { expires: new Date(0) });
-          res.cookie(cookieName.trans, "", { expires: new Date(0) });
+          res.cookie("dd", "", cookieConfigRemove);
+          res.cookie(cookieName.rid, "", cookieConfigRemove);
+          res.cookie(cookieName.trans, "", cookieConfigRemove);
         }
 
         oldSend.apply(res, arguments);

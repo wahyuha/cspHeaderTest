@@ -1,13 +1,14 @@
 import session from "express-session";
 import sessionFileStore from "session-file-store";
-import { cookieConfig } from "@server/middlewares/cookieConfig";
+// import { cookieConfig } from "@server/middlewares/cookieConfig";
+import { cookieConfig } from "@server/utils/env";
 
 let store;
 
 const FileStore = new sessionFileStore(session);
 store = new FileStore({
   path: ".sessions",
-  ttl: 1800,
+  ttl: 600,
 });
 
 export const sessionStore = {

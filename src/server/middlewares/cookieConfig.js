@@ -1,6 +1,6 @@
 export const cookieConfig = {
   path: "/",
-  maxAge: 1800000,
+  maxAge: 600000,
   httpOnly: true,
   secure: false,
   SameSite: "strict",
