@@ -1,4 +1,5 @@
-import sirv from "sirv";
+import serveStatic from "serve-static";
+import path from "path";
 import nocache from "nocache";
 import express from "express";
 import helmet from "helmet";
@@ -25,8 +26,7 @@ const app = express();
 const basePath = process.env.BASE_PATH || '';
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === "development";
-const static_path =
-  NODE_ENV === "development" ? "static" : "__sapper__/build/static";
+const static_path = dev ? "../../../static" : "../../../__sapper__/build/static";
 
 // security header
 // app.use(helmet.contentSecurityPolicy());
@@ -51,6 +51,9 @@ app.use((req, res, next) => {
 //healthcheck
 app.use("/dd/ping", require("express-healthcheck")());
 
+app.use(basePath+"", serveStatic(path.join(__dirname, static_path), {
+  maxAge: '7d',
+}))
 app.use(nocache());
 
 app.use(
@@ -60,7 +63,6 @@ app.use(
   urlencoded({ limit: "2mb", extended: true }),
   session(sessionStore),
   compression({ threshold: 0 }),
-  sirv(static_path, { dev }),
   initSession(),
   reqDecrypt(),
   reqLogger(),
