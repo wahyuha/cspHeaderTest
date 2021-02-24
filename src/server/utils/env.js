@@ -17,6 +17,7 @@ export const cookieConfigRemove = {
 };
 
 export const cookieName = {
+  main: "dd",
   rid: "req",
   trans: "tid",
 };

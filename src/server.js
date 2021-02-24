@@ -53,7 +53,7 @@ app.use((req, res, next) => {
 });
 
 //healthcheck
-app.use("/dd/ping", require("express-healthcheck")());
+app.use(`${basePath}/ping`, require("express-healthcheck")());
 
 app.use(
   basePath + "",

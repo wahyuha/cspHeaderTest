@@ -1,7 +1,9 @@
 import session from "express-session";
 import sessionFileStore from "session-file-store";
-// import { cookieConfig } from "@server/middlewares/cookieConfig";
 import { cookieConfig } from "@server/utils/env";
+
+const sessionSecret = process.env.SESSION_SECRET || "kocheng";
+const sessionName = process.env.SESSION_NAME || "dd";
 
 let store;
 
@@ -12,9 +14,9 @@ store = new FileStore({
 });
 
 export const sessionStore = {
-  secret: "kocheng",
+  secret: sessionSecret,
   resave: false,
-  name: "dd",
+  name: sessionName,
   saveUninitialized: false,
   unset: "destroy",
   cookie: cookieConfig,

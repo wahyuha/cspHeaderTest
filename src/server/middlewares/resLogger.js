@@ -53,11 +53,11 @@ const resLogger = () => {
 
         console.tdr(req.session.requestId, req.session.tid, pth, mtdr);
         console.end(req.session.requestId, req.session.tid, logEnd, pth, mte);
-        
+
         // destroy sesion after finish deliver page general error
         if (req.url === "/debit/error") {
           req.session.destroy();
-          res.cookie("dd", "", cookieConfigRemove);
+          res.cookie(cookieName.main, "", cookieConfigRemove);
           res.cookie(cookieName.rid, "", cookieConfigRemove);
           res.cookie(cookieName.trans, "", cookieConfigRemove);
         }
