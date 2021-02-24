@@ -1,24 +1,23 @@
 import axios from "axios";
-import { apiUrlServer } from "@constants/url";
+import { apiUrlServer, apiUrlServerLoko } from "@constants/url";
 import { logStartOutbond, logEndOutbond } from "@constants/logger";
 
 class httpServer {
   constructor(session) {
-    this.apiUrl;
+    this.apiUrl = apiUrlServer;
     this.headers = {};
     this.instance;
     this.session = session;
     this.timeout = 120000;
-
-    this.createApiUrl()
-      .createHeaders()
+    this.createHeaders()
       .createInstance()
       .requestInterceptor()
       .responseInterceptor();
   }
 
-  createApiUrl() {
-    this.apiUrl = apiUrlServer;
+  setUrl(apiUrl) {
+    this.apiUrl = apiUrl;
+    this.createInstance();
     return this;
   }
 
@@ -185,8 +184,15 @@ export default (session) => {
     return await new httpServer(session).post(url, data);
   }
 
+  async function postLoko(url, data) {
+    return await new httpServer(session)
+      .setUrl(apiUrlServerLoko)
+      .post(url, data);
+  }
+
   return {
     get,
     post,
+    postLoko,
   };
 };
