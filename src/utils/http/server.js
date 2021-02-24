@@ -59,8 +59,8 @@ class httpServer {
 
         const mts = {
           headers: headers,
-          query: config.query ?? {},
-          params: config.params ?? {},
+          query: config.query || {},
+          params: config.params || {},
           body: config.data,
         };
         const path = {

@@ -12,7 +12,7 @@ export const ts = (rid, tid, tag, path, msg) => {
   let logTime = new Date();
   let messageLog = {
     requestId: rid,
-    transId: tid ?? intruder,
+    transId: tid || intruder,
     tag: tag,
     domain: path.domain,
     path: path.pathname,
@@ -31,7 +31,7 @@ export const te = (rid, tid, tag, path, msg) => {
   let diff = Math.abs(logTime - logStartTime); // difference in milliseconds
   let messageLog = {
     requestId: rid,
-    transId: tid ?? intruder,
+    transId: tid || intruder,
     tag: tag,
     domain: path.domain,
     path: path.pathname,
@@ -51,7 +51,7 @@ export const tdr = (rid, tid, path, msg) => {
   const diff = Math.abs(logTime - logStartTime); // difference in milliseconds
   let messageLog = {
     requestId: rid,
-    transId: tid ?? intruder,
+    transId: tid || intruder,
     port: process.env.PORT || 3010,
     logTime: logTime.toISOString(),
     app: appname,
@@ -85,7 +85,7 @@ export const tps = (rid, tid, pname, msg) => {
   let logTime = new Date();
   let messageLog = {
     requestId: rid,
-    transId: tid ?? intruder,
+    transId: tid || intruder,
     tag: logStartProcess,
     processName: pname,
     logTime: logTime.toISOString(),
@@ -103,7 +103,7 @@ export const tpe = (rid, tid, pname, msg) => {
   let diff = Math.abs(logTime - logStartTime); // difference in milliseconds
   let messageLog = {
     requestId: rid,
-    transId: tid ?? intruder,
+    transId: tid || intruder,
     tag: logEndProcess,
     processName: pname,
     logTime: logTime.toISOString(),
