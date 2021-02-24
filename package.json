@@ -88,7 +88,7 @@
   "lint-staged": {
     "*.+(js|svelte|json)": [
       "prettier --write",
-      "eslint --fix",
+      "npm run lint",
       "git add"
     ],
     "*.+(css|md)": [
