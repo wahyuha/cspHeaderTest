@@ -4,12 +4,6 @@ export const cookieConfig = {
   httpOnly: true,
   secure: false,
   SameSite: "strict",
-  // secret: 'kocheng',
-  // cookie: {
-  //   name: 'dd',
-  //   secure: true,
-  //   maxAge: 600000,
-  // },
 };
 
 export const cookieConfigRemove = {

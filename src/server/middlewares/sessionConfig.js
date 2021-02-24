@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-// import { cookieConfig } from "@server/middlewares/cookieConfig";
 import { cookieConfig, cookieName } from "@server/utils/env";
 import {
   getPathName,
@@ -15,7 +14,6 @@ const sessionConfig = () => {
       req.session.extSessionId = getPathQuery(req.url).s;
       req.session.requestId = uuidv4();
       req.session.tid = tid;
-      // req.session.salt = newToken();
       req.session.sessionId = newToken();
       req.session.aesKey = newToken();
       req.session.aesDel = newtokenDelimeter();

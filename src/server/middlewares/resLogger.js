@@ -53,16 +53,7 @@ const resLogger = () => {
 
         console.tdr(req.session.requestId, req.session.tid, pth, mtdr);
         console.end(req.session.requestId, req.session.tid, logEnd, pth, mte);
-        // create new transId to client for next session verification
-        // if (!isFileRoute(req.url)) {
-        //   req.session.tid = uuidv4();
-        // }
-
-        // if (res.statusCode !== 500) {
-        //   res.cookie(cookieName.rid, req.session.requestId, cookieConfig);
-        //   res.cookie(cookieName.trans, req.session.tid, cookieConfig);
-        // }
-
+        
         // destroy sesion after finish deliver page general error
         if (req.url === "/debit/error") {
           req.session.destroy();
