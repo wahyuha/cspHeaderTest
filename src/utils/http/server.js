@@ -61,8 +61,8 @@ class httpServer {
 
         const mts = {
           headers: headers,
-          query: config.query !== undefined ? config.query : {},
-          params: config.params !== undefined ? config.params : {},
+          query: config.query?? {},
+          params: config.params?? {},
           body: config.data,
         };
         const path = {
