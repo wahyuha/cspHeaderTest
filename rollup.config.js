@@ -18,14 +18,14 @@ const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
 const onwarn = (warning, onwarn) =>
   (warning.code === "MISSING_EXPORT" && /'preload'/.test(warning.message)) ||
-	(warning.code === "CIRCULAR_DEPENDENCY" &&
-		/[/\\]@sapper[/\\]/.test(warning.message)) ||
-	(warning.code === "PLUGIN_WARNING" &&
-		warning.pluginCode &&
-		warning.pluginCode === "a11y-no-onchange") ||
-	warning.code === "EVAL" ||
-	warning.code === "MISSING_MODULE" ||
-	onwarn(warning);
+  (warning.code === "CIRCULAR_DEPENDENCY" &&
+    /[/\\]@sapper[/\\]/.test(warning.message)) ||
+  (warning.code === "PLUGIN_WARNING" &&
+    warning.pluginCode &&
+    warning.pluginCode === "a11y-no-onchange") ||
+  warning.code === "EVAL" ||
+  warning.code === "MISSING_MODULE" ||
+  onwarn(warning);
 
 export default {
   client: {
@@ -151,7 +151,7 @@ export default {
     ],
     external: Object.keys(pkg.dependencies).concat(
       require("module").builtinModules ||
-				Object.keys(process.binding("natives"))
+        Object.keys(process.binding("natives"))
     ),
 
     preserveEntrySignatures: "strict",

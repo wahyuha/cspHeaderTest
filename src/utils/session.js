@@ -1,6 +1,6 @@
-import {getPathName } from "@server/utils/common";
+import { getPathName } from "@server/utils/common";
 
-export const isValidSession = req => {
+export const isValidSession = (req) => {
   const s = req.session;
   const extsId = s.extSessionId !== undefined && s.extSessionId !== "";
   const tId = s.tid === req.cookies.tid;
@@ -14,6 +14,6 @@ export const isValidSession = req => {
     cookieTal: req.cookies.tal,
     extSessionId: s.extSessionId,
   });
-  
+
   return extsId && tId;
 };

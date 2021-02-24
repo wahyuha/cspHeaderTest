@@ -20,7 +20,7 @@ export async function post(req, res) {
         partnerName,
         customerNumber,
         backToStoreUri: session.backToStoreUri,
-        backToStoreFailedUri: session.backToStoreFailedUri
+        backToStoreFailedUri: session.backToStoreFailedUri,
       },
       status: "00",
     });

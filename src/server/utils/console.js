@@ -1,4 +1,4 @@
-import { ts, te, tp, tps, tpe, tdr } from "@server/utils/log";
+import { ts, te, tp, tdr } from "@server/utils/log";
 
 export const initDebugLog = () => {
   console.start = console.log;
@@ -15,9 +15,9 @@ export const enableDebugLog = () => {
 };
 
 export const disableDebugLog = () => {
-  console.log = function() {};
-  console.start = function() {};
-  console.end = function() {};
-  console.process = function() {};
-  console.tdr = function() {};
+  console.log = function () {};
+  console.start = function () {};
+  console.end = function () {};
+  console.process = function () {};
+  console.tdr = function () {};
 };

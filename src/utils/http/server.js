@@ -3,7 +3,6 @@ import { apiUrlServer } from "@constants/url";
 import { logStartOutbond, logEndOutbond } from "@constants/logger";
 
 class httpServer {
-
   constructor(session) {
     this.apiUrl;
     this.headers = {};
@@ -11,8 +10,7 @@ class httpServer {
     this.session = session;
     this.timeout = 120000;
 
-    this
-      .createApiUrl()
+    this.createApiUrl()
       .createHeaders()
       .createInstance()
       .requestInterceptor()
@@ -55,14 +53,14 @@ class httpServer {
     const session = this.session;
     const remHead = ["common", "get", "post", "head", "put", "patch", "delete"];
     this.instance.interceptors.request.use(
-      function (config){
+      function (config) {
         const headers = config.headers;
-        remHead.forEach(header => delete headers[header]);
+        remHead.forEach((header) => delete headers[header]);
 
         const mts = {
           headers: headers,
-          query: config.query?? {},
-          params: config.params?? {},
+          query: config.query ?? {},
+          params: config.params ?? {},
           body: config.data,
         };
         const path = {
@@ -70,7 +68,13 @@ class httpServer {
           pathname: config.url,
         };
 
-        console.start(session.requestId, session.tid, logStartOutbond, path, mts);
+        console.start(
+          session.requestId,
+          session.tid,
+          logStartOutbond,
+          path,
+          mts
+        );
         return config;
       },
       function (error) {
@@ -80,10 +84,24 @@ class httpServer {
           domain: config.baseURL,
           pathname: config.url,
         };
-        const remHead = ["common", "get", "post", "head", "put", "patch", "delete"];
-        remHead.forEach(header => delete headers[header]);
+        const remHead = [
+          "common",
+          "get",
+          "post",
+          "head",
+          "put",
+          "patch",
+          "delete",
+        ];
+        remHead.forEach((header) => delete headers[header]);
         const mts = { error: true, headers: headers, errors: error };
-        console.start(session.requestId, session.tid, logStartOutbond, path, mts);
+        console.start(
+          session.requestId,
+          session.tid,
+          logStartOutbond,
+          path,
+          mts
+        );
 
         return Promise.reject(error);
       }
@@ -120,7 +138,7 @@ class httpServer {
         console.end(session.requestId, session.tid, logEndOutbond, path, mte);
 
         return response;
-      }, 
+      },
       function (error) {
         const config = error.config;
         const path = {

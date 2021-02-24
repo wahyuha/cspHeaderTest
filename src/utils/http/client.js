@@ -10,8 +10,7 @@ class httpClient {
     this.session = session;
     this.timeout = 120000;
 
-    this
-      .createApiUrl()
+    this.createApiUrl()
       .createHeaders()
       .createInstance()
       .requestInterceptor()
@@ -48,7 +47,7 @@ class httpClient {
   requestInterceptor() {
     const session = this.session;
     this.instance.interceptors.request.use(
-      function (config){
+      function (config) {
         if (config.data !== undefined) {
           if (process.env.CRYPTO_MODE === "on") {
             let data = config.data;
@@ -56,7 +55,12 @@ class httpClient {
               data = JSON.stringify(data);
             }
             config.data = {
-              data: encrypt(data, session.aesKey, session.aesDel, session.rsaDel),
+              data: encrypt(
+                data,
+                session.aesKey,
+                session.aesDel,
+                session.rsaDel
+              ),
             };
           }
         }
@@ -79,7 +83,7 @@ class httpClient {
         }
 
         return response;
-      }, 
+      },
       function (error) {
         return Promise.reject(error);
       }

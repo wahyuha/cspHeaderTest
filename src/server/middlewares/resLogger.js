@@ -1,16 +1,18 @@
 import { isFileRoute, getPathName, isSkipPath } from "@server/utils/common";
 import { logEnd } from "@constants/logger";
 import { decryptResp } from "@server/utils/crypto";
-import { cookieConfig, cookieConfigRemove, cookieName } from "@server/utils/env";
+import { cookieConfigRemove, cookieName } from "@server/utils/env";
 
 const resLogger = () => {
-  return function(req, res, next) {
-    if (!isFileRoute(req.url) 
-      && !isSkipPath(getPathName(req.url)) 
-      && getPathName(req.url) !== "/debit/reinit") {
+  return function (req, res, next) {
+    if (
+      !isFileRoute(req.url) &&
+      !isSkipPath(getPathName(req.url)) &&
+      getPathName(req.url) !== "/debit/reinit"
+    ) {
       const pathName = getPathName(req.url);
       let oldSend = res.end;
-      res.end = function(data) {
+      res.end = function (data) {
         let bd = req.body;
 
         let mte = {};

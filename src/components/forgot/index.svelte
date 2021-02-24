@@ -1,5 +1,5 @@
 <script>
-	import Meta from "@components/meta/index.svelte";
+  import Meta from "@components/meta/index.svelte";
   import { lazy } from "@helpers/img.js";
   import Accordion from "@components/accordion/index.svelte";
   import Section from "@components/accordion/section.svelte";
@@ -8,11 +8,84 @@
   let accordion = "";
 </script>
 
+<Meta title="Lupa PIN" />
+<div class="wrapper-clean">
+  <div class="direction-wrap">
+    <p class="info">
+      Lupa PIN akun LinkAja kamu? Reset PIN kamu dengan metode yang tersedia,
+      yuk!
+    </p>
+    <div>
+      <Accordion>
+        <Section key="1">
+          <div class="d-flex-center" slot="header">
+            <img
+              class="icon-header"
+              alt="Pertanyaan Keamanan"
+              src="icons/question.png"
+              use:lazy={{ src: "icons/question.png" }}
+            />
+            <span class="ff-b f14" bind:this={accordion}>
+              Pertanyaan Keamanan
+            </span>
+          </div>
+          <div slot="content" class="content-slot">
+            {#each FORGOT_CONSTANTS.question as stringValue, i}
+              <div class="item-flex">
+                <span class="item-num">{i + 1}</span>
+                <span>{@html stringValue}</span>
+              </div>
+            {/each}
+          </div>
+        </Section>
+        <Section key="2">
+          <div class="d-flex-center" slot="header">
+            <img
+              class="icon-header"
+              alt="Email"
+              src="icons/email.png"
+              use:lazy={{ src: "icons/email.png" }}
+            />
+            <span class="ff-b f14" bind:this={accordion}> Email </span>
+          </div>
+          <div slot="content" class="content-slot">
+            {#each FORGOT_CONSTANTS.email as stringValue, i}
+              <div class="item-flex">
+                <span class="item-num">{i + 1}</span>
+                <span>{@html stringValue}</span>
+              </div>
+            {/each}
+          </div>
+        </Section>
+        <Section key="3">
+          <div class="d-flex-center" slot="header">
+            <img
+              class="icon-header"
+              alt="Call Center"
+              src="icons/call.png"
+              use:lazy={{ src: "icons/call.png" }}
+            />
+            <span class="ff-b f14" bind:this={accordion}> Call Center </span>
+          </div>
+          <div slot="content" class="content-slot">
+            {#each FORGOT_CONSTANTS.call as stringValue, i}
+              <div class="item-flex">
+                <span class="item-num">{i + 1}</span>
+                <span>{@html stringValue}</span>
+              </div>
+            {/each}
+          </div>
+        </Section>
+      </Accordion>
+    </div>
+  </div>
+</div>
+
 <style>
-	.direction-wrap {
-		padding: 0;
-	}
-	.info {
+  .direction-wrap {
+    padding: 0;
+  }
+  .info {
     margin: 0;
     padding: 0 16px 16px;
   }
@@ -35,84 +108,11 @@
   }
   .item-num {
     padding: 4px 8px;
-    background-color: #F1F2F6;
-    color: #7E7E7E;
+    background-color: #f1f2f6;
+    color: #7e7e7e;
     border-radius: 10%;
     display: inline-table;
     margin-right: 16px;
     font-size: 10px;
   }
 </style>
-
-<Meta title="Lupa PIN" />
-<div class="wrapper-clean">
-	<div class="direction-wrap">
-		<p class="info">
-			Lupa PIN akun LinkAja kamu? Reset PIN kamu dengan metode yang tersedia, yuk!
-    </p>
-    <div>
-      <Accordion>
-        <Section key="1">
-          <div class="d-flex-center" slot="header">
-            <img
-              class="icon-header"
-              alt="Pertanyaan Keamanan"
-              src="icons/question.png"
-              use:lazy={{ src: "icons/question.png" }} />
-            <span class="ff-b f14" bind:this={accordion}>
-              Pertanyaan Keamanan
-            </span>
-          </div>
-          <div slot="content" class="content-slot">
-            {#each FORGOT_CONSTANTS.question as stringValue, i}
-              <div class="item-flex">
-                <span class="item-num">{i+1}</span>
-                <span>{@html stringValue}</span>
-              </div>
-            {/each}
-          </div>
-        </Section>
-        <Section key="2">
-          <div class="d-flex-center" slot="header">
-            <img
-              class="icon-header"
-              alt="Email"
-              src="icons/email.png"
-              use:lazy={{ src: "icons/email.png" }} />
-            <span class="ff-b f14" bind:this={accordion}>
-              Email
-            </span>
-          </div>
-          <div slot="content" class="content-slot">
-            {#each FORGOT_CONSTANTS.email as stringValue, i}
-              <div class="item-flex">
-                <span class="item-num">{i+1}</span>
-                <span>{@html stringValue}</span>
-              </div>
-            {/each}
-          </div>
-        </Section>
-        <Section key="3">
-          <div class="d-flex-center" slot="header">
-            <img
-              class="icon-header"
-              alt="Call Center"
-              src="icons/call.png"
-              use:lazy={{ src: "icons/call.png" }} />
-            <span class="ff-b f14" bind:this={accordion}>
-              Call Center
-            </span>
-          </div>
-          <div slot="content" class="content-slot">
-            {#each FORGOT_CONSTANTS.call as stringValue, i}
-              <div class="item-flex">
-                <span class="item-num">{i+1}</span>
-                <span>{@html stringValue}</span>
-              </div>
-            {/each}
-          </div>
-        </Section>
-      </Accordion>
-    </div>
-	</div>
-</div>

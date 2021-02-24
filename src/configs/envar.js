@@ -6,7 +6,7 @@ const loadDotEnv = () => {
 
   const ENV_VARS = {};
   for (let key in process.env) {
-    ENV_VARS[targetPrefix + key] = ("'" + process.env[key] + "'");
+    ENV_VARS[targetPrefix + key] = "'" + process.env[key] + "'";
   }
   return ENV_VARS;
 };

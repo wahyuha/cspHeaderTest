@@ -2,27 +2,24 @@ import CryptoJS from "crypto-js";
 import NodeRSA from "node-rsa";
 import sshKeyDecrypt from "ssh-key-decrypt";
 
-var keyBuf = sshKeyDecrypt(
-  process.env.PRIVATE_KEY,
-  process.env.KEY_PASS
-);
+var keyBuf = sshKeyDecrypt(process.env.PRIVATE_KEY, process.env.KEY_PASS);
 
 const key = new NodeRSA(null, { encryptionScheme: "pkcs1" });
 key.importKey(keyBuf, "pkcs1-der");
 
-const rsaEncryptPub = plainText => {
+const rsaEncryptPub = (plainText) => {
   return key.encrypt(plainText, "base64");
 };
 
-const rsaDecryptPrv = cipherText => {
+const rsaDecryptPrv = (cipherText) => {
   return key.decrypt(cipherText, "utf8");
 };
 
-const rsaEncryptPrv = plainText => {
+const rsaEncryptPrv = (plainText) => {
   return key.encryptPrivate(plainText, "base64");
 };
 
-const rsaDecryptPub = cipherText => {
+const rsaDecryptPub = (cipherText) => {
   return key.decryptPublic(cipherText, "utf8");
 };
 

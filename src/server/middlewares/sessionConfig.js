@@ -1,10 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 // import { cookieConfig } from "@server/middlewares/cookieConfig";
 import { cookieConfig, cookieName } from "@server/utils/env";
-import { getPathName, getPathQuery, newToken, newtokenDelimeter } from "@server/utils/common.js";
+import {
+  getPathName,
+  getPathQuery,
+  newToken,
+  newtokenDelimeter,
+} from "@server/utils/common.js";
 
 const sessionConfig = () => {
-  return function(req, res, next) {
+  return function (req, res, next) {
     if (getPathName(req.url) === "/debit/init") {
       const tid = uuidv4();
       req.session.extSessionId = getPathQuery(req.url).s;

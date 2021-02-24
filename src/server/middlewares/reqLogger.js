@@ -2,7 +2,7 @@ import { isFileRoute, getPathName, isSkipPath } from "@server/utils/common";
 import { logStart } from "@constants/logger";
 
 const reqLogger = () => {
-  return function(req, res, next) {
+  return function (req, res, next) {
     if (!isFileRoute(req.url) && !isSkipPath(getPathName(req.url))) {
       const pathName = getPathName(req.url);
       const mts = {

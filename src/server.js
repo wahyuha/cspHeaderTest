@@ -14,19 +14,23 @@ import reqDecrypt from "@middlewares/reqDecrypt";
 import resEncrypt from "@middlewares/resEncrypt";
 import reqLogger from "@middlewares/reqLogger";
 import resLogger from "@middlewares/resLogger";
-import { initDebugLog, enableDebugLog, disableDebugLog } from "@server/utils/console";
+import {
+  initDebugLog,
+  enableDebugLog,
+  disableDebugLog,
+} from "@server/utils/console";
 
 initDebugLog();
-process.env.DEBUG_MODE_FILE === "true"
-  ? enableDebugLog()
-  : disableDebugLog();
+process.env.DEBUG_MODE_FILE === "true" ? enableDebugLog() : disableDebugLog();
 
 const app = express();
 
-const basePath = process.env.BASE_PATH || '';
+const basePath = process.env.BASE_PATH || "";
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === "development";
-const static_path = dev ? "../../../static" : "../../../__sapper__/build/static";
+const static_path = dev
+  ? "../../../static"
+  : "../../../__sapper__/build/static";
 
 // security header
 // app.use(helmet.contentSecurityPolicy());
@@ -51,9 +55,12 @@ app.use((req, res, next) => {
 //healthcheck
 app.use("/dd/ping", require("express-healthcheck")());
 
-app.use(basePath+"", serveStatic(path.join(__dirname, static_path), {
-  maxAge: '7d',
-}))
+app.use(
+  basePath + "",
+  serveStatic(path.join(__dirname, static_path), {
+    maxAge: "7d",
+  })
+);
 app.use(nocache());
 
 app.use(

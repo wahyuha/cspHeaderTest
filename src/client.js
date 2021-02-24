@@ -6,7 +6,7 @@ if (process.env.CRYPTO_MODE === "on") {
 }
 
 if (process.env.ENABLE_ERUDA === "true") {
-  import("eruda").then(resp => {
+  import("eruda").then((resp) => {
     resp.default.init();
   });
 }

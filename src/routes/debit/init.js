@@ -5,16 +5,21 @@ export async function get(req, res) {
   req.session.extSessionId = sessionID;
 
   try {
-    const { data } = await httpServer(req.session).post("/1.0/bind/check", { sessionID });
-    const { data: {
-      state,
-      backToStoreUri,
-      backToStoreFailedUri,
-      partnerName,
-      customerNumber,
-    }, status } = data;
+    const { data } = await httpServer(req.session).post("/1.0/bind/check", {
+      sessionID,
+    });
+    const {
+      data: {
+        state,
+        backToStoreUri,
+        backToStoreFailedUri,
+        partnerName,
+        customerNumber,
+      },
+      status,
+    } = data;
 
-    if(status === "00") {
+    if (status === "00") {
       req.session.partnerName = partnerName;
       req.session.customerNumber = customerNumber;
       req.session.state = state;
@@ -22,23 +27,23 @@ export async function get(req, res) {
       req.session.backToStoreFailedUri = backToStoreFailedUri;
 
       if (state === "BindingStateAgreement") {
-        res.redirect(`/dd/debit/consent`);
+        res.redirect("/dd/debit/consent");
         return false;
-      } else if(state === "BindingStateLogin") {
-        res.redirect(`/dd/debit/otp`);
+      } else if (state === "BindingStateLogin") {
+        res.redirect("/dd/debit/otp");
         return false;
-      } else if(state === "BindingStateVerified") {
-        res.redirect(`/dd/debit/success`);
+      } else if (state === "BindingStateVerified") {
+        res.redirect("/dd/debit/success");
         return false;
       }
-      res.redirect(`/dd/debit/error?code=991`);
+      res.redirect("/dd/debit/error?code=991");
       return false;
     }
     res.redirect(`/dd/debit/error?code=${status}`);
     return false;
   } catch (error) {
     console.process(error);
-    res.redirect(`/dd/debit/error?code=992`);
+    res.redirect("/dd/debit/error?code=992");
     return false;
   }
 }

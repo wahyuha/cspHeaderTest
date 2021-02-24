@@ -22,7 +22,9 @@ export async function post(req, res) {
       sessionID,
       pin: encryptedPin,
     });
-    const { data: { data, status, message } } = response;
+    const {
+      data: { data, status, message },
+    } = response;
 
     if (status === "00") {
       req.session.customerState = data.state;
@@ -30,6 +32,6 @@ export async function post(req, res) {
     }
     res.json({ data, status, message });
   } catch (error) {
-    res.json({error});
+    res.json({ error });
   }
 }

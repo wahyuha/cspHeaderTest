@@ -2,7 +2,7 @@ const winston = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
 const moment = require("moment-timezone");
 const logform = require("logform");
-const path = require('path');
+const path = require("path");
 
 const { combine, printf } = logform.format;
 
@@ -12,7 +12,7 @@ const os = require("os");
 const hostname = os.hostname();
 const transport = new DailyRotateFile({
   dirname: process.env.SAPPER_APP_LOGS_PATH,
-  filename: path.join('logs', `AUTH_${hostname}_%DATE%.log`),
+  filename: path.join("logs", `AUTH_${hostname}_%DATE%.log`),
   datePattern: "YYYY-MM-DD",
   zippedArchive: true,
   maxFiles: "14d",
@@ -21,7 +21,7 @@ const transport = new DailyRotateFile({
 
 const logger = winston.createLogger({
   format: combine(
-    printf(info => {
+    printf((info) => {
       return `${info.message}`;
     })
   ),

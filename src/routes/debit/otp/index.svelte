@@ -20,7 +20,7 @@
 
   let otp;
   let customerNumber;
-  
+
   let loading = false;
   let error;
   let showLoaderFirst = false;
@@ -34,8 +34,9 @@
     loading = true;
     error = "";
     const params = { otp };
-    await clientHttp(sessionClient).post("/otp", params)
-      .then(response => {
+    await clientHttp(sessionClient)
+      .post("/otp", params)
+      .then((response) => {
         const { status } = response.data;
         if (status === "00") {
           goto(`${baseUrl}/debit/success`);
@@ -45,7 +46,7 @@
           error = publicError(status);
         }
       })
-      .catch(() => error = publicError())
+      .catch(() => (error = publicError()))
       .finally(() => {
         loading = false;
       });
@@ -57,64 +58,65 @@
   };
 </script>
 
+<Meta title="Masukkan OTP" />
+<div class="wrapper-clean">
+  <div class="banner-wrap">
+    <img
+      class="banner-img"
+      alt="OTP LinkAja"
+      src="images/login-banner.png"
+      use:lazy={{ src: "images/login-banner.png" }}
+    />
+  </div>
+
+  <div class="form-wrap">
+    <p class="pin-info" in:fade={{ duration: 300 }}>
+      Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber ||
+        "*************"}
+    </p>
+    <InputOTP bind:otp {autoSubmit} {error} />
+    <ResendOTP
+      on:limit={() => {
+        showModal = true;
+      }}
+    />
+  </div>
+
+  <div class="action-wrap" in:fade={{ duration: 500 }}>
+    <Button disabled={loading} bind:loading onClick={onSubmit}>Lanjut</Button>
+    <Counter
+      on:limit={() => {
+        showLoaderFirst = true;
+      }}
+    />
+  </div>
+</div>
+{#if showLoaderFirst}
+  <LoaderBlocking />
+{:else if showModal}
+  <Modal
+    on:cancel={() => (showModal = false)}
+    on:close={() => (showModal = false)}
+  >
+    <LimitOTP onClick={() => (showModal = false)} />
+  </Modal>
+{/if}
+
 <style>
-	.banner-wrap {
-		overflow: hidden;
+  .banner-wrap {
+    overflow: hidden;
   }
   .banner-img {
     width: 100%;
     min-height: 90px;
   }
   .form-wrap {
-		padding: 16px;
+    padding: 16px;
   }
   .pin-info {
     margin: 0 0 16px;
   }
-	.action-wrap {
-		padding: 16px;
+  .action-wrap {
+    padding: 16px;
   }
 </style>
-
-<Meta title="Masukkan OTP" />
-<div class="wrapper-clean">
-	<div class="banner-wrap">
-		<img
-			class="banner-img"
-			alt="OTP LinkAja"
-			src="images/login-banner.png"
-			use:lazy={{ src: "images/login-banner.png" }} />
-  </div>
-  
-	<div class="form-wrap">
-    <p class="pin-info" in:fade={{ duration: 300 }}>
-      Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber || "*************"}
-    </p>
-    <InputOTP
-      bind:otp={otp}
-      autoSubmit={autoSubmit}
-      error={error}
-    />
-    <ResendOTP on:limit={() => { showModal = true }} />
-	</div>
-
-	<div class="action-wrap" in:fade={{ duration: 500 }}>
-    <Button
-      disabled={loading}
-      bind:loading={loading}
-			onClick={onSubmit}
-		>
-			Lanjut
-    </Button>
-    <Counter on:limit={() => { showLoaderFirst = true }} />
-  </div>
-</div>
-{#if showLoaderFirst}
-  <LoaderBlocking />
-{:else if showModal}
-	<Modal
-		on:cancel={() => (showModal = false)}
-		on:close={() => (showModal = false)}>
-		<LimitOTP onClick={() => (showModal = false)} />
-	</Modal>
-{/if}

@@ -15,7 +15,7 @@
   function listenEvent() {
     if ($timer <= 0) {
       clearInterval(timerInt);
-      dispatch('limit', true);
+      dispatch("limit", true);
       reset();
       setTimeout(() => goto(`${baseUrl}/debit/error/timeout`), 2000);
     }
@@ -28,10 +28,12 @@
     }, 1000);
 
     return () => {
-			clearInterval(timerInt);
-		};
+      clearInterval(timerInt);
+    };
   });
 </script>
+
+<div class="counter">Berakhir dalam {pad(minutes, 2)}:{pad(seconds, 2)}</div>
 
 <style>
   .counter {
@@ -39,5 +41,3 @@
     text-align: center;
   }
 </style>
-
-<div class="counter">Berakhir dalam {pad(minutes, 2)}:{pad(seconds, 2)}</div>
