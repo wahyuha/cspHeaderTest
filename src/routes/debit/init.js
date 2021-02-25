@@ -16,6 +16,7 @@ export async function get(req, res) {
         backToStoreFailedUri,
         partnerName,
         customerNumber,
+        editable,
       },
       status,
     } = data;
@@ -23,6 +24,7 @@ export async function get(req, res) {
     if (status === "00") {
       req.session.partnerName = partnerName;
       req.session.customerNumber = customerNumber;
+      req.session.editable = editable;
       req.session.state = state;
       req.session.backToStoreUri = backToStoreUri;
       req.session.backToStoreFailedUri = backToStoreFailedUri;

@@ -26,9 +26,10 @@
         if (status === "00") {
           partnerName = data.partnerName;
           setCustomer({
-            number: data.customerNumber,
+            customerNumber: data.customerNumber,
             backToStoreUri: data.backToStoreUri,
             backToStoreFailedUri: data.backToStoreFailedUri,
+            editable: data.editable,
           });
         } else {
           const queryCode = status ? `?code=${status}` : "";

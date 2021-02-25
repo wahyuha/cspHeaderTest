@@ -9,18 +9,24 @@ export async function post(req, res) {
 
     return false;
   }
-  const session = req.session;
-  const partnerName = session.partnerName;
-  const customerNumber = session.customerNumber;
-  const state = session.state;
+  const session = req.session || {};
+  const {
+    partnerName,
+    customerNumber,
+    state,
+    editable,
+    backToStoreUri,
+    backToStoreFailedUri,
+  } = session;
 
   if (state === "BindingStateAgreement" && partnerName) {
     res.json({
       data: {
         partnerName,
         customerNumber,
-        backToStoreUri: session.backToStoreUri,
-        backToStoreFailedUri: session.backToStoreFailedUri,
+        editable,
+        backToStoreUri,
+        backToStoreFailedUri,
       },
       status: "00",
     });

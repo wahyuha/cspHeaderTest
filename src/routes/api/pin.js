@@ -16,11 +16,13 @@ export async function post(req, res) {
   const requestId = req.session.requestId;
   const pin = req.body.pin || "";
   const encryptedPin = encrypt(`${pin}`, requestId);
+  const customerNumber = `${req.body.customerNumber}` || "";
 
   try {
     const response = await httpServer(req.session).post("/1.0/bind/login", {
       sessionID,
       pin: encryptedPin,
+      customerNumber
     });
     const {
       data: { data, status, message },

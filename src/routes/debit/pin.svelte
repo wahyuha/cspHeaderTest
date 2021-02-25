@@ -15,20 +15,23 @@
   import ForgotContent from "@components/forgot/index.svelte";
   import LoaderBlocking from "@components/loader/blocking.svelte";
 
-  let pin;
-  let loading = false;
-  let error;
-  let showLoaderFirst = false;
-
   const { session } = stores();
   const sessionClient = $session;
+
+  let pin;
+  let loading = false;
+  let showLoaderFirst = false;
+  let error;
+  let { customerNumber } = $customer;
+
+  const { editable } = $customer || false;
 
   $: forgotModal = false;
 
   const onSubmit = async () => {
     loading = true;
     error = "";
-    const params = { pin };
+    const params = { pin, customerNumber };
     await clientHttp(sessionClient)
       .post("/pin", params)
       .then((response) => {
@@ -68,9 +71,9 @@
     <div class="input-wrap">
       <div class="ff-b">Nomor Handphone</div>
       <input
-        type="text"
-        value={$customer.number}
-        disabled
+        type="number"
+        disabled={!editable}
+        bind:value={customerNumber}
         class="input-general"
       />
     </div>
