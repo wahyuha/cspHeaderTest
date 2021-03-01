@@ -22,7 +22,7 @@ export async function post(req, res) {
     const response = await httpServer(req.session).post("/1.0/bind/login", {
       sessionID,
       pin: encryptedPin,
-      customerNumber
+      customerNumber,
     });
     const {
       data: { data, status, message },
