@@ -6,7 +6,7 @@
 
   let input;
 
-  $: styledError = error && "input-error shake-me";
+  $: styledError = error ? "input-error shake-me" : "";
 
   function validateByLength(e) {
     if (
