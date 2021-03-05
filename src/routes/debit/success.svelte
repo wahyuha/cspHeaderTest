@@ -6,8 +6,11 @@
   import Meta from "@components/meta/index.svelte";
   import { lazy } from "@helpers/img.js";
 
+  let partnerName = "";
+
   onMount(async () => {
     const backToStoreUri = $customer.backToStoreUri;
+    partnerName = $customer.partnerName || "partner";
     setTimeout(() => {
       backToStoreUri && goto(backToStoreUri);
     }, 3000);
@@ -27,7 +30,7 @@
   <div in:fly={{ y: -200, duration: 1700 }}>
     <h2 class="success-title ff-b">Penyambungan Berhasil!</h2>
     <p class="success-text">
-      Tunggu sebentar, ya, kamu akan segera diarahkan kembali ke situs partner
+      Tunggu sebentar, ya, kamu akan segera diarahkan kembali ke situs {partnerName}
     </p>
   </div>
 </div>

@@ -30,6 +30,7 @@
             backToStoreUri: data.backToStoreUri,
             backToStoreFailedUri: data.backToStoreFailedUri,
             editable: data.editable,
+            partnerName: data.partnerName,
           });
         } else {
           const queryCode = status ? `?code=${status}` : "";
