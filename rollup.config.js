@@ -37,6 +37,7 @@ export default {
     plugins: [
       replace({
         ...loadDotEnv(),
+        preventAssignment: true,
         "process.browser": true,
         "process.env.NODE_ENV": JSON.stringify(mode),
       }),
@@ -130,6 +131,7 @@ export default {
       }),
       replace({
         ...loadDotEnv(),
+        preventAssignment: true,
         "process.browser": false,
         "process.env.NODE_ENV": JSON.stringify(mode),
       }),
