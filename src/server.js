@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import compression from "compression";
 import * as sapper from "@sapper/server";
-import { sessionStore } from "@middlewares/store";
+import { sessionConfig } from "@middlewares/store";
 import initSession from "@middlewares/sessionConfig";
 import reqDecrypt from "@middlewares/reqDecrypt";
 import resEncrypt from "@middlewares/resEncrypt";
@@ -68,7 +68,7 @@ app.use(
   cookieParser(),
   json({ limit: "2mb" }),
   urlencoded({ limit: "2mb", extended: true }),
-  session(sessionStore),
+  session(sessionConfig),
   compression({ threshold: 0 }),
   initSession(),
   reqDecrypt(),

@@ -1,9 +1,7 @@
-export const cookieConfig = {
-  path: "/",
-  maxAge: 600000,
-  httpOnly: true,
-  secure: false,
-  SameSite: "strict",
+export const cookieName = {
+  main: process.env.SESSION_NAME || "_dd",
+  rid: "req",
+  trans: "tid",
 };
 
 export const cookieConfigRemove = {
@@ -14,10 +12,4 @@ export const cookieConfigRemove = {
   httpOnly: true,
   secure: false,
   SameSite: "strict",
-};
-
-export const cookieName = {
-  main: "dd",
-  rid: "req",
-  trans: "tid",
 };

@@ -1,24 +1,40 @@
 import session from "express-session";
 import sessionFileStore from "session-file-store";
-import { cookieConfig } from "@server/utils/env";
-
-const sessionSecret = process.env.SESSION_SECRET || "kocheng";
-const sessionName = process.env.SESSION_NAME || "dd";
+import redis from "redis";
+import connectRedis from "connect-redis";
+import { cookieConfig } from "@configs/cookie";
+import { sessionOptions, sessionFile, sessionRedis } from "@configs/session";
 
 let store;
+if (sessionOptions.storeType === "redis") {
+  const RedisStore = connectRedis(session);
+  const config = {
+    host: sessionRedis.host,
+    port: sessionRedis.port,
+  };
+  if (sessionRedis.password) {
+    config.password = sessionRedis.password;
+  }
+  var redisClient = redis.createClient(config);
+  store = new RedisStore({
+    client: redisClient,
+    prefix: sessionRedis.prefix,
+    ttl: sessionOptions.ttl,
+  });
+} else {
+  const FileStore = new sessionFileStore(session);
+  store = new FileStore({
+    path: sessionFile.path,
+    ttl: sessionOptions.ttl,
+  });
+}
 
-const FileStore = new sessionFileStore(session);
-store = new FileStore({
-  path: ".sessions",
-  ttl: 600,
-});
-
-export const sessionStore = {
-  secret: sessionSecret,
+export const sessionConfig = {
+  secret: sessionOptions.secret,
   resave: false,
-  name: sessionName,
+  name: sessionOptions.name,
   saveUninitialized: false,
   unset: "destroy",
   cookie: cookieConfig,
-  store: store,
+  store,
 };

@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-import { cookieConfig, cookieName } from "@server/utils/env";
+import { cookieName } from "@server/utils/env";
+import { cookieConfig } from "@configs/cookie";
 import {
   getPathName,
   getPathQuery,
