@@ -2,6 +2,11 @@
   export let open = false;
 </script>
 
+<div on:click class={"header"}>
+  <slot />
+  <span class={`${open ? "arrowUp" : "arrowDown"}`} />
+</div>
+
 <style>
   .header {
     padding: 0 16px;
@@ -10,7 +15,16 @@
     justify-content: space-between;
     align-items: center;
     height: 52px;
-    border-bottom: 1px solid #E1E1ED;
+    border-bottom: 1px solid #e1e1ed;
+  }
+
+  .header::before {
+    content: " ";
+    position: absolute;
+    border-bottom: 1px #fff solid;
+    height: 52px;
+    width: 52px;
+    left: 0;
   }
 
   .arrow-right:before {
@@ -18,7 +32,7 @@
     width: 16px;
     height: 16px;
     content: "";
-    background-image: url('/dd/icons/arrow-right.png');
+    background-image: url("/dd/icons/arrow-right.png");
     background-size: 16px;
   }
 
@@ -27,7 +41,7 @@
     width: 16px;
     height: 16px;
     content: "";
-    background-image: url('/dd/icons/arrow-right.png');
+    background-image: url("/dd/icons/arrow-right.png");
     background-size: 16px;
     transform: rotate(-90deg);
     -webkit-transform: rotate(-90deg);
@@ -38,14 +52,9 @@
     width: 16px;
     height: 16px;
     content: "";
-    background-image: url('/dd/icons/arrow-right.png');
+    background-image: url("/dd/icons/arrow-right.png");
     background-size: 16px;
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
   }
 </style>
-
-<div on:click class={"header"}>
-  <slot />
-  <span class={`${open ? "arrowUp" : "arrowDown"}`} />
-</div>

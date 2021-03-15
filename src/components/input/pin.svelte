@@ -90,6 +90,7 @@
     right: 14px;
     top: 10px;
     outline: 0;
+    padding: 0;
   }
   .mask-password {
     -webkit-text-security: disc;
