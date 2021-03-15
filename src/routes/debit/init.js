@@ -17,6 +17,7 @@ export async function get(req, res) {
         partnerName,
         customerNumber,
         editable,
+        tnc,
       },
       status,
     } = data;
@@ -28,6 +29,7 @@ export async function get(req, res) {
       req.session.state = state;
       req.session.backToStoreUri = backToStoreUri;
       req.session.backToStoreFailedUri = backToStoreFailedUri;
+      req.session.tnc = tnc;
 
       if (state === "BindingStateAgreement") {
         res.redirect(`${basePath}/debit/consent`);

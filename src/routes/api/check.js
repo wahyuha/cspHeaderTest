@@ -17,6 +17,7 @@ export async function post(req, res) {
     editable,
     backToStoreUri,
     backToStoreFailedUri,
+    tnc,
   } = session;
 
   if (state === "BindingStateAgreement" && partnerName) {
@@ -27,6 +28,7 @@ export async function post(req, res) {
         editable,
         backToStoreUri,
         backToStoreFailedUri,
+        tnc,
       },
       status: "00",
     });

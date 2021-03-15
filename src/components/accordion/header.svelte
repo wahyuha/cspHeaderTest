@@ -21,7 +21,7 @@
   .header::before {
     content: " ";
     position: absolute;
-    border-bottom: 1px #fff solid;
+    border-bottom: 2px #fff solid;
     height: 52px;
     width: 52px;
     left: 0;

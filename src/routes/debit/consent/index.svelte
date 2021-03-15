@@ -14,6 +14,20 @@
   const { session } = stores();
   const sessionClient = $session;
 
+  let tnc = [
+    {
+      title: "Nomor handphone",
+      imageURL: "icons/phone.png",
+    },
+    {
+      title: "Nama akun Linkaja",
+      imageURL: "icons/avatar.png",
+    },
+    {
+      title: "Info saldo Linkaja",
+      imageURL: "icons/idr.png",
+    },
+  ];
   let partnerName = "merchant LinkAja";
   let loaded = false;
   $: showModal = false;
@@ -25,6 +39,9 @@
         const { data, status } = response.data;
         if (status === "00") {
           partnerName = data.partnerName;
+          if (data.tnc) {
+            tnc = data.tnc;
+          }
           setCustomer({
             customerNumber: data.customerNumber,
             backToStoreUri: data.backToStoreUri,
@@ -58,11 +75,12 @@
     />
     <p class="info">
       Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke <span
-        class={loaded ? "ff-b" : "partner-blur"}>{partnerName}</span
+        class={loaded ? "ff-b" : "text-blur"}>{partnerName}</span
       >
     </p>
   </div>
-  <DisplayedInfo />
+
+  <DisplayedInfo {tnc} {loaded} />
 
   <div class="action-wrap">
     <p class="action-info">
@@ -101,11 +119,6 @@
   }
   .info {
     margin: 0;
-  }
-  .partner-blur {
-    color: transparent;
-    text-shadow: #000 0 0 10px;
-    transition: 0.4s;
   }
   .action-wrap {
     margin-top: 8px;
