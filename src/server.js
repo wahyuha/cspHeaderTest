@@ -14,6 +14,7 @@ import reqDecrypt from "@middlewares/reqDecrypt";
 import resEncrypt from "@middlewares/resEncrypt";
 import reqLogger from "@middlewares/reqLogger";
 import resLogger from "@middlewares/resLogger";
+import { cspConfig } from "@configs/csp";
 import {
   initDebugLog,
   enableDebugLog,
@@ -33,7 +34,7 @@ const static_path = dev
   : "../../../__sapper__/build/static";
 
 // security header
-// app.use(helmet.contentSecurityPolicy());
+app.use(helmet.contentSecurityPolicy(cspConfig));
 app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
 app.use(helmet.noSniff());
 app.use(helmet.hidePoweredBy());
