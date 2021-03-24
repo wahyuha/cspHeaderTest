@@ -2,7 +2,7 @@
   "name": "@linkaja/wco",
   "description": "Webview for Direct Debit",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "dev": "cp .env.dev .env && npm run replace-env && sapper dev -p 5000",
     "build": "sapper build -p 4019 --legacy && cp package.json __sapper__/build && cp -r static __sapper__/build",
