@@ -34,6 +34,7 @@ export async function post(req, res) {
     }
     res.json({ data, status, message });
   } catch (error) {
+    console.process(error);
     res.json({ error });
   }
 }
