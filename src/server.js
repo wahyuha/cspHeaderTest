@@ -3,6 +3,7 @@ import path from "path";
 import nocache from "nocache";
 import express from "express";
 import helmet from "helmet";
+import cors from "cors";
 import { json, urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -14,7 +15,7 @@ import reqDecrypt from "@middlewares/reqDecrypt";
 import resEncrypt from "@middlewares/resEncrypt";
 import reqLogger from "@middlewares/reqLogger";
 import resLogger from "@middlewares/resLogger";
-import { cspConfig } from "@configs/csp";
+import { cspConfig, corsConfig } from "@configs/header";
 import {
   initDebugLog,
   enableDebugLog,
@@ -34,6 +35,7 @@ const static_path = dev
   : "../../../__sapper__/build/static";
 
 // security header
+app.use(cors(corsConfig));
 app.use(helmet.contentSecurityPolicy(cspConfig));
 app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
 app.use(helmet.noSniff());
