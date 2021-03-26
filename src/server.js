@@ -25,6 +25,8 @@ import {
 initDebugLog();
 process.env.DEBUG_MODE_FILE === "true" ? enableDebugLog() : disableDebugLog();
 
+const enableCsp = process.env.CSP_ENABLE === "true";
+
 const app = express();
 
 const basePath = process.env.BASE_PATH || "";
@@ -36,7 +38,7 @@ const static_path = dev
 
 // security header
 app.use(cors(corsConfig));
-app.use(helmet.contentSecurityPolicy(cspConfig));
+enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
 app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
 app.use(helmet.noSniff());
 app.use(helmet.hidePoweredBy());
