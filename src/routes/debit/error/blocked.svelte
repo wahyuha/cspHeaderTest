@@ -26,10 +26,10 @@
         use:lazy={{ src: "images/blocked.png" }}
       />
       <div in:popOut={{ duration: 700 }}>
-        <h2 class="tt-info ff-b">Akun LinkAja Kamu Terblokir</h2>
+        <h2 class="tt-info ff-b">Akun Tidak Dapat Diakses</h2>
         <p class="info">
-          Kamu sudah 3 kali salah memasukkan PIN. Hubungi Call Center LinkAja di
-          150911 untuk reset PIN LinkAja kamu
+          Saat ini, kamu tidak bisa masuk ke akun kamu.
+          Hubungi Call Center LinkAja untuk info lebih lanjut!
         </p>
       </div>
       <Button type="half" onClick={() => goto(`${baseUrl}/debit/exit`)}>

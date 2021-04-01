@@ -1,4 +1,5 @@
 const defaultMessage = "Terjadi kesalahan, mohon dicoba lagi beberapa saat";
+export const pinLengthMessage = "PIN kurang dari 6 digit. Cek kembali, ya!";
 
 const errorMap = [
   { status: "78", message: "Akun LinkAja Kamu Terblokir" },
