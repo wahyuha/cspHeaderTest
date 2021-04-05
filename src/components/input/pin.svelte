@@ -49,6 +49,7 @@
           class={`${styledError} ${styledMask} input-general`}
           pattern="[0-9]*"
           inputmode="numeric"
+          placeholder="Masukkan 6 digit PIN LinkAja"
   />
   {#if value}
     <button type="button" class="button-show" on:click={showPIN}>
