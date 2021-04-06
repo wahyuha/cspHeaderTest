@@ -31,7 +31,7 @@
   const onSubmit = async () => {
     loading = true;
     error = "";
-    const params = { value, customerNumber };
+    const params = { pin: value, customerNumber };
 
     if (`${value}`.length < 6) {
       error = pinLengthMessage;
