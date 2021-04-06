@@ -4,7 +4,7 @@
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { publicError } from "@utils/error";
+  import { publicError, pinLengthMessage } from "@utils/error";
   import { customer } from "@stores/customer";
   import Meta from "@components/meta/index.svelte";
   import InputPIN from "@components/input/pin.svelte";
@@ -18,7 +18,7 @@
   const { session } = stores();
   const sessionClient = $session;
 
-  let pin;
+  let value;
   let loading = false;
   let showLoaderFirst = false;
   let error;
@@ -31,7 +31,14 @@
   const onSubmit = async () => {
     loading = true;
     error = "";
-    const params = { pin, customerNumber };
+    const params = { pin: value, customerNumber };
+
+    if (`${value}`.length < 6) {
+      error = pinLengthMessage;
+      loading = false;
+      return;
+    }
+
     await clientHttp(sessionClient)
       .post("/pin", params)
       .then((response) => {
@@ -79,7 +86,7 @@
     </div>
     <div class="input-wrap">
       <div class="ff-b">PIN LinkAja</div>
-      <InputPIN bind:pin {error} />
+      <InputPIN bind:value {error} />
     </div>
   </div>
 

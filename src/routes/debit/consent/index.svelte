@@ -39,7 +39,7 @@
         const { data, status } = response.data;
         if (status === "00") {
           partnerName = data.partnerName;
-          if (data.tnc) {
+          if (data.tnc && data.tnc.length) {
             tnc = data.tnc;
           }
           setCustomer({

@@ -30,7 +30,7 @@
   <div in:fly={{ y: -200, duration: 1700 }}>
     <h2 class="success-title ff-b">Penyambungan Berhasil!</h2>
     <p class="success-text">
-      Tunggu sebentar, ya, kamu akan segera diarahkan kembali ke situs {partnerName}
+      Tunggu sebentar, ya, kamu akan segera diarahkan kembali ke halaman {partnerName}
     </p>
   </div>
 </div>

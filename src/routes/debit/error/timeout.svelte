@@ -26,19 +26,19 @@
         proses dari awal, ya!
       </p>
     </div>
-    <div class="d-flex space-between">
+    <div class="space-between">
       <Button
-        outline
-        class="m-x-2"
-        onClick={() => goto(`${baseUrl}/debit/exit`)}
-      >
-        Tutup
-      </Button>
-      <Button
-        class="m-x-2"
+        full
         onClick={() => goto(`${baseUrl}/debit/reinit?s=${extSessionId}`)}
       >
         Ulangi
+      </Button>
+      <Button
+        full
+        class="no-outline mt-20"
+        onClick={() => goto(`${baseUrl}/debit/exit`)}
+      >
+        Tutup
       </Button>
     </div>
   </div>
@@ -67,9 +67,6 @@
     margin: 0;
     color: #52575c;
     padding-bottom: 40px;
-  }
-  .d-flex {
-    display: flex;
   }
   .space-between {
     justify-content: space-between;

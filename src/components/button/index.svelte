@@ -72,4 +72,11 @@
   .m-x-2 {
     margin: 0 8px;
   }
+  .no-outline {
+    background: none;
+    color: #ff2c2c;
+  }
+  .mt-20 {
+    margin-top: 20px;
+  }
 </style>

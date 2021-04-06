@@ -33,7 +33,7 @@
   });
 </script>
 
-<div class="counter">Berakhir dalam {pad(minutes, 2)}:{pad(seconds, 2)}</div>
+<div class="counter">Selesaikan proses dalam {pad(minutes, 2)}:{pad(seconds, 2)}</div>
 
 <style>
   .counter {

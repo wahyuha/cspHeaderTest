@@ -1,51 +1,60 @@
 <script>
   import KEYCODE from "@constants/keyCode";
 
-  export let pin;
-  export let error;
+  export let value = null
+  export let size = 6;
+  export let error = null;
+  export let autoUnFocus = true;
 
   let input;
+  let isShow;
+  let src = "icons/eye-slash.svg";
+  let alt = "hide PIN";
 
   $: styledError = error ? "input-error shake-me" : "";
+  $: styledMask = isShow ? "" : "mask-password";
 
   function validateByLength(e) {
     if (
-      pin &&
-      `${pin}`.length >= 6 &&
-      !Object.values(KEYCODE).includes(e.keyCode)
+            value &&
+            `${value}`.length >= size &&
+            !Object.values(KEYCODE).includes(e.keyCode)
     ) {
       e.preventDefault();
       return false;
     }
-    if (error) error = "";
+    error = "";
   }
 
-  function autoUnfocus() {
-    if (pin && `${pin}`.length >= 6) {
+  function onKeyup() {
+    if (autoUnFocus && value && `${value}`.length >= size) {
       setTimeout(() => input.blur(), 500);
     }
   }
 
-  function clearPin() {
-    pin = "";
+  function showPIN() {
+    isShow = !isShow;
+    src = isShow ? "icons/eye.svg" : "icons/eye-slash.svg";
+    alt = isShow ? "show PIN" : "hide PIN";
   }
 </script>
 
 <div class="input-group">
   <input
-    bind:this={input}
-    bind:value={pin}
-    on:keydown={validateByLength}
-    on:keyup={autoUnfocus}
-    type="number"
-    class={`${styledError} input-general mask-password`}
-    pattern="[0-9]*"
-    inputmode="numeric"
+          bind:this={input}
+          bind:value={value}
+          on:keydown={validateByLength}
+          on:keyup={onKeyup}
+          type="number"
+          class={`${styledError} ${styledMask} input-general`}
+          pattern="[0-9]*"
+          inputmode="numeric"
+          placeholder="Masukkan 6 digit PIN LinkAja"
   />
-  {#if pin}
-    <button type="button" class="button-clear" on:click={clearPin}
-      >&times;</button
-    >
+  {#if value}
+    <button type="button" class="button-show" on:click={showPIN}>
+      <img {alt} {src}/>
+    </button>
   {/if}
 </div>
 {#if error}
@@ -79,18 +88,15 @@
     position: relative;
     width: 100%;
   }
-  .button-clear {
+  .button-show {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    color: #ffffff;
-    background-color: #9ca4ac;
     z-index: 1;
     right: 14px;
-    top: 10px;
+    top: 14px;
     outline: 0;
-    padding: 0;
+    background: none;
+    font-size: 12px;
+    font-weight: 700;
   }
   .mask-password {
     -webkit-text-security: disc;
