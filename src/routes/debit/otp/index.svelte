@@ -2,6 +2,7 @@
   import { goto, stores } from "@sapper/app";
   import clientHttp from "@utils/http/client";
   import { onMount } from "svelte";
+  import { setCustomer } from "@stores/customer";
   import { fade } from "svelte/transition";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
@@ -37,8 +38,13 @@
     await clientHttp(sessionClient)
       .post("/otp", params)
       .then((response) => {
-        const { status } = response.data;
+        const { data, status } = response.data;
         if (status === "00") {
+          if (data.backToStoreURI) {
+            setCustomer({
+              backToStoreUri: data.backToStoreURI
+            });
+          }
           goto(`${baseUrl}/debit/success`);
         } else if (status === "LA909") {
           goto(`${baseUrl}/debit/error/unauthorized`);

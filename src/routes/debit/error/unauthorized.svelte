@@ -5,9 +5,11 @@
   import { popOut } from "@utils/animation";
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
+  import { customer } from "@stores/customer";
 
   const { session } = stores();
   const { extSessionId } = $session;
+  const backToStoreUri = $customer.backToStoreFailedUri || $customer.backToStoreUri;
 </script>
 
 <Meta title="Penyambungan Akun Belum Berhasil" />
@@ -30,7 +32,7 @@
       <Button
         outline
         class="m-x-2"
-        onClick={() => goto(`${baseUrl}/debit/exit`)}
+        onClick={() => goto(backToStoreUri)}
       >
         Tutup
       </Button>

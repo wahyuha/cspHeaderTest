@@ -6,8 +6,10 @@
   import Meta from "@components/meta/index.svelte";
   import { lazy } from "@helpers/img.js";
   import Button from "@components/button/index.svelte";
+  import { customer } from "@stores/customer";
 
   let animate = false;
+  const backToStoreUri = $customer.backToStoreFailedUri || $customer.backToStoreUri;
 
   onMount(async () => {
     setTimeout(() => (animate = true), 100);
@@ -32,7 +34,7 @@
           Hubungi Call Center LinkAja untuk info lebih lanjut!
         </p>
       </div>
-      <Button type="half" onClick={() => goto(`${baseUrl}/debit/exit`)}>
+      <Button type="half" onClick={() => goto(backToStoreUri)}>
         Tutup
       </Button>
     </div>
