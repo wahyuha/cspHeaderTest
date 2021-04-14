@@ -83,6 +83,7 @@
         disabled={!editable}
         bind:value={customerNumber}
         class="input-general"
+        placeholder="Masukkan nomor handphone kamu"
       />
     </div>
     <div class="input-wrap">
@@ -141,6 +142,14 @@
     width: 100%;
     outline: none;
     -webkit-appearance: none;
+  }
+  input.input-general::-webkit-outer-spin-button,
+  input.input-general::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input.input-general[type="number"] {
+    -moz-appearance: textfield;
   }
   .action-wrap {
     margin-top: 8px;
