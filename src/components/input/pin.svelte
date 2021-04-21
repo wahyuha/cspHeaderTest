@@ -36,6 +36,7 @@
     isShow = !isShow;
     src = isShow ? "icons/eye.svg" : "icons/eye-slash.svg";
     alt = isShow ? "show PIN" : "hide PIN";
+    input.type = isShow ? "tel" : "password";
   }
 </script>
 
@@ -45,7 +46,7 @@
           bind:value={value}
           on:keydown={validateByLength}
           on:keyup={onKeyup}
-          type="number"
+          type="password"
           class={`${styledError} ${styledMask} input-general`}
           pattern="[0-9]*"
           inputmode="numeric"
@@ -81,8 +82,8 @@
     -webkit-appearance: none;
     margin: 0;
   }
-  input.input-general[type="number"] {
-    -moz-appearance: textfield;
+  input.input-general[type="tel"] {
+    -moz-appearance:textfield;
   }
   .input-group {
     position: relative;

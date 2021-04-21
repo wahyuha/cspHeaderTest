@@ -79,7 +79,7 @@
     <div class="input-wrap">
       <div class="ff-b">Nomor Handphone</div>
       <input
-        type="number"
+        type="tel"
         disabled={!editable}
         bind:value={customerNumber}
         class="input-general"
@@ -148,7 +148,7 @@
     -webkit-appearance: none;
     margin: 0;
   }
-  input.input-general[type="number"] {
+  input.input-general[type="tel"] {
     -moz-appearance: textfield;
   }
   .action-wrap {
