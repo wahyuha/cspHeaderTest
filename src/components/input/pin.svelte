@@ -51,6 +51,7 @@
           pattern="[0-9]*"
           inputmode="numeric"
           placeholder="Masukkan 6 digit PIN LinkAja"
+          id="PIN"
   />
   {#if value}
     <button type="button" class="button-show" on:click={showPIN}>
@@ -82,7 +83,7 @@
     -webkit-appearance: none;
     margin: 0;
   }
-  input.input-general[type="tel"] {
+  input.input-general[id="PIN"] {
     -moz-appearance:textfield;
   }
   .input-group {

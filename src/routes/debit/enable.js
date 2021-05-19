@@ -2,7 +2,7 @@ import { basePath } from "@constants/url";
 import httpServer from "@utils/http/server";
 
 export async function post(req, res) {
-  const pgptoken = req.body.message;
+  const pgptoken = req.body.Message ? req.body.Message : req.body.message;
   if (!pgptoken) {
     res.redirect(`${basePath}/debit/error?code=992`);
     return false;
