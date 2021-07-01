@@ -6,7 +6,7 @@ const cspEnv = {
   styleSrc: process.env.CSP_STYLE_SRC ? process.env.CSP_STYLE_SRC.split(",") : "self", 
   fontSrc: process.env.CSP_FONT_SRC ? process.env.CSP_FONT_SRC.split(",") : "self", 
   objectSrc: process.env.CSP_OBJECT_SRC ? process.env.CSP_OBJECT_SRC.split(",") : "none", 
-}
+};
 
 const corsEnv = {
   origin: process.env.CORS_ORIGIN.split(","),

@@ -1,7 +1,7 @@
 <script>
   import KEYCODE from "@constants/keyCode";
 
-  export let value = null
+  export let value = null;
   export let size = 6;
   export let error = null;
   export let autoUnFocus = true;
@@ -16,7 +16,7 @@
 
   function validateByLength(e) {
     if (
-            value &&
+      value &&
             `${value}`.length >= size &&
             !Object.values(KEYCODE).includes(e.keyCode)
     ) {

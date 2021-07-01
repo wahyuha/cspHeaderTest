@@ -2,14 +2,14 @@
   import { onMount } from "svelte";
   import { popOut } from "@utils/animation";
   import { goto } from "@sapper/app";
-  import { baseUrl } from "@constants/url";
   import Meta from "@components/meta/index.svelte";
   import { lazy } from "@helpers/img.js";
   import Button from "@components/button/index.svelte";
   import { customer } from "@stores/customer";
 
   let animate = false;
-  const backToStoreUri = $customer.backToStoreFailedUri || $customer.backToStoreUri;
+  const backToStoreUri =
+    $customer.backToStoreFailedUri || $customer.backToStoreUri;
 
   onMount(async () => {
     setTimeout(() => (animate = true), 100);
@@ -30,13 +30,11 @@
       <div in:popOut={{ duration: 700 }}>
         <h2 class="tt-info ff-b">Akun Tidak Dapat Diakses</h2>
         <p class="info">
-          Saat ini, kamu tidak bisa masuk ke akun kamu.
-          Hubungi Call Center LinkAja untuk info lebih lanjut!
+          Saat ini, kamu tidak bisa masuk ke akun kamu. Hubungi Call Center
+          LinkAja untuk info lebih lanjut!
         </p>
       </div>
-      <Button type="half" onClick={() => goto(backToStoreUri)}>
-        Tutup
-      </Button>
+      <Button type="half" onClick={() => goto(backToStoreUri)}>Tutup</Button>
     </div>
   </div>
 {/if}

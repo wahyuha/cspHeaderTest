@@ -7,7 +7,7 @@
   import { publicError, pinLengthMessage } from "@utils/error";
   import { customer } from "@stores/customer";
   import Meta from "@components/meta/index.svelte";
-  import InputPIN from "@components/input/pin.svelte";
+  import { InputMasked } from "seruni";
   import Button from "@components/button/index.svelte";
   import Counter from "@components/counter/index.svelte";
   import Modal from "@components/modal/full.svelte";
@@ -88,7 +88,11 @@
     </div>
     <div class="input-wrap">
       <div class="ff-b">PIN LinkAja</div>
-      <InputPIN bind:value {error} />
+      <InputMasked
+        bind:value
+        {error}
+        placeholder="Masukkan 6 digit PIN LinkAja"
+      />
     </div>
   </div>
 

@@ -70,6 +70,10 @@ button {
   border: none;
 }
 
+input {
+  font-size: 12px;
+}
+
 code {
   font-family: menlo, inconsolata, monospace;
   font-size: calc(1em - 2px);

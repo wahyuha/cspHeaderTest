@@ -42,7 +42,7 @@
         if (status === "00") {
           if (data.backToStoreURI) {
             setCustomer({
-              backToStoreUri: data.backToStoreURI
+              backToStoreUri: data.backToStoreURI,
             });
           }
           goto(`${baseUrl}/debit/success`);
