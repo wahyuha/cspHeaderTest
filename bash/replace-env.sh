@@ -13,8 +13,8 @@ openssl rsa -in $priv_name -passin pass:$SAPPER_APP_KEY_PASS -pubout -out $pub_n
 sed -i'.bak' -n -e 'H;${x;s/\n/\\n/g;p;}' $pub_name
 sed -i'.bak' -n -e 'H;${x;s/\n/\\n/g;p;}' $priv_name
 echo "
-PUBLIC_KEY=`cat $pub_name`" >> $filename
-echo "PRIVATE_KEY=`cat $priv_name`" >> $filename
+SAPPER_APP_PUBLIC_KEY=`cat $pub_name`" >> $filename
+echo "SAPPER_APP_PRIVATE_KEY=`cat $priv_name`" >> $filename
 
 #add env git commit sha version
 # search_git="{{GIT_SHA}}"
