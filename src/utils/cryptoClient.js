@@ -10,7 +10,7 @@ export const encrypt = (data, aeskey, aesDel, rsaDel) => {
 
   // eslint-disable-next-line
   var rsa = new JSEncrypt();
-  rsa.setPublicKey(process.env.PUBLIC_KEY);
+  rsa.setPublicKey(process.env.SAPPER_APP_PUBLIC_KEY);
   var encryptedKey = rsa.encrypt(aesKey);
   var payload = encryptedKey + rsaDel + encryptedMessage;
 
