@@ -6,8 +6,8 @@ source $filename
 
 priv_name="privkey.pem"
 pub_name="privkey.pub"
-openssl genrsa -aes128 -passout pass:$KEY_PASS -out $priv_name $KEY_SIZE
-openssl rsa -in $priv_name -passin pass:$KEY_PASS -pubout -out $pub_name
+openssl genrsa -aes128 -passout pass:$SAPPER_APP_KEY_PASS -out $priv_name $SAPPER_APP_KEY_SIZE
+openssl rsa -in $priv_name -passin pass:$SAPPER_APP_KEY_PASS -pubout -out $pub_name
 
 #add env public & private key
 sed -i'.bak' -n -e 'H;${x;s/\n/\\n/g;p;}' $pub_name

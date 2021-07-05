@@ -10,7 +10,7 @@ const addSec = (body, req, res) => {
     const oldAesDel = req.session.aesDel;
 
     res.locals.isJson = true;
-    if (process.env.CRYPTO_MODE === "true") {
+    if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
       const result = JSON.stringify(body);
       body = encryptResp(result, oldAesKey, oldAesDel);
       res.locals.encrypted = true;

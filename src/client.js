@@ -1,7 +1,7 @@
 import * as sapper from "@sapper/app";
 import { injectVendor } from "@helpers/vendor";
 
-if (process.env.CRYPTO_MODE === "true") {
+if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
   injectVendor();
 }
 

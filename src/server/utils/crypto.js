@@ -2,7 +2,7 @@ import CryptoJS from "crypto-js";
 import NodeRSA from "node-rsa";
 import sshKeyDecrypt from "ssh-key-decrypt";
 
-var keyBuf = sshKeyDecrypt(process.env.PRIVATE_KEY, process.env.KEY_PASS);
+var keyBuf = sshKeyDecrypt(process.env.PRIVATE_KEY, process.env.SAPPER_APP_KEY_PASS);
 
 const key = new NodeRSA(null, { encryptionScheme: "pkcs1" });
 key.importKey(keyBuf, "pkcs1-der");

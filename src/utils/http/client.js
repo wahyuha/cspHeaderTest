@@ -49,7 +49,7 @@ class httpClient {
     this.instance.interceptors.request.use(
       function (config) {
         if (config.data !== undefined) {
-          if (process.env.CRYPTO_MODE === "true") {
+          if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
             let data = config.data;
             if (typeof data === "object") {
               data = JSON.stringify(data);
@@ -78,7 +78,7 @@ class httpClient {
 
     this.instance.interceptors.response.use(
       function (response) {
-        if (response.data !== undefined && process.env.CRYPTO_MODE === "true") {
+        if (response.data !== undefined && process.env.SAPPER_APP_CRYPTO_MODE === "true") {
           response.data = decrypt(response.data, session.aesDel);
         }
 
