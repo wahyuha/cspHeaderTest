@@ -9,7 +9,7 @@ export async function post(req, res) {
   }
   try {
     const { data } = await httpServer(req.session).postLoko(
-      "loko/binding/verify",
+      "/loko/binding/verify",
       {
         ID: pgptoken,
       }
