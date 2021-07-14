@@ -34,7 +34,7 @@ export default {
     input: config.client.input(),
     output: {
       ...config.client.output(),
-      sourcemap: true,
+      sourcemap: dev,
     },
     plugins: [
       replace({
@@ -149,7 +149,7 @@ export default {
     input: config.server.input(),
     output: {
       ...config.server.output(),
-      sourcemap: true,
+      sourcemap: dev,
     },
     plugins: [
       aliasExternal("seruni", [
