@@ -8,6 +8,6 @@ const errorMap = [
 ];
 
 export function publicError(status) {
-  const errorObj = errorMap.find((e) => e.status === status);
+  const errorObj = errorMap.find((e) => e.status === status) || {};
   return errorObj.message || defaultMessage;
 }
