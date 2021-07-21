@@ -1,14 +1,25 @@
 # Kiluan Webview Release Notes
 
+# v1.2.0 21 July 2021
+
+### Fixed
+
+- [security] Disable sourcemap files
+- [security] Enable payload encryption
+
+### Changed
+
+- [UI] Enhance input PIN with custom masking
+
 # v1.1.0 21 April 2021
 
-## Fixed
+### Fixed
 
-- [pin] fix input pun
+- [pin] fix input pin
 
 # v1.0.1 24 March 2021
 
-## Added
+### Added
 
 - [security] Add csp header
 
