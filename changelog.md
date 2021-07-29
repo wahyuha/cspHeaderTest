@@ -1,5 +1,11 @@
 # Kiluan Webview Release Notes
 
+# v1.2.1 29 July 2021
+
+### Fixed
+
+- [UI] Rollback input PIN with native component
+
 # v1.2.0 21 July 2021
 
 ### Fixed
