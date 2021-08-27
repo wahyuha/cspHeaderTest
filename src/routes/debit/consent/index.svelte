@@ -5,6 +5,7 @@
   import Meta from "@components/meta/index.svelte";
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
+  import tncConst from "@constants/tnc";
   import { lazy } from "@helpers/img.js";
   import DisplayedInfo from "./_components/displayedInfo.svelte";
   import Button from "@components/button/index.svelte";
@@ -14,20 +15,8 @@
   const { session } = stores();
   const sessionClient = $session;
 
-  let tnc = [
-    {
-      title: "Nomor handphone",
-      imageURL: "icons/phone.png",
-    },
-    {
-      title: "Nama akun Linkaja",
-      imageURL: "icons/avatar.png",
-    },
-    {
-      title: "Info saldo Linkaja",
-      imageURL: "icons/idr.png",
-    },
-  ];
+  let tnc = tncConst;
+  let isRegister = false;
   let partnerName = "merchant LinkAja";
   let loaded = false;
   $: showModal = false;
@@ -39,6 +28,7 @@
         const { data, status } = response.data;
         if (status === "00") {
           partnerName = data.partnerName;
+          isRegister = data.isRegister;
           if (data.tnc && data.tnc.length) {
             tnc = data.tnc;
           }
@@ -62,6 +52,21 @@
         loaded = true;
       });
   });
+
+  async function handleNextStep() {
+    if (isRegister) {
+      await clientHttp(sessionClient)
+      .post("/otp/request")
+      .then(() => {
+        goto(`${baseUrl}/register/otp`)
+      })
+      .finally(() => {
+        loaded = true;
+      });
+      return false;
+    }
+    goto(`${baseUrl}/debit/pin`)
+  }
 </script>
 
 <Meta title="Halaman Persetujuan" />
@@ -93,7 +98,7 @@
         class="tnc-link">Syarat dan Ketentuan</a
       > yang berlaku
     </p>
-    <Button disabled={!loaded} onClick={() => goto(`${baseUrl}/debit/pin`)}>
+    <Button disabled={!loaded} onClick={handleNextStep}>
       Lanjut
     </Button>
   </div>

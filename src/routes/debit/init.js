@@ -18,6 +18,7 @@ export async function get(req, res) {
         customerNumber,
         editable,
         tnc,
+        isRegister,
       },
       status,
     } = data;
@@ -30,19 +31,13 @@ export async function get(req, res) {
       req.session.backToStoreUri = backToStoreUri;
       req.session.backToStoreFailedUri = backToStoreFailedUri;
       req.session.tnc = tnc;
+      req.session.isRegister = isRegister;
 
-      if (state === "BindingStateAgreement") {
-        res.redirect(`${basePath}/debit/consent`);
-        return false;
-      } else if (state === "BindingStateLogin") {
-        res.redirect(`${basePath}/debit/otp`);
-        return false;
-      } else if (state === "BindingStateVerified") {
-        res.redirect(`${basePath}/debit/success`);
-        return false;
+      if (isRegister) {
+        return redirectRegister(state);
+      } else {
+        return redirectExistUser(state);
       }
-      res.redirect(`${basePath}/debit/error?code=991`);
-      return false;
     }
     res.redirect(`${basePath}/debit/error?code=${status}`);
     return false;
@@ -51,4 +46,37 @@ export async function get(req, res) {
     res.redirect(`${basePath}/debit/error?code=992`);
     return false;
   }
+}
+
+function redirectExistUser(state) {
+  if (state === "BindingStateAgreement") {
+    res.redirect(`${basePath}/debit/consent`);
+    return false;
+  } else if (state === "BindingStateLogin") {
+    res.redirect(`${basePath}/debit/otp`);
+    return false;
+  } else if (state === "BindingStateVerified") {
+    res.redirect(`${basePath}/debit/success`);
+    return false;
+  }
+  res.redirect(`${basePath}/debit/error?code=991`);
+  return false;
+}
+
+function redirectRegister(state) {
+  if (state === "RegisterStateAgreement") {
+    res.redirect(`${basePath}/debit/consent`);
+    return false;
+  } else if (state === "RegisterStateOtpRequest") {
+    res.redirect(`${basePath}/register/otp`);
+    return false;
+  } else if (state === "RegisterStateOtpVerified") {
+    res.redirect(`${basePath}/register/identity`);
+    return false;
+  } else if (state === "RegisterStateRegistered") {
+    res.redirect(`${basePath}/register/success`);
+    return false;
+  }
+  res.redirect(`${basePath}/register/error?code=991`);
+  return false; 
 }
