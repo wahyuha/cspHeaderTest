@@ -8,9 +8,8 @@
   import { customer } from "@stores/customer";
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
-  import Counter from "@components/counter/index.svelte";
+  import InputPIN from "@components/input/pin.svelte";
   import Modal from "@components/modal/full.svelte";
-  import ForgotTrigger from "@components/forgot/trigger.svelte";
   import ForgotContent from "@components/forgot/index.svelte";
   import LoaderBlocking from "@components/loader/blocking.svelte";
 
@@ -22,8 +21,8 @@
   let loading = false;
   let showLoaderFirst = false;
   let error;
-  let name = "";
-  let email = "";
+  let pin = "";
+  let confirmPIN = "";
   let { customerNumber } = $customer;
   let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
 
@@ -32,7 +31,6 @@
   $: forgotModal = false;
 
   const onSubmit = async () => {
-    goto(`${baseUrl}/register/pin`); // debugging purpose
     loading = true;
     error = "";
     const params = { pin: value, customerNumber };
@@ -78,43 +76,29 @@
     />
   </div>
   <div class="form-wrap" in:fade={{ duration: 300 }}>
-    <div class="tt-info ff-b">Daftar & Hubungkan LinkAja</div>
-    <p class="login-info">Pendaftaran untuk {customerNumber || ''}</p>
+    <div class="tt-info ff-b">Buat PIN, Yuk!</div>
+    <p class="login-info">PIN LinkAja terdiri dari 6 digit, rahasiakan ya!</p>
     <div class="input-wrap">
-      <div class="f-label ff-b">Nama Lengkap</div>
+      <div class="f-label ff-b">Nomor Handphone</div>
       <input
         type="tel"
-        disabled={!editable}
-        bind:value={name}
+        disabled
+        value={customerNumber}
         class="input-general"
-        placeholder="Masukkan nama lengkap kamu"
+        placeholder="Masukkan nomor handphone kamu"
       />
     </div>
     <div class="input-wrap">
-      <div class="f-label ff-b">Email</div>
-      <input
-        type="tel"
-        disabled={!editable}
-        bind:value={email}
-        class="input-general"
-        placeholder="Masukkan email kamu"
-      />
-      <div class="input-info">Email diperlukan supaya kamu bisa akses pemulihan akun LinkAja saat kamu lupa PIN</div>
+      <div class="ff-b">PIN</div>
+      <InputPIN bind:value={pin} {error} />
+    </div>
+    <div class="input-wrap">
+      <div class="ff-b">Konfirmasi PIN</div>
+      <InputPIN bind:value={confirmPIN} {error} />
     </div>
   </div>
 
   <div class="action-wrap">
-    <p class="action-info">
-      Saya telah membaca dan menyetujui 
-      <a
-        href
-        on:click={(e) => {
-          e.preventDefault();
-        }}
-        class="tnc-link">Ketentuan Layanan</a
-      >
-      pendaftaran akun LinkAja
-    </p>
     <Button disabled={loading} onClick={onSubmit} bind:loading>Buat PIN</Button>
   </div>
 </div>
