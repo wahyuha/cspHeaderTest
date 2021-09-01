@@ -31,6 +31,7 @@
   $: forgotModal = false;
 
   const onSubmit = async () => {
+    goto(`${baseUrl}/register/success`); //debugging purpose
     loading = true;
     error = "";
     const params = { pin: value, customerNumber };
