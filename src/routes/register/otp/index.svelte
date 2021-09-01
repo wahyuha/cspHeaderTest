@@ -35,6 +35,7 @@
     loading = true;
     error = "";
     const params = { otp };
+    goto(`${baseUrl}/register/identity`); // debuging puropose
     await clientHttp(sessionClient)
       .post("/otp", params)
       .then((response) => {
@@ -45,9 +46,9 @@
               backToStoreUri: data.backToStoreURI,
             });
           }
-          goto(`${baseUrl}/debit/success`);
+          goto(`${baseUrl}/register/identity`);
         } else if (status === "LA909") {
-          goto(`${baseUrl}/debit/error/unauthorized`);
+          goto(`${baseUrl}/register/error/unauthorized`);
         } else {
           error = publicError(status);
         }
