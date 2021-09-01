@@ -34,9 +34,9 @@ export async function get(req, res) {
       req.session.isRegister = isRegister;
 
       if (isRegister) {
-        return redirectRegister(state);
+        return redirectRegister(res, state);
       } else {
-        return redirectExistUser(state);
+        return redirectExistUser(res, state);
       }
     }
     res.redirect(`${basePath}/debit/error?code=${status}`);
@@ -48,7 +48,7 @@ export async function get(req, res) {
   }
 }
 
-function redirectExistUser(state) {
+function redirectExistUser(res, state) {
   if (state === "BindingStateAgreement") {
     res.redirect(`${basePath}/debit/consent`);
     return false;
@@ -63,7 +63,7 @@ function redirectExistUser(state) {
   return false;
 }
 
-function redirectRegister(state) {
+function redirectRegister(res, state) {
   if (state === "RegisterStateAgreement") {
     res.redirect(`${basePath}/debit/consent`);
     return false;

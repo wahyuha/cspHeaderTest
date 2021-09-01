@@ -18,9 +18,10 @@ export async function post(req, res) {
     backToStoreUri,
     backToStoreFailedUri,
     tnc,
+    isRegister,
   } = session;
 
-  if (state === "BindingStateAgreement" && partnerName) {
+  if (state === "BindingStateAgreement" || state === "RegisterStateAgreement" && partnerName) {
     res.json({
       data: {
         partnerName,
@@ -29,6 +30,7 @@ export async function post(req, res) {
         backToStoreUri,
         backToStoreFailedUri,
         tnc,
+        isRegister,
       },
       status: "00",
     });
