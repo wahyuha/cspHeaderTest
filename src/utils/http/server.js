@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiUrlServer, apiUrlServerLoko } from "@constants/url";
+import { apiUrlServer, apiUrlServerLoko, mockApiUrl, mockPaths } from "@constants/url";
 import { logStartOutbond, logEndOutbond } from "@constants/logger";
 
 class httpServer {
@@ -55,6 +55,11 @@ class httpServer {
       function (config) {
         const headers = config.headers;
         remHead.forEach((header) => delete headers[header]);
+
+        const mockPathArr = mockPaths.split(",");
+        if (mockPathArr.includes(config.url)) {
+          config.baseURL = mockApiUrl;
+        }
 
         const mts = {
           headers: headers,
