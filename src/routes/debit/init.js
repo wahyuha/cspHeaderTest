@@ -32,23 +32,23 @@ export async function get(req, res) {
       req.session.tnc = tnc;
 
       if (state === "BindingStateAgreement") {
-        res.redirect(`${basePath}/debit/consent`);
+        res.redirect(302, `${basePath}/debit/consent`);
         return false;
       } else if (state === "BindingStateLogin") {
-        res.redirect(`${basePath}/debit/otp`);
+        res.redirect(302, `${basePath}/debit/otp`);
         return false;
       } else if (state === "BindingStateVerified") {
-        res.redirect(`${basePath}/debit/success`);
+        res.redirect(302, `${basePath}/debit/success`);
         return false;
       }
-      res.redirect(`${basePath}/debit/error?code=991`);
+      res.redirect(302, `${basePath}/debit/error?code=991`);
       return false;
     }
-    res.redirect(`${basePath}/debit/error?code=${status}`);
+    res.redirect(302, `${basePath}/debit/error?code=${status}`);
     return false;
   } catch (error) {
     console.process(error);
-    res.redirect(`${basePath}/debit/error?code=992`);
+    res.redirect(302, `${basePath}/debit/error?code=992`);
     return false;
   }
 }
