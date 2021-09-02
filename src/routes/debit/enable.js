@@ -19,14 +19,26 @@ export async function post(req, res) {
       status,
     } = data;
     if (status === "00") {
-      res.redirect(302, `${basePath}/debit/init?s=${refNum}`);
-      return false;
+      // res.redirect(302, `${basePath}/debit/init?s=${refNum}`);
+      // return false;
+      res.writeHead(302, {
+        location: `${basePath}/debit/init?s=${refNum}`,
+      });
+      res.end();
     }
-    res.redirect(302, `${basePath}/debit/error?code=${status}`);
-    return false;
+    res.writeHead(302, {
+      location: `${basePath}/debit/error?code=${status}`,
+    });
+    res.end();
+    // res.redirect(302, `${basePath}/debit/error?code=${status}`);
+    // return false;
   } catch (error) {
     console.process(error);
-    res.redirect(302, `${basePath}/debit/error?code=992`);
-    return false;
+    res.writeHead(302, {
+      location: `${basePath}/debit/error?code=992`,
+    });
+    res.end();
+    // res.redirect(302, `${basePath}/debit/error?code=992`);
+    // return false;
   }
 }

@@ -32,23 +32,47 @@ export async function get(req, res) {
       req.session.tnc = tnc;
 
       if (state === "BindingStateAgreement") {
-        res.redirect(302, `${basePath}/debit/consent`);
-        return false;
+        res.writeHead(302, {
+          location: `${basePath}/debit/consent`,
+        });
+        res.end();
+        // res.redirect(302, `${basePath}/debit/consent`);
+        // return false;
       } else if (state === "BindingStateLogin") {
-        res.redirect(302, `${basePath}/debit/otp`);
-        return false;
+        res.writeHead(302, {
+          location: `${basePath}/debit/otp`,
+        });
+        res.end();
+        // res.redirect(302, `${basePath}/debit/otp`);
+        // return false;
       } else if (state === "BindingStateVerified") {
-        res.redirect(302, `${basePath}/debit/success`);
-        return false;
+        res.writeHead(302, {
+          location: `${basePath}/debit/success`,
+        });
+        res.end();
+        // res.redirect(302, `${basePath}/debit/success`);
+        // return false;
       }
-      res.redirect(302, `${basePath}/debit/error?code=991`);
-      return false;
+      res.writeHead(302, {
+        location: `${basePath}/debit/error?code=991`,
+      });
+      res.end();
+      // res.redirect(302, `${basePath}/debit/error?code=991`);
+      // return false;
     }
-    res.redirect(302, `${basePath}/debit/error?code=${status}`);
-    return false;
+    res.writeHead(302, {
+      location: `${basePath}/debit/error?code=${status}`,
+    });
+    res.end();
+    // res.redirect(302, `${basePath}/debit/error?code=${status}`);
+    // return false;
   } catch (error) {
     console.process(error);
-    res.redirect(302, `${basePath}/debit/error?code=992`);
-    return false;
+    res.writeHead(302, {
+      location: `${basePath}/debit/error?code=992`,
+    });
+    res.end();
+    // res.redirect(302, `${basePath}/debit/error?code=992`);
+    // return false;
   }
 }
