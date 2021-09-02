@@ -25,11 +25,11 @@ export async function post(req, res) {
       location = `${basePath}/debit/init?s=${refNum}`;
     }
     else {
-      location = `${basePath}/debit/error?code=${status}`;
+      location = `${basePath}/debit/error/unverified?code=${status}`;
     }
   } catch (error) {
     console.process(error);
-    location = `${basePath}/debit/error?code=992`;
+    location = `${basePath}/debit/error/unverified?code=992`;
   }
 
   await req.session.destroy();
