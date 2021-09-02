@@ -20,6 +20,5 @@ export async function get(req, res) {
     location: `${basePath}/debit/init?s=${sessionID}`,
   });
   res.end();
-  // res.redirect(302, `${basePath}/debit/init?s=${sessionID}`);
-  // return false;
+  return true;
 }

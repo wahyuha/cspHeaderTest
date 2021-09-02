@@ -5,6 +5,8 @@ export async function get(req, res) {
   const sessionID = req.query.s;
   req.session.extSessionId = sessionID;
 
+  let location = "";
+
   try {
     const { data } = await httpServer(req.session).post("/1.0/bind/check", {
       sessionID,
@@ -32,47 +34,25 @@ export async function get(req, res) {
       req.session.tnc = tnc;
 
       if (state === "BindingStateAgreement") {
-        res.writeHead(302, {
-          location: `${basePath}/debit/consent`,
-        });
-        res.end();
-        // res.redirect(302, `${basePath}/debit/consent`);
-        // return false;
+        location = `${basePath}/debit/consent`;
       } else if (state === "BindingStateLogin") {
-        res.writeHead(302, {
-          location: `${basePath}/debit/otp`,
-        });
-        res.end();
-        // res.redirect(302, `${basePath}/debit/otp`);
-        // return false;
+        location = `${basePath}/debit/otp`;
       } else if (state === "BindingStateVerified") {
-        res.writeHead(302, {
-          location: `${basePath}/debit/success`,
-        });
-        res.end();
-        // res.redirect(302, `${basePath}/debit/success`);
-        // return false;
+        location = `${basePath}/debit/success`;
+      } else {
+        location = `${basePath}/debit/error?code=991`;
       }
-      res.writeHead(302, {
-        location: `${basePath}/debit/error?code=991`,
-      });
-      res.end();
-      // res.redirect(302, `${basePath}/debit/error?code=991`);
-      // return false;
+    } else {
+      location = `${basePath}/debit/error?code=${status}`;
     }
-    res.writeHead(302, {
-      location: `${basePath}/debit/error?code=${status}`,
-    });
-    res.end();
-    // res.redirect(302, `${basePath}/debit/error?code=${status}`);
-    // return false;
   } catch (error) {
     console.process(error);
-    res.writeHead(302, {
-      location: `${basePath}/debit/error?code=992`,
-    });
-    res.end();
-    // res.redirect(302, `${basePath}/debit/error?code=992`);
-    // return false;
+    location = `${basePath}/debit/error?code=992`;
   }
+
+  res.writeHead(302, {
+    location,
+  });
+  res.end();
+  return true;
 }
