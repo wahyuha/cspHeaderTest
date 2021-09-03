@@ -3,7 +3,7 @@ import path from "path";
 import nocache from "nocache";
 import express from "express";
 import helmet from "helmet";
-import cors from "cors";
+// import cors from "cors";
 import { json, urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
 import session from "express-session";
