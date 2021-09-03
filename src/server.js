@@ -38,9 +38,9 @@ const static_path = dev
 
 // security header
 // app.use(cors(corsConfig));
-enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
-app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
-app.use(helmet.noSniff());
+// enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
+// app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
+// app.use(helmet.noSniff());
 app.use(helmet.hidePoweredBy());
 app.use(
   helmet.frameguard({
