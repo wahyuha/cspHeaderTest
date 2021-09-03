@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
 import * as sapper from "@sapper/app";
-import { injectVendor, injectRollbar } from "@helpers/vendor";
+import { injectVendor } from "@helpers/vendor";
 
 if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
   injectVendor();
@@ -22,9 +22,8 @@ Sentry.init({
   release: "kiluan@1.2.1",
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
-  environment: "development",
+  environment: process.env.NODE_ENV === "development" ? "development" : "production",
 });
-
 
 sapper.start({
   target: document.querySelector("#sapper"),
