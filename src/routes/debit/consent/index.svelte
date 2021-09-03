@@ -34,21 +34,16 @@
   let showModal = false;
 
   onMount(async () => {
-    Sentry.captureMessage("onMount");
     setTimeout(async () => {
-      Sentry.captureMessage("setTimeoute ok");
       await clientHttp(sessionClient)
       .post("/check")
       .then((response) => {
-          Sentry.captureMessage("response");
           const { data, status } = response.data;
           if (status === "00") {
-            Sentry.captureMessage("response 00 OK");
             partnerName = data.partnerName;
             if (data.tnc && data.tnc.length) {
               tnc = data.tnc;
             }
-            Sentry.captureMessage("pre set customer");
             setCustomer({
               customerNumber: data.customerNumber,
               backToStoreUri: data.backToStoreUri,
@@ -57,7 +52,6 @@
               partnerName: data.partnerName,
             });
           } else {
-            Sentry.captureMessage("response no OK");
             const queryCode = status ? `?code=${status}` : "";
             goto(`${baseUrl}/debit/error${queryCode}`);
           }
@@ -66,12 +60,9 @@
           Sentry.captureException(e);
           console.error(e);
           goto(`${baseUrl}/debit/error?code=999`);
-        })
-        .finally(() => {
-          loaded = true;
         });
+        loaded = true;
     }, 800)
-    Sentry.captureMessage("last debug");
   });
 </script>
 

@@ -58,9 +58,7 @@
         console.log(e);
         error = publicError();
       })
-      .finally(() => {
-        loading = false;
-      });
+      loading = false;
   };
 </script>
 

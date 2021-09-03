@@ -53,9 +53,7 @@
         }
       })
       .catch(() => (error = publicError()))
-      .finally(() => {
-        loading = false;
-      });
+      loading = false;
   };
 
   const autoSubmit = async () => {
