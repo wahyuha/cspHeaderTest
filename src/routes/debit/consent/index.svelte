@@ -1,4 +1,5 @@
 <script>
+  import * as Sentry from "@sentry/browser";
   import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { setCustomer } from "@stores/customer";
@@ -30,19 +31,24 @@
   ];
   let partnerName = "merchant LinkAja";
   let loaded = false;
-  $: showModal = false;
+  let showModal = false;
 
   onMount(async () => {
+    Sentry.captureMessage("onMount");
     setTimeout(async () => {
+      Sentry.captureMessage("setTimeoute ok");
       await clientHttp(sessionClient)
-        .post("/check")
-        .then((response) => {
+      .post("/check")
+      .then((response) => {
+          Sentry.captureMessage("response");
           const { data, status } = response.data;
           if (status === "00") {
+            Sentry.captureMessage("response 00 OK");
             partnerName = data.partnerName;
             if (data.tnc && data.tnc.length) {
               tnc = data.tnc;
             }
+            Sentry.captureMessage("pre set customer");
             setCustomer({
               customerNumber: data.customerNumber,
               backToStoreUri: data.backToStoreUri,
@@ -51,11 +57,13 @@
               partnerName: data.partnerName,
             });
           } else {
+            Sentry.captureMessage("response no OK");
             const queryCode = status ? `?code=${status}` : "";
             goto(`${baseUrl}/debit/error${queryCode}`);
           }
         })
         .catch((e) => {
+          Sentry.captureException(e);
           console.error(e);
           goto(`${baseUrl}/debit/error?code=999`);
         })
@@ -63,6 +71,7 @@
           loaded = true;
         });
     }, 800)
+    Sentry.captureMessage("last debug");
   });
 </script>
 

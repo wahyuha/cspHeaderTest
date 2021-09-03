@@ -16,6 +16,7 @@ export const injectRollbar = () => {
     },
   };
   const jsenc = document.createElement("script");
+  jsenc.defer = true;
   jsenc.src = "/dd/js/rollbar.min.js";
   document.head.appendChild(jsenc);
 };
