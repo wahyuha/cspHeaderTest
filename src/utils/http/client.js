@@ -48,21 +48,19 @@ class httpClient {
     const session = this.session;
     this.instance.interceptors.request.use(
       function (config) {
-        if (config.data !== undefined) {
-          if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
-            let data = config.data;
-            if (typeof data === "object") {
-              data = JSON.stringify(data);
-            }
-            config.data = {
-              data: encrypt(
-                data,
-                session.aesKey,
-                session.aesDel,
-                session.rsaDel
-              ),
-            };
+        if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
+          let data = config.data || {dummy: ""};
+          if (typeof data === "object") {
+            data = JSON.stringify(data);
           }
+          config.data = {
+            data: encrypt(
+              data,
+              session.aesKey,
+              session.aesDel,
+              session.rsaDel
+            ),
+          };
         }
         return config;
       },

@@ -33,34 +33,36 @@
   $: showModal = false;
 
   onMount(async () => {
-    await clientHttp(sessionClient)
-      .post("/check")
-      .then((response) => {
-        const { data, status } = response.data;
-        if (status === "00") {
-          partnerName = data.partnerName;
-          if (data.tnc && data.tnc.length) {
-            tnc = data.tnc;
+    setTimeout(async () => {
+      await clientHttp(sessionClient)
+        .post("/check")
+        .then((response) => {
+          const { data, status } = response.data;
+          if (status === "00") {
+            partnerName = data.partnerName;
+            if (data.tnc && data.tnc.length) {
+              tnc = data.tnc;
+            }
+            setCustomer({
+              customerNumber: data.customerNumber,
+              backToStoreUri: data.backToStoreUri,
+              backToStoreFailedUri: data.backToStoreFailedUri,
+              editable: data.editable,
+              partnerName: data.partnerName,
+            });
+          } else {
+            const queryCode = status ? `?code=${status}` : "";
+            goto(`${baseUrl}/debit/error${queryCode}`);
           }
-          setCustomer({
-            customerNumber: data.customerNumber,
-            backToStoreUri: data.backToStoreUri,
-            backToStoreFailedUri: data.backToStoreFailedUri,
-            editable: data.editable,
-            partnerName: data.partnerName,
-          });
-        } else {
-          const queryCode = status ? `?code=${status}` : "";
-          goto(`${baseUrl}/debit/error${queryCode}`);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        goto(`${baseUrl}/debit/error?code=999`);
-      })
-      .finally(() => {
-        loaded = true;
-      });
+        })
+        .catch((e) => {
+          console.error(e);
+          goto(`${baseUrl}/debit/error?code=999`);
+        })
+        .finally(() => {
+          loaded = true;
+        });
+    }, 800)
   });
 </script>
 
