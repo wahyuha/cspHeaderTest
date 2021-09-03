@@ -17,8 +17,8 @@
   function validateByLength(e) {
     if (
       value &&
-            `${value}`.length >= size &&
-            !Object.values(KEYCODE).includes(e.keyCode)
+      `${value}`.length >= size &&
+      !Object.keys(KEYCODE).map((key) => KEYCODE[key]).includes(e.keyCode)
     ) {
       e.preventDefault();
       return false;
