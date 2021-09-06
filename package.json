@@ -19,6 +19,7 @@
     "format": "npx prettier --write \"{,src/**/}{*,\\[slug\\]}.{js,json}\""
   },
   "dependencies": {
+    "@sentry/node": "^6.12.0",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.1",
