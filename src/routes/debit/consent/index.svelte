@@ -34,8 +34,17 @@
   let showModal = false;
 
   onMount(async () => {
-    setTimeout(async () => {
-      await clientHttp(sessionClient)
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        fetchCheck();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300)
+  });
+
+  async function fetchCheck() {
+    await clientHttp(sessionClient)
       .post("/check")
       .then((response) => {
           const { data, status } = response.data;
@@ -61,9 +70,9 @@
           console.error(e);
           goto(`${baseUrl}/debit/error?code=999`);
         });
-        loaded = true;
-    }, 800)
-  });
+
+    loaded = true;
+  }
 </script>
 
 <Meta title="Halaman Persetujuan" />
