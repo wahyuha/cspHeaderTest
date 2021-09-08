@@ -48,21 +48,22 @@ class httpClient {
     const session = this.session;
     this.instance.interceptors.request.use(
       function (config) {
-        if (config.data !== undefined) {
-          if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
-            let data = config.data;
-            if (typeof data === "object") {
-              data = JSON.stringify(data);
-            }
-            config.data = {
-              data: encrypt(
-                data,
-                session.aesKey,
-                session.aesDel,
-                session.rsaDel
-              ),
-            };
+        if (process.env.SAPPER_APP_CRYPTO_MODE === "true") {
+          let data = config.data || {dummy: ""};
+          if (typeof data === "object") {
+            data = JSON.stringify(data);
           }
+          console.log("aesKey", session.aesKey);
+          console.log("aesDel", session.aesDel);
+          console.log("rsaDel", session.rsaDel);
+          config.data = {
+            data: encrypt(
+              data,
+              session.aesKey,
+              session.aesDel,
+              session.rsaDel
+            ),
+          };
         }
         return config;
       },
@@ -79,6 +80,8 @@ class httpClient {
     this.instance.interceptors.response.use(
       function (response) {
         if (response.data !== undefined && process.env.SAPPER_APP_CRYPTO_MODE === "true") {
+          console.log("decrypt aesDel", session.aesDel);
+          console.log("decrypt data", response.data);
           response.data = decrypt(response.data, session.aesDel);
         }
 

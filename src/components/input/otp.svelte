@@ -24,8 +24,8 @@
   });
 
   const calcOtp = (otps) => {
-    if (Object.values(otps).length) {
-      return Object.values(otps).join("");
+    if (Object.keys(otps).length) {
+      return Object.keys(otps).map((key) => otps[key]).join("");
     } else return "";
   };
 

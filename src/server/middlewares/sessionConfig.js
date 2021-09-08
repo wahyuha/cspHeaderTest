@@ -10,7 +10,7 @@ import {
 
 const sessionConfig = () => {
   return function (req, res, next) {
-    if (getPathName(req.url) === "/debit/init") {
+    if (getPathName(req.url) === "/debit/init" || getPathName(req.url) === "/debit/enable") {
       const tid = uuidv4();
       req.session.extSessionId = getPathQuery(req.url).s;
       req.session.requestId = uuidv4();

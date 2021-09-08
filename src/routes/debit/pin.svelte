@@ -48,7 +48,6 @@
           $session.customerNumber = data.customerNumber;
           goto(`${baseUrl}/debit/otp`);
         } else if (errorCodes.includes(status)) {
-          // change with constant
           goto(`${baseUrl}/debit/error/blocked`);
         } else {
           error = publicError(status);
@@ -58,9 +57,7 @@
         console.log(e);
         error = publicError();
       })
-      .finally(() => {
-        loading = false;
-      });
+      loading = false;
   };
 </script>
 

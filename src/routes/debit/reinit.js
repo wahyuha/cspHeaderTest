@@ -16,6 +16,9 @@ export async function get(req, res) {
   await res.cookie(cookieName.rid, "", cookieConfigRemove);
   await res.cookie(cookieName.trans, "", cookieConfigRemove);
 
-  res.redirect(`${basePath}/debit/init?s=${sessionID}`);
-  return false;
+  res.writeHead(302, {
+    location: `${basePath}/debit/init?s=${sessionID}`,
+  });
+  res.end();
+  return true;
 }

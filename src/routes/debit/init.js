@@ -39,44 +39,47 @@ export async function get(req, res) {
         return redirectExistUser(res, state);
       }
     }
-    res.redirect(`${basePath}/debit/error?code=${status}`);
-    return false;
   } catch (error) {
     console.process(error);
-    res.redirect(`${basePath}/debit/error?code=992`);
-    return false;
+    res.writeHead(302, {
+      location: `${basePath}/debit/error?code=992`,
+    });
+    res.end();
   }
 }
 
 function redirectExistUser(res, state) {
   if (state === "BindingStateAgreement") {
-    res.redirect(`${basePath}/debit/consent`);
-    return false;
+    location = `${basePath}/debit/consent`;
   } else if (state === "BindingStateLogin") {
-    res.redirect(`${basePath}/debit/otp`);
-    return false;
+    location = `${basePath}/debit/otp`;
   } else if (state === "BindingStateVerified") {
-    res.redirect(`${basePath}/debit/success`);
-    return false;
+    location = `${basePath}/debit/success`;
+  } else {
+    location = `${basePath}/debit/error?code=991`;
   }
-  res.redirect(`${basePath}/debit/error?code=991`);
-  return false;
+  res.writeHead(302, {
+    location,
+  });
+  res.end();
+  return true;
 }
 
 function redirectRegister(res, state) {
   if (state === "RegisterStateAgreement") {
-    res.redirect(`${basePath}/debit/consent`);
-    return false;
+    location = `${basePath}/debit/consent`;
   } else if (state === "RegisterStateOtpRequest") {
-    res.redirect(`${basePath}/register/otp`);
-    return false;
+    location = `${basePath}/register/otp`;
   } else if (state === "RegisterStateOtpVerified") {
-    res.redirect(`${basePath}/register/identity`);
-    return false;
+    location = `${basePath}/register/identity`;
   } else if (state === "RegisterStateRegistered") {
-    res.redirect(`${basePath}/register/success`);
-    return false;
+    location = `${basePath}/register/success`;
   }
-  res.redirect(`${basePath}/register/error?code=991`);
-  return false; 
+  location = `${basePath}/register/error?code=991`;
+
+  res.writeHead(302, {
+    location,
+  });
+  res.end();
+  return true;
 }

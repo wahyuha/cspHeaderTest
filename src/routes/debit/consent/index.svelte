@@ -1,4 +1,5 @@
 <script>
+  import * as Sentry from "@sentry/browser";
   import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { setCustomer } from "@stores/customer";
@@ -19,9 +20,19 @@
   let isRegister = false;
   let partnerName = "merchant LinkAja";
   let loaded = false;
-  $: showModal = false;
+  let showModal = false;
 
   onMount(async () => {
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        fetchCheck();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300)
+  });
+
+  async function fetchCheck() {
     await clientHttp(sessionClient)
       .post("/check")
       .then((response) => {
@@ -48,10 +59,10 @@
         console.error(e);
         goto(`${baseUrl}/debit/error?code=999`);
       })
-      .finally(() => {
+      .then(() => {
         loaded = true;
       });
-  });
+  }
 
   async function handleNextStep() {
     if (isRegister) {

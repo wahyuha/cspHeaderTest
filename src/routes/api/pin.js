@@ -15,6 +15,8 @@ export async function post(req, res) {
   const sessionID = req.session.extSessionId;
   const requestId = req.session.requestId;
   const pin = req.body.pin || "";
+  console.log("sessionID :", sessionID);
+  console.log("PIN :", pin);
   const encryptedPin = encrypt(`${pin}`, requestId);
   const customerNumber = `${req.body.customerNumber}` || "";
 
