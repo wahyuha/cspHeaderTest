@@ -30,6 +30,16 @@
   $: forgotModal = false;
 
   onMount(async () => {
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        checkIdentity();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300)
+  });
+
+  async function checkIdentity() {
     if(isRedirected) {
       await clientHttp(sessionClient)
       .post("/check/identity")
@@ -61,7 +71,7 @@
         console.error(e);
       })
     }
-  })
+  }
 
   const isEligible = () => {
     loading = false;
