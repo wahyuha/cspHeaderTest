@@ -7,6 +7,7 @@
   import { lazy } from "@helpers/img.js";
   import { customer, setCustomer } from "@stores/customer";
   import { setIdentity } from "@stores/identity";
+  import { createAccountValidator } from "@helpers/validator";
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
   import Modal from "@components/modal/full.svelte";
@@ -18,7 +19,7 @@
 
   let loading = false;
   let showLoaderFirst = false;
-  let error;
+  let errors = {};
   let { customerNumber, name, email } = $customer;
   let isRedirected = !Boolean(customerNumber)
 
@@ -60,12 +61,28 @@
     }
   })
 
-  const onSubmit = async () => {
-    setIdentity({
-      name,
-      email
-    });
-    return goto(`${baseUrl}/register/pin`);
+  const isEligible = () => {
+    loading = false;
+    if (!editable) {
+      return true;
+    }
+    
+    const values = { name, email };
+    errors = createAccountValidator(values);
+    if (!Object.keys(errors).length) {
+      return true;
+    }
+    return false;
+  }
+
+  const onSubmit = async (e) => {
+    if (isEligible()) {
+      setIdentity({
+        name,
+        email
+      });
+      return goto(`${baseUrl}/register/pin`);
+    }
   };
 </script>
 
@@ -91,6 +108,9 @@
         class="input-general"
         placeholder="Masukkan nama lengkap kamu"
       />
+      {#if errors.name}
+        <div class="error-text">{errors.name}</div>
+      {/if}
     </div>
     <div class="input-wrap">
       <div class="f-label ff-b">Email</div>
@@ -101,6 +121,9 @@
         class="input-general"
         placeholder="Masukkan email kamu"
       />
+      {#if errors.email}
+        <div class="error-text">{errors.email}</div>
+      {/if}
       <div class="input-info">Email diperlukan supaya kamu bisa akses pemulihan akun LinkAja saat kamu lupa PIN</div>
     </div>
   </div>
@@ -186,5 +209,11 @@
     padding: 16px;
     padding-top: 0px;
     background-color: #ffffff;
+  }
+
+  .error-text {
+    color: #d90102;
+    font-size: 12px;
+    padding: 4px 0;
   }
 </style>

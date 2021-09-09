@@ -7,6 +7,7 @@
   import { publicError, pinLengthMessage } from "@utils/error";
   import { customer } from "@stores/customer";
   import { identity } from "@stores/identity";
+  import { createPinValidator } from "@helpers/validator";
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
   import InputPIN from "@components/input/pin.svelte";
@@ -20,9 +21,10 @@
   let value;
   let loading = false;
   let showLoaderFirst = false;
-  let error;
+  let errorSubmit = "";
+  let errors = {};
   let pin = "";
-  let confirmPIN = "";
+  let pinConfirm = "";
   let { customerNumber } = $customer;
   let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
 
@@ -30,36 +32,42 @@
 
   $: forgotModal = false;
 
-  const onSubmit = async () => {
-    loading = true;
-    error = "";
-    const params = { name, email, pin };
+  const isEligible = () => {
+    loading = false;
 
-    if (`${value}`.length < 6) {
-      error = pinLengthMessage;
-      loading = false;
-      return;
+    const values = { pin, pinConfirm };
+    errors = createPinValidator(values);
+    if (!Object.keys(errors).length) {
+      return true;
     }
+    return false;
+  }
 
-    await clientHttp(sessionClient)
-      .post("/register", params)
-      .then((response) => {
-        const { data, status } = response.data;
-        if (status === "00") {
-          return goto(`${baseUrl}/register/success`);
-        } else if (errorCodes.includes(status)) {
-          return goto(`${baseUrl}/debit/error/unregistered`);
-        } else {
-          error = publicError(status);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        error = publicError();
-      })
-      .finally(() => {
-        loading = false;
-      });
+  const onSubmit = async () => {
+    if (isEligible()) {
+      loading = true;
+      errorSubmit = "";
+      const params = { name, email, pin };
+
+      await clientHttp(sessionClient)
+        .post("/register", params)
+        .then((response) => {
+          const { data, status } = response.data;
+          if (status === "00") {
+            return goto(`${baseUrl}/register/success`);
+          } else if (errorCodes.includes(status)) {
+            return goto(`${baseUrl}/debit/error/unregistered`);
+          } else {
+            errorSubmit = publicError(status);
+          }
+        })
+        .catch((e) => {
+          errorSubmit = publicError();
+        })
+        .finally(() => {
+          loading = false;
+        });
+    }
   };
 </script>
 
@@ -77,6 +85,9 @@
     <div class="tt-info ff-b">Buat PIN, Yuk!</div>
     <p class="login-info">PIN LinkAja terdiri dari 6 digit, rahasiakan ya!</p>
     <div class="input-wrap">
+      {#if errorSubmit}
+        <div class="error-text">{errorSubmit}</div>
+      {/if}
       <div class="f-label ff-b">Nomor Handphone</div>
       <input
         type="tel"
@@ -88,16 +99,16 @@
     </div>
     <div class="input-wrap">
       <div class="ff-b">PIN</div>
-      <InputPIN bind:value={pin} {error} />
+      <InputPIN bind:value={pin} error={errors.pin} />
     </div>
     <div class="input-wrap">
       <div class="ff-b">Konfirmasi PIN</div>
-      <InputPIN bind:value={confirmPIN} {error} />
+      <InputPIN bind:value={pinConfirm} error={errors.pinConfirm} />
     </div>
   </div>
 
   <div class="action-wrap">
-    <Button disabled={loading} onClick={onSubmit} bind:loading>Buat PIN</Button>
+    <Button disabled={loading} onClick={onSubmit} bind:loading>Lanjut</Button>
   </div>
 </div>
 {#if forgotModal}
@@ -157,14 +168,15 @@
   input.input-general[type="tel"] {
     -moz-appearance: textfield;
   }
-  .input-info {
-  padding: 4px 0;
-    color: #9CA4AC;
-    font-size: 12px;
-  }
   .action-wrap {
     padding: 16px;
     padding-top: 0px;
     background-color: #ffffff;
+  }
+
+  .error-text {
+    color: #d90102;
+    font-size: 12px;
+    padding: 4px 0;
   }
 </style>
