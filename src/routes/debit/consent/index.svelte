@@ -49,6 +49,8 @@
             backToStoreFailedUri: data.backToStoreFailedUri,
             editable: data.editable,
             partnerName: data.partnerName,
+            name: data.name,
+            email: data.email,
           });
         } else {
           const queryCode = status ? `?code=${status}` : "";

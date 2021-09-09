@@ -19,6 +19,8 @@ export async function get(req, res) {
         editable,
         tnc,
         isRegister,
+        name,
+        email,
       },
       status,
     } = data;
@@ -32,6 +34,8 @@ export async function get(req, res) {
       req.session.backToStoreFailedUri = backToStoreFailedUri;
       req.session.tnc = tnc;
       req.session.isRegister = isRegister;
+      req.session.name = name;
+      req.session.email = email;
 
       if (isRegister) {
         return redirectRegister(res, state);
@@ -49,6 +53,7 @@ export async function get(req, res) {
 }
 
 function redirectExistUser(res, state) {
+  let location = "";
   if (state === "BindingStateAgreement") {
     location = `${basePath}/debit/consent`;
   } else if (state === "BindingStateLogin") {
@@ -66,6 +71,7 @@ function redirectExistUser(res, state) {
 }
 
 function redirectRegister(res, state) {
+  let location = "";
   if (state === "RegisterStateAgreement") {
     location = `${basePath}/debit/consent`;
   } else if (state === "RegisterStateOtpRequest") {
@@ -74,8 +80,9 @@ function redirectRegister(res, state) {
     location = `${basePath}/register/identity`;
   } else if (state === "RegisterStateRegistered") {
     location = `${basePath}/register/success`;
+  } else {
+    location = `${basePath}/register/error?code=991`;
   }
-  location = `${basePath}/register/error?code=991`;
 
   res.writeHead(302, {
     location,

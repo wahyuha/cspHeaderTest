@@ -1,69 +1,33 @@
 <script>
   import { goto, stores } from "@sapper/app";
   import { fade } from "svelte/transition";
-  import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { publicError, pinLengthMessage } from "@utils/error";
   import { customer } from "@stores/customer";
+  import { setIdentity } from "@stores/identity";
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
-  import Counter from "@components/counter/index.svelte";
   import Modal from "@components/modal/full.svelte";
-  import ForgotTrigger from "@components/forgot/trigger.svelte";
   import ForgotContent from "@components/forgot/index.svelte";
   import LoaderBlocking from "@components/loader/blocking.svelte";
 
   const { session } = stores();
-  const sessionClient = $session;
-  console.log(sessionClient);
 
-  let value;
   let loading = false;
   let showLoaderFirst = false;
   let error;
-  let name = "";
-  let email = "";
-  let { customerNumber } = $customer;
-  let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
+  let { customerNumber, name, email } = $customer;
 
   const { editable } = $customer || false;
 
   $: forgotModal = false;
 
   const onSubmit = async () => {
-    goto(`${baseUrl}/register/pin`); // debugging purpose
-    loading = true;
-    error = "";
-    const params = { pin: value, customerNumber };
-
-    if (`${value}`.length < 6) {
-      error = pinLengthMessage;
-      loading = false;
-      return;
-    }
-
-    await clientHttp(sessionClient)
-      .post("/pin", params)
-      .then((response) => {
-        const { data, status } = response.data;
-        if (status === "00") {
-          $session.customerNumber = data.customerNumber;
-          goto(`${baseUrl}/debit/otp`);
-        } else if (errorCodes.includes(status)) {
-          // change with constant
-          goto(`${baseUrl}/debit/error/blocked`);
-        } else {
-          error = publicError(status);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        error = publicError();
-      })
-      .finally(() => {
-        loading = false;
-      });
+    setIdentity({
+      name,
+      email
+    });
+    return goto(`${baseUrl}/register/pin`);
   };
 </script>
 

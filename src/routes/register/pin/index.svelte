@@ -6,6 +6,7 @@
   import { lazy } from "@helpers/img.js";
   import { publicError, pinLengthMessage } from "@utils/error";
   import { customer } from "@stores/customer";
+  import { identity } from "@stores/identity";
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
   import InputPIN from "@components/input/pin.svelte";
@@ -15,7 +16,6 @@
 
   const { session } = stores();
   const sessionClient = $session;
-  console.log(sessionClient);
 
   let value;
   let loading = false;
@@ -26,15 +26,14 @@
   let { customerNumber } = $customer;
   let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
 
-  const { editable } = $customer || false;
+  const { name = "", email = "" } = $identity;
 
   $: forgotModal = false;
 
   const onSubmit = async () => {
-    goto(`${baseUrl}/register/success`); //debugging purpose
     loading = true;
     error = "";
-    const params = { pin: value, customerNumber };
+    const params = { name, email, pin };
 
     if (`${value}`.length < 6) {
       error = pinLengthMessage;
@@ -43,15 +42,13 @@
     }
 
     await clientHttp(sessionClient)
-      .post("/pin", params)
+      .post("/register", params)
       .then((response) => {
         const { data, status } = response.data;
         if (status === "00") {
-          $session.customerNumber = data.customerNumber;
-          goto(`${baseUrl}/debit/otp`);
+          return goto(`${baseUrl}/register/success`);
         } else if (errorCodes.includes(status)) {
-          // change with constant
-          goto(`${baseUrl}/debit/error/blocked`);
+          return goto(`${baseUrl}/debit/error/unregistered`);
         } else {
           error = publicError(status);
         }
