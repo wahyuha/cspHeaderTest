@@ -1,9 +1,11 @@
 <script>
+  import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { fade } from "svelte/transition";
+  import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { customer } from "@stores/customer";
+  import { customer, setCustomer } from "@stores/customer";
   import { setIdentity } from "@stores/identity";
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
@@ -12,15 +14,51 @@
   import LoaderBlocking from "@components/loader/blocking.svelte";
 
   const { session } = stores();
+  const sessionClient = $session;
 
   let loading = false;
   let showLoaderFirst = false;
   let error;
   let { customerNumber, name, email } = $customer;
+  let isRedirected = !Boolean(customerNumber)
 
-  const { editable } = $customer || false;
+  let { editable } = $customer || false;
 
   $: forgotModal = false;
+
+  onMount(async () => {
+    if(isRedirected) {
+      await clientHttp(sessionClient)
+      .post("/check/identity")
+      .then((response) => {
+        const { data, status } = response.data;
+        if (status === "00") {
+          customerNumber = data.customerNumber;
+          name = data.name;
+          email = data.email;
+          editable = data.editable;
+          
+          setCustomer({
+            customerNumber,
+            backToStoreUri: data.backToStoreUri,
+            backToStoreFailedUri: data.backToStoreFailedUri,
+            editable,
+            partnerName: data.partnerName,
+            isRegister: data.isRegister,
+            name,
+            email,
+          });
+          setIdentity({
+            name,
+            email,
+          })
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+    }
+  })
 
   const onSubmit = async () => {
     setIdentity({

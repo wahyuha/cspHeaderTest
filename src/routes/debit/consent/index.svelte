@@ -1,5 +1,4 @@
 <script>
-  import * as Sentry from "@sentry/browser";
   import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { setCustomer } from "@stores/customer";

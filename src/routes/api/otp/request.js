@@ -14,7 +14,7 @@ export async function post(req, res) {
   const sessionID = req.session.extSessionId;
 
   try {
-    const response = await httpServer(req.session).post("/1.0/bind/otp/request", { sessionID });
+    const response = await httpServer(req.session).post("/1.0/bind/cc", { sessionID });
     const {
       data: { data, status, message },
     } = response;
