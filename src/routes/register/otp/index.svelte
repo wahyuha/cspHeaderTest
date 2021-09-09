@@ -35,26 +35,26 @@
     loading = true;
     error = "";
     const params = { otp };
-    goto(`${baseUrl}/register/identity`); // debuging puropose
     await clientHttp(sessionClient)
       .post("/otp", params)
       .then((response) => {
         const { data, status } = response.data;
+        loading = false;
         if (status === "00") {
           if (data.backToStoreURI) {
             setCustomer({
               backToStoreUri: data.backToStoreURI,
             });
           }
-          goto(`${baseUrl}/register/identity`);
+          return goto(`${baseUrl}/register/identity`);
         } else if (status === "LA909") {
-          goto(`${baseUrl}/register/error/unauthorized`);
+          return goto(`${baseUrl}/register/error/unauthorized`);
         } else {
           error = publicError(status);
         }
       })
       .catch(() => (error = publicError()))
-      .finally(() => {
+      .then(() => {
         loading = false;
       });
   };
