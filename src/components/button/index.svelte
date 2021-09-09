@@ -79,4 +79,15 @@
   .mt-20 {
     margin-top: 20px;
   }
+  button:disabled {
+    color: #e1e1ed !important;
+    background: #9ca4ac !important;
+    pointer-events: none !important;
+  }
+
+  button.disabled {
+    color: #e1e1ed !important;
+    background: #9ca4ac !important;
+    pointer-events: none !important;
+  }
 </style>

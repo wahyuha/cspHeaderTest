@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { fade } from "svelte/transition";
+  import { Checkbox } from "seruni";
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
@@ -17,6 +18,7 @@
   const { session } = stores();
   const sessionClient = $session;
 
+  let accept = false;
   let loading = false;
   let showLoaderFirst = false;
   let errors = {};
@@ -129,18 +131,22 @@
   </div>
 
   <div class="action-wrap">
-    <p class="action-info">
-      Saya telah membaca dan menyetujui 
-      <a
+    <div class="tnc-section">
+      <Checkbox
+        bind:checked={accept}
+        text=""
+      />
+      <div class="action-info">
+        Saya telah membaca dan menyetujui  <a
         href
         on:click={(e) => {
           e.preventDefault();
+          showModal = true;
         }}
-        class="tnc-link">Ketentuan Layanan</a
-      >
-      pendaftaran akun LinkAja
-    </p>
-    <Button disabled={loading} onClick={onSubmit} bind:loading>Buat PIN</Button>
+        class="tnc-link">Ketentuan Layanan</a> penyambungan akun LinkAja
+      </div>
+    </div>
+    <Button disabled={!accept} onClick={onSubmit}>Lanjut</Button>
   </div>
 </div>
 {#if forgotModal}
@@ -215,5 +221,8 @@
     color: #d90102;
     font-size: 12px;
     padding: 4px 0;
+  }
+  .tnc-section {
+    display: flex;
   }
 </style>

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { setCustomer } from "@stores/customer";
+  import { Checkbox } from "seruni";
   import Meta from "@components/meta/index.svelte";
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
@@ -15,6 +16,7 @@
   const { session } = stores();
   const sessionClient = $session;
 
+  let accept = false;
   let tnc = tncConst;
   let isRegister = false;
   let partnerName = "merchant LinkAja";
@@ -100,19 +102,22 @@
   <DisplayedInfo {tnc} {loaded} />
 
   <div class="action-wrap">
-    <p class="action-info">
-      Dengan klik 'Lanjut', kamu telah membaca dan menyetujui <a
+    <div class="tnc-section">
+      <Checkbox
+        bind:checked={accept}
+        text=""
+      />
+      <div class="action-info">
+        Saya telah membaca dan menyetujui  <a
         href
         on:click={(e) => {
           e.preventDefault();
           showModal = true;
         }}
-        class="tnc-link">Syarat dan Ketentuan</a
-      > yang berlaku
-    </p>
-    <Button disabled={!loaded} onClick={handleNextStep}>
-      Lanjut
-    </Button>
+        class="tnc-link">Ketentuan Layanan</a> penyambungan akun LinkAja
+      </div>
+    </div>
+    <Button disabled={!accept} onClick={handleNextStep}>Lanjut</Button>
   </div>
 </div>
 {#if showModal}
@@ -141,5 +146,8 @@
     margin-top: 8px;
     padding: 16px 16px 32px;
     background-color: #ffffff;
+  }
+  .tnc-section {
+    display: flex;
   }
 </style>
