@@ -12,22 +12,20 @@
   import Meta from "@components/meta/index.svelte";
   import Button from "@components/button/index.svelte";
   import Modal from "@components/modal/full.svelte";
-  import ForgotContent from "@components/forgot/index.svelte";
+  import TncContent from "./_components/tncContent.svelte";
   import LoaderBlocking from "@components/loader/blocking.svelte";
 
   const { session } = stores();
   const sessionClient = $session;
 
   let accept = false;
-  let loading = false;
   let showLoaderFirst = false;
+  let showModal = false;
   let errors = {};
   let { customerNumber, name, email } = $customer;
   let isRedirected = !Boolean(customerNumber)
 
   let { editable } = $customer || false;
-
-  $: forgotModal = false;
 
   onMount(async () => {
     const loaded = setInterval(() => {
@@ -42,7 +40,7 @@
   async function checkIdentity() {
     if(isRedirected) {
       await clientHttp(sessionClient)
-      .post("/check/identity")
+      .post("/check/general")
       .then((response) => {
         const { data, status } = response.data;
         if (status === "00") {
@@ -125,7 +123,7 @@
       {/if}
     </div>
     <div class="input-wrap">
-      <div class="f-label ff-b">Email</div>
+      <div class="f-label ff-b">Alamat Email</div>
       <input
         type="tel"
         disabled={!editable}
@@ -159,13 +157,14 @@
     <Button disabled={!accept} onClick={onSubmit}>Lanjut</Button>
   </div>
 </div>
-{#if forgotModal}
+{#if showModal}
   <Modal
-    on:cancel={() => (forgotModal = false)}
-    on:close={() => (forgotModal = false)}
+    on:cancel={() => (showModal = false)}
+    on:close={() => (showModal = false)}
   >
-    <ForgotContent />
+    <TncContent />
   </Modal>
+  
 {:else if showLoaderFirst}
   <LoaderBlocking />
 {/if}

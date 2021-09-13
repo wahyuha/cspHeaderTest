@@ -21,7 +21,7 @@ export async function post(req, res) {
     email,
   } = session;
 
-  if (state === "RegisterStateOtpVerified") {
+  if (state) {
     res.json({
       data: {
         partnerName,

@@ -22,6 +22,9 @@
   let partnerName = "merchant LinkAja";
   let loaded = false;
   let showModal = false;
+  const consentInfo = !isRegister ?
+    "Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke"
+    : "Dengan daftar dan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke Livin’ Mandiri"
 
   onMount(async () => {
     const loaded = setInterval(() => {
@@ -93,7 +96,7 @@
       use:lazy={{ src: "images/logo-main.png" }}
     />
     <p class="info">
-      Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke <span
+      {consentInfo} <span
         class={loaded ? "ff-b" : "text-blur"}>{partnerName}</span
       >
     </p>

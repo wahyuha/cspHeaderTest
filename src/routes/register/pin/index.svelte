@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { fade } from "svelte/transition";
   import clientHttp from "@utils/http/client";
@@ -25,12 +26,57 @@
   let errors = {};
   let pin = "";
   let pinConfirm = "";
-  let { customerNumber } = $customer;
+  let { customerNumber = "" } = $customer;
+  let isRedirected = !Boolean(customerNumber)
   let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
 
   const { name = "", email = "" } = $identity;
 
   $: forgotModal = false;
+
+  onMount(async () => {
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        checkAccount();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300)
+  });
+
+  async function checkAccount() {
+    if(isRedirected) {
+      await clientHttp(sessionClient)
+      .post("/check/general")
+      .then((response) => {
+        const { data, status } = response.data;
+        if (status === "00") {
+          customerNumber = data.customerNumber;
+          name = data.name;
+          email = data.email;
+          editable = data.editable;
+          
+          setCustomer({
+            customerNumber,
+            backToStoreUri: data.backToStoreUri,
+            backToStoreFailedUri: data.backToStoreFailedUri,
+            editable,
+            partnerName: data.partnerName,
+            isRegister: data.isRegister,
+            name,
+            email,
+          });
+          setIdentity({
+            name,
+            email,
+          })
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+    }
+  }
 
   const isEligible = () => {
     loading = false;

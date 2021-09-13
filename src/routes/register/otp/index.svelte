@@ -77,6 +77,7 @@
   </div>
 
   <div class="form-wrap">
+    <div class="tt-info ff-b">Konfirmasi OTP Kamu</div>
     <p class="pin-info" in:fade={{ duration: 300 }}>
       Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber ||
         "*************"}
@@ -119,6 +120,11 @@
   }
   .form-wrap {
     padding: 16px;
+  }
+  .tt-info {
+    padding: 0 0 8px;
+    font-weight: 700;
+    font-size: 16px;
   }
   .pin-info {
     margin: 0 0 16px;
