@@ -72,7 +72,6 @@
   }
 
   const isEligible = () => {
-    loading = false;
     if (!editable) {
       return true;
     }

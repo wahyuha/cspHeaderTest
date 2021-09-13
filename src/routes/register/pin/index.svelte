@@ -5,8 +5,9 @@
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { publicError, pinLengthMessage } from "@utils/error";
-  import { customer } from "@stores/customer";
+  import { publicError } from "@utils/error";
+  import { customer, setCustomer } from "@stores/customer";
+  import { setIdentity } from "@stores/identity";
   import { identity } from "@stores/identity";
   import { createPinValidator } from "@helpers/validator";
   import Meta from "@components/meta/index.svelte";
@@ -52,15 +53,12 @@
         const { data, status } = response.data;
         if (status === "00") {
           customerNumber = data.customerNumber;
-          name = data.name;
-          email = data.email;
-          editable = data.editable;
           
           setCustomer({
             customerNumber,
             backToStoreUri: data.backToStoreUri,
             backToStoreFailedUri: data.backToStoreFailedUri,
-            editable,
+            editable: data.editable,
             partnerName: data.partnerName,
             isRegister: data.isRegister,
             name,
