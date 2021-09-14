@@ -55,7 +55,7 @@
     loading = true;
     await clientHttp(sessionClient)
       .post("/otp/resend")
-      .finally(() => {
+      .then(() => {
         loading = false;
       });
     decreaseRemain();

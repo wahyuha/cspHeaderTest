@@ -1,11 +1,12 @@
 <script>
+  import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
   import { fade } from "svelte/transition";
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
   import { publicError, pinLengthMessage } from "@utils/error";
-  import { customer } from "@stores/customer";
+  import { customer, setCustomer } from "@stores/customer";
   import Meta from "@components/meta/index.svelte";
   import InputPIN from "@components/input/pin.svelte";
   import Button from "@components/button/index.svelte";
@@ -23,11 +24,47 @@
   let showLoaderFirst = false;
   let error;
   let { customerNumber } = $customer;
+  let isRedirected = !Boolean(customerNumber);
   let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
 
   const { editable } = $customer || false;
 
   $: forgotModal = false;
+
+  onMount(async () => {
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        checkAccount();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300)
+  });
+
+  async function checkAccount() {
+    if(isRedirected) {
+      await clientHttp(sessionClient)
+      .post("/check/general")
+      .then((response) => {
+        const { data, status } = response.data;
+        if (status === "00") {
+          customerNumber = data.customerNumber;
+          
+          setCustomer({
+            customerNumber,
+            backToStoreUri: data.backToStoreUri,
+            backToStoreFailedUri: data.backToStoreFailedUri,
+            editable: data.editable,
+            partnerName: data.partnerName,
+            isRegister: data.isRegister,
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+    }
+  }
 
   const onSubmit = async () => {
     loading = true;

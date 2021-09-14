@@ -2,7 +2,7 @@
   import { goto, stores } from "@sapper/app";
   import clientHttp from "@utils/http/client";
   import { onMount } from "svelte";
-  import { setCustomer } from "@stores/customer";
+  import { customer, setCustomer } from "@stores/customer";
   import { fade } from "svelte/transition";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
@@ -20,7 +20,8 @@
   const sessionClient = $session;
 
   let otp;
-  let customerNumber;
+  let { customerNumber } = $customer;
+  let isRedirected = !Boolean(customerNumber);
 
   let loading = false;
   let error;
@@ -30,6 +31,41 @@
   onMount(async () => {
     customerNumber = $session.customerNumber;
   });
+
+  onMount(async () => {
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        checkAccount();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300)
+  });
+
+  async function checkAccount() {
+    if(isRedirected) {
+      await clientHttp(sessionClient)
+      .post("/check/general")
+      .then((response) => {
+        const { data, status } = response.data;
+        if (status === "00") {
+          customerNumber = data.customerNumber;
+          
+          setCustomer({
+            customerNumber,
+            backToStoreUri: data.backToStoreUri,
+            backToStoreFailedUri: data.backToStoreFailedUri,
+            editable: data.editable,
+            partnerName: data.partnerName,
+            isRegister: data.isRegister,
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+    }
+  }
 
   const onSubmit = async () => {
     loading = true;

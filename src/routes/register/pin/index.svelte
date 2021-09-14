@@ -20,7 +20,6 @@
   const { session } = stores();
   const sessionClient = $session;
 
-  let value;
   let loading = false;
   let showLoaderFirst = false;
   let errorSubmit = "";
@@ -108,7 +107,7 @@
         .catch((e) => {
           errorSubmit = publicError();
         })
-        .finally(() => {
+        .then(() => {
           loading = false;
         });
     }

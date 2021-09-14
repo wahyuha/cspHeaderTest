@@ -77,7 +77,7 @@
       .then(() => {
         goto(`${baseUrl}/register/otp`)
       })
-      .finally(() => {
+      .then(() => {
         loaded = true;
       });
       return false;
