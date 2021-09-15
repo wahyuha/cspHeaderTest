@@ -36,10 +36,10 @@
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
       checkAccount();
     } else {
-      const loaded = setInterval(() => {
+      const loadedInt = setInterval(() => {
         if (typeof JSEncrypt !== "undefined") {
           checkAccount();
-          clearInterval(loaded);
+          clearInterval(loadedInt);
           return;
         }
       }, 300)
