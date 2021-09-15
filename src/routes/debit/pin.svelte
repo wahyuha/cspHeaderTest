@@ -32,6 +32,7 @@
   $: forgotModal = false;
 
   onMount(async () => {
+    console.log('init pin...');
     const loaded = setInterval(() => {
       if (typeof JSEncrypt !== "undefined") {
         checkAccount();
@@ -42,13 +43,18 @@
   });
 
   async function checkAccount() {
+    console.log('JSEn loaded (pin)');
     if(isRedirected) {
+      console.log('redirected');
       await clientHttp(sessionClient)
       .post("/check/general")
       .then((response) => {
+        console.log('check/general response 200');
         const { data, status } = response.data;
         if (status === "00") {
+          console.log('status 00');
           customerNumber = data.customerNumber;
+          console.log('customerNumber updated');
           
           setCustomer({
             customerNumber,
@@ -58,9 +64,13 @@
             partnerName: data.partnerName,
             isRegister: data.isRegister,
           });
+          console.log('update customer');
+        } else {
+          console.log('status not 00');
         }
       })
       .catch((e) => {
+        console.log('error fetch');
         console.error(e);
       })
     }
@@ -94,7 +104,11 @@
         console.log(e);
         error = publicError();
       })
-      loading = false;
+      .then(() => {
+        console.log('isLoading?');
+        loading = false;
+        console.log('loading true?');
+      });
   };
 </script>
 

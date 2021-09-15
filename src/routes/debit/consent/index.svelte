@@ -27,6 +27,7 @@
     : "Dengan daftar dan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke Livin’ Mandiri"
 
   onMount(async () => {
+    console.log('init consent...');
     const loaded = setInterval(() => {
       if (typeof JSEncrypt !== "undefined") {
         fetchCheck();
@@ -37,16 +38,20 @@
   });
 
   async function fetchCheck() {
+    console.log('JSEn loaded');
     await clientHttp(sessionClient)
       .post("/check")
       .then((response) => {
+        console.log('check response 200');
         const { data, status } = response.data;
         if (status === "00") {
+          console.log('status 00');
           partnerName = data.partnerName;
           isRegister = data.isRegister;
           if (data.tnc && data.tnc.length) {
             tnc = data.tnc;
           }
+          console.log('TnC updated');
           setCustomer({
             customerNumber: data.customerNumber,
             backToStoreUri: data.backToStoreUri,
@@ -56,17 +61,22 @@
             name: data.name,
             email: data.email,
           });
+          console.log('update customer');
         } else {
+          console.log('status not 00');
           const queryCode = status ? `?code=${status}` : "";
           goto(`${baseUrl}/debit/error${queryCode}`);
         }
       })
       .catch((e) => {
+        console.log('error fetch');
         console.error(e);
         goto(`${baseUrl}/debit/error?code=999`);
       })
       .then(() => {
+        console.log('isLoaded?');
         loaded = true;
+        console.log('loaded true?');
       });
   }
 
@@ -82,6 +92,7 @@
       });
       return false;
     }
+    console.log('go to pin');
     goto(`${baseUrl}/debit/pin`)
   }
 </script>
