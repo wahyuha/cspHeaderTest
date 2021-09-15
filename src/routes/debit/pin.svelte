@@ -37,7 +37,7 @@
       if (typeof JSEncrypt !== "undefined") {
         checkAccount();
         clearInterval(loaded);
-        return;
+        return true;
       }
     }, 300)
   });

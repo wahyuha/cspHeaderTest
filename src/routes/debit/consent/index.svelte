@@ -32,7 +32,7 @@
       if (typeof JSEncrypt !== "undefined") {
         fetchCheck();
         clearInterval(loaded);
-        return;
+        return true;
       }
     }, 300)
   });
@@ -85,7 +85,7 @@
       await clientHttp(sessionClient)
       .post("/otp/request")
       .then(() => {
-        goto(`${baseUrl}/register/otp`)
+        return goto(`${baseUrl}/register/otp`)
       })
       .then(() => {
         loaded = true;
@@ -93,7 +93,7 @@
       return false;
     }
     console.log('go to pin');
-    goto(`${baseUrl}/debit/pin`)
+    return goto(`${baseUrl}/debit/pin`)
   }
 </script>
 
