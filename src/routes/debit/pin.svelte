@@ -33,13 +33,17 @@
 
   onMount(async () => {
     console.log('init pin...');
-    const loaded = setInterval(() => {
-      if (typeof JSEncrypt !== "undefined") {
-        checkAccount();
-        clearInterval(loaded);
-        return true;
-      }
-    }, 300)
+    if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
+      checkAccount();
+    } else {
+      const loaded = setInterval(() => {
+        if (typeof JSEncrypt !== "undefined") {
+          checkAccount();
+          clearInterval(loaded);
+          return true;
+        }
+      }, 300)
+    }
   });
 
   async function checkAccount() {
