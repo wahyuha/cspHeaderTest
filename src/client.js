@@ -18,7 +18,8 @@ if (process.env.ENABLE_ERUDA === "true") {
 }
 
 Sentry.init({
-  dsn: "https://e58c57d825664e94a4672d32c6ec3acf@o525890.ingest.sentry.io/5940308",
+  // dsn: "https://e58c57d825664e94a4672d32c6ec3acf@o525890.ingest.sentry.io/5940308",
+  dsn: "https://1a013830891b487abc0e68134ca44237@o1000727.ingest.sentry.io/5960158",
   release: "kiluan@1.2.1",
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,

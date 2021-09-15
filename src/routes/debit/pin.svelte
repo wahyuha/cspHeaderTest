@@ -34,7 +34,7 @@
   onMount(async () => {
     console.log('init pin...');
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
-      checkAccount();
+      await checkAccount();
     } else {
       const loaded = setInterval(() => {
         if (typeof JSEncrypt !== "undefined") {

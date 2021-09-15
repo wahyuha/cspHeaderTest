@@ -29,7 +29,7 @@
   onMount(async () => {
     console.log('init consent...');
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
-      fetchCheck();
+      await fetchCheck();
     } else {
       const loaded = setInterval(() => {
         if (typeof JSEncrypt !== "undefined") {

@@ -33,13 +33,17 @@
   });
 
   onMount(async () => {
-    const loaded = setInterval(() => {
-      if (typeof JSEncrypt !== "undefined") {
-        checkAccount();
-        clearInterval(loaded);
-        return;
-      }
-    }, 300)
+    if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
+      checkAccount();
+    } else {
+      const loaded = setInterval(() => {
+        if (typeof JSEncrypt !== "undefined") {
+          checkAccount();
+          clearInterval(loaded);
+          return;
+        }
+      }, 300)
+    }
   });
 
   async function checkAccount() {
