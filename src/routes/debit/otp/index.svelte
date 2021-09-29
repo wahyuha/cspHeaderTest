@@ -52,8 +52,8 @@
           error = publicError(status);
         }
       })
-      .catch(() => (error = publicError()))
-      loading = false;
+      .catch(() => (error = publicError()));
+    loading = false;
   };
 
   const autoSubmit = async () => {

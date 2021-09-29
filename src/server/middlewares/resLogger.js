@@ -8,8 +8,7 @@ const resLogger = () => {
     if (
       !isFileRoute(req.url) &&
       !isSkipPath(getPathName(req.url)) &&
-      (getPathName(req.url) !== "/debit/reinit" &&
-      getPathName(req.url) !== "/debit/enable")
+      getPathName(req.url) !== "/debit/reinit"
     ) {
       const pathName = getPathName(req.url);
       let oldSend = res.end;

@@ -15,6 +15,5 @@ export const isValidSession = (req) => {
     extSessionId: s.extSessionId,
   });
 
-  return true;
-  // return extsId && tId;
+  return extsId && tId;
 };

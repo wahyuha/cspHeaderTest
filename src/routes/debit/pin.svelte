@@ -56,8 +56,8 @@
       .catch((e) => {
         console.log(e);
         error = publicError();
-      })
-      loading = false;
+      });
+    loading = false;
   };
 </script>
 
