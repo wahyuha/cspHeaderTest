@@ -21,7 +21,7 @@
 
   let otp;
   let { customerNumber } = $customer;
-  let isRedirected = !Boolean(customerNumber);
+  let isRedirected = !customerNumber;
 
   let loading = false;
   let error;
@@ -42,32 +42,32 @@
           clearInterval(loadedInt);
           return;
         }
-      }, 300)
+      }, 300);
     }
   });
 
   async function checkAccount() {
-    if(isRedirected) {
+    if (isRedirected) {
       await clientHttp(sessionClient)
-      .post("/check/general")
-      .then((response) => {
-        const { data, status } = response.data;
-        if (status === "00") {
-          customerNumber = data.customerNumber;
-          
-          setCustomer({
-            customerNumber,
-            backToStoreUri: data.backToStoreUri,
-            backToStoreFailedUri: data.backToStoreFailedUri,
-            editable: data.editable,
-            partnerName: data.partnerName,
-            isRegister: data.isRegister,
-          });
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      })
+        .post("/check/general")
+        .then((response) => {
+          const { data, status } = response.data;
+          if (status === "00") {
+            customerNumber = data.customerNumber;
+
+            setCustomer({
+              customerNumber,
+              backToStoreUri: data.backToStoreUri,
+              backToStoreFailedUri: data.backToStoreFailedUri,
+              editable: data.editable,
+              partnerName: data.partnerName,
+              isRegister: data.isRegister,
+            });
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
   }
 
@@ -92,8 +92,8 @@
           error = publicError(status);
         }
       })
-      .catch(() => (error = publicError()))
-      loading = false;
+      .catch(() => (error = publicError()));
+    loading = false;
   };
 
   const autoSubmit = async () => {

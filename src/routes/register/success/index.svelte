@@ -23,7 +23,7 @@
     <img
       class="banner-img"
       alt="linkaja-created"
-      src="images/created.png"
+      src="images/created-sm.png"
       use:lazy={{ src: "images/created.png" }}
     />
   </div>

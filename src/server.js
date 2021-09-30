@@ -2,8 +2,6 @@ import serveStatic from "serve-static";
 import path from "path";
 import nocache from "nocache";
 import express from "express";
-import * as Sentry from "@sentry/node";
-import * as Tracing from "@sentry/tracing";
 import helmet from "helmet";
 import cors from "cors";
 import { json, urlencoded } from "body-parser";
@@ -38,14 +36,6 @@ const static_path = dev
   ? "../../../static"
   : "../../../__sapper__/build/static";
 
-Sentry.init({
-  dsn:
-    "https://15ef3b856a104369afef393ada847da6@o525890.ingest.sentry.io/5947104",
-  integrations: [new Tracing.Integrations.Express({ app })],
-  tracesSampleRate: 0.5,
-  environment: dev ? "development" : "production",
-});
-
 // security header
 app.use(cors(corsConfig));
 enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
@@ -77,8 +67,6 @@ app.use(
   })
 );
 app.use(nocache());
-
-app.use(Sentry.Handlers.errorHandler());
 
 app.use(
   basePath,

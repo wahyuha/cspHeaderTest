@@ -71,8 +71,8 @@
     <img
       class="banner-img"
       alt="OTP LinkAja"
-      src="images/login-banner.png"
-      use:lazy={{ src: "images/login-banner.png" }}
+      src="images/otp-banner-sm.png"
+      use:lazy={{ src: "images/otp-banner.png" }}
     />
   </div>
 
