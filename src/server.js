@@ -5,7 +5,7 @@ import express from "express";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import helmet from "helmet";
-// import cors from "cors";
+import cors from "cors";
 import { json, urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -39,19 +39,18 @@ const static_path = dev
   : "../../../__sapper__/build/static";
 
 Sentry.init({
-  dsn: "https://15ef3b856a104369afef393ada847da6@o525890.ingest.sentry.io/5947104",
-  integrations: [
-    new Tracing.Integrations.Express({ app }),
-  ],
+  dsn:
+    "https://15ef3b856a104369afef393ada847da6@o525890.ingest.sentry.io/5947104",
+  integrations: [new Tracing.Integrations.Express({ app })],
   tracesSampleRate: 0.5,
   environment: dev ? "development" : "production",
 });
 
 // security header
-// app.use(cors(corsConfig));
-// enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
-// app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
-// app.use(helmet.noSniff());
+app.use(cors(corsConfig));
+enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
+app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
+app.use(helmet.noSniff());
 app.use(helmet.hidePoweredBy());
 app.use(
   helmet.frameguard({

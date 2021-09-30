@@ -4,16 +4,14 @@ import {
   composeValidators,
   isRequired,
   hasLengthGreaterThan,
-  hasLengthLessThan,
   isNumeric,
-  isAlphabetic,
 } from "revalidate";
 
 const isEmail = (value) => {
   return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
 };
 
-const isPhoneNumber = (value) => {
+export const isPhoneNumber = (value) => {
   return /^(08)(?:\d.*){8,}\d+/g.test(value);
 };
 
@@ -37,7 +35,9 @@ const isValidEmail = createValidator(
   "Masukkan email dengan format yang sesuai. Cth: linkajadid@linkaja.id"
 );
 
-const cannotEmpty = isRequired({ message: "Mohon diisi terlebih dahulu" });
+export const cannotEmpty = isRequired({
+  message: "Mohon diisi terlebih dahulu",
+});
 
 /**
  * PIN cannot sequence like: 123456

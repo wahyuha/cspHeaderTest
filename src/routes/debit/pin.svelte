@@ -24,7 +24,7 @@
   let showLoaderFirst = false;
   let error;
   let { customerNumber } = $customer;
-  let isRedirected = !Boolean(customerNumber);
+  let isRedirected = !customerNumber;
   let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
 
   const { editable } = $customer || false;
@@ -32,7 +32,6 @@
   $: forgotModal = false;
 
   onMount(async () => {
-    console.log('init pin...');
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
       await checkAccount();
     } else {
@@ -42,41 +41,32 @@
           clearInterval(loadedInt);
           return true;
         }
-      }, 300)
+      }, 300);
     }
   });
 
   async function checkAccount() {
-    console.log('JSEn loaded (pin)');
-    if(isRedirected) {
-      console.log('redirected');
+    if (isRedirected) {
       await clientHttp(sessionClient)
-      .post("/check/general")
-      .then((response) => {
-        console.log('check/general response 200');
-        const { data, status } = response.data;
-        if (status === "00") {
-          console.log('status 00');
-          customerNumber = data.customerNumber;
-          console.log('customerNumber updated');
-          
-          setCustomer({
-            customerNumber,
-            backToStoreUri: data.backToStoreUri,
-            backToStoreFailedUri: data.backToStoreFailedUri,
-            editable: data.editable,
-            partnerName: data.partnerName,
-            isRegister: data.isRegister,
-          });
-          console.log('update customer');
-        } else {
-          console.log('status not 00');
-        }
-      })
-      .catch((e) => {
-        console.log('error fetch');
-        console.error(e);
-      })
+        .post("/check/general")
+        .then((response) => {
+          const { data, status } = response.data;
+          if (status === "00") {
+            customerNumber = data.customerNumber;
+
+            setCustomer({
+              customerNumber,
+              backToStoreUri: data.backToStoreUri,
+              backToStoreFailedUri: data.backToStoreFailedUri,
+              editable: data.editable,
+              partnerName: data.partnerName,
+              isRegister: data.isRegister,
+            });
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
   }
 
@@ -109,9 +99,7 @@
         error = publicError();
       })
       .then(() => {
-        console.log('isLoading?');
         loading = false;
-        console.log('loading true?');
       });
   };
 </script>

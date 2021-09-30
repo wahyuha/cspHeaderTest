@@ -27,7 +27,7 @@
   let pin = "";
   let pinConfirm = "";
   let { customerNumber = "" } = $customer;
-  let isRedirected = !Boolean(customerNumber)
+  let isRedirected = !customerNumber;
   let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
 
   const { name = "", email = "" } = $identity;
@@ -41,37 +41,37 @@
         clearInterval(loaded);
         return;
       }
-    }, 300)
+    }, 300);
   });
 
   async function checkAccount() {
-    if(isRedirected) {
+    if (isRedirected) {
       await clientHttp(sessionClient)
-      .post("/check/general")
-      .then((response) => {
-        const { data, status } = response.data;
-        if (status === "00") {
-          customerNumber = data.customerNumber;
-          
-          setCustomer({
-            customerNumber,
-            backToStoreUri: data.backToStoreUri,
-            backToStoreFailedUri: data.backToStoreFailedUri,
-            editable: data.editable,
-            partnerName: data.partnerName,
-            isRegister: data.isRegister,
-            name,
-            email,
-          });
-          setIdentity({
-            name,
-            email,
-          })
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      })
+        .post("/check/general")
+        .then((response) => {
+          const { data, status } = response.data;
+          if (status === "00") {
+            customerNumber = data.customerNumber;
+
+            setCustomer({
+              customerNumber,
+              backToStoreUri: data.backToStoreUri,
+              backToStoreFailedUri: data.backToStoreFailedUri,
+              editable: data.editable,
+              partnerName: data.partnerName,
+              isRegister: data.isRegister,
+              name,
+              email,
+            });
+            setIdentity({
+              name,
+              email,
+            });
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
   }
 
@@ -84,7 +84,7 @@
       return true;
     }
     return false;
-  }
+  };
 
   const onSubmit = async () => {
     if (isEligible()) {
@@ -95,7 +95,7 @@
       await clientHttp(sessionClient)
         .post("/register", params)
         .then((response) => {
-          const { data, status } = response.data;
+          const { status } = response.data;
           if (status === "00") {
             return goto(`${baseUrl}/register/success`);
           } else if (errorCodes.includes(status)) {
@@ -104,7 +104,7 @@
             errorSubmit = publicError(status);
           }
         })
-        .catch((e) => {
+        .catch(() => {
           errorSubmit = publicError();
         })
         .then(() => {
@@ -187,7 +187,7 @@
     margin: 0 0 16px;
   }
   .f-label {
-    color: #9CA4AC;
+    color: #9ca4ac;
   }
   .input-wrap {
     padding-bottom: 16px;

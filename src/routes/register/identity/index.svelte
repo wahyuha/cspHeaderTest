@@ -23,7 +23,7 @@
   let showModal = false;
   let errors = {};
   let { customerNumber, name, email } = $customer;
-  let isRedirected = !Boolean(customerNumber)
+  let isRedirected = !customerNumber;
 
   let { editable } = $customer || false;
 
@@ -34,40 +34,40 @@
         clearInterval(loaded);
         return;
       }
-    }, 300)
+    }, 300);
   });
 
   async function checkIdentity() {
-    if(isRedirected) {
+    if (isRedirected) {
       await clientHttp(sessionClient)
-      .post("/check/general")
-      .then((response) => {
-        const { data, status } = response.data;
-        if (status === "00") {
-          customerNumber = data.customerNumber;
-          name = data.name;
-          email = data.email;
-          editable = data.editable;
-          
-          setCustomer({
-            customerNumber,
-            backToStoreUri: data.backToStoreUri,
-            backToStoreFailedUri: data.backToStoreFailedUri,
-            editable,
-            partnerName: data.partnerName,
-            isRegister: data.isRegister,
-            name,
-            email,
-          });
-          setIdentity({
-            name,
-            email,
-          })
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      })
+        .post("/check/general")
+        .then((response) => {
+          const { data, status } = response.data;
+          if (status === "00") {
+            customerNumber = data.customerNumber;
+            name = data.name;
+            email = data.email;
+            editable = data.editable;
+
+            setCustomer({
+              customerNumber,
+              backToStoreUri: data.backToStoreUri,
+              backToStoreFailedUri: data.backToStoreFailedUri,
+              editable,
+              partnerName: data.partnerName,
+              isRegister: data.isRegister,
+              name,
+              email,
+            });
+            setIdentity({
+              name,
+              email,
+            });
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
   }
 
@@ -75,20 +75,20 @@
     if (!editable) {
       return true;
     }
-    
+
     const values = { name, email };
     errors = createAccountValidator(values);
     if (!Object.keys(errors).length) {
       return true;
     }
     return false;
-  }
+  };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async () => {
     if (isEligible()) {
       setIdentity({
         name,
-        email
+        email,
       });
       return goto(`${baseUrl}/register/pin`);
     }
@@ -107,7 +107,7 @@
   </div>
   <div class="form-wrap" in:fade={{ duration: 300 }}>
     <div class="tt-info ff-b">Daftar & Hubungkan LinkAja</div>
-    <p class="login-info">Pendaftaran untuk {customerNumber || ''}</p>
+    <p class="login-info">Pendaftaran untuk {customerNumber || ""}</p>
     <div class="input-wrap">
       <div class="f-label ff-b">Nama Lengkap</div>
       <input
@@ -133,24 +133,25 @@
       {#if errors.email}
         <div class="error-text">{errors.email}</div>
       {/if}
-      <div class="input-info">Email diperlukan supaya kamu bisa akses pemulihan akun LinkAja saat kamu lupa PIN</div>
+      <div class="input-info">
+        Email diperlukan supaya kamu bisa akses pemulihan akun LinkAja saat kamu
+        lupa PIN
+      </div>
     </div>
   </div>
 
   <div class="action-wrap">
     <div class="tnc-section">
-      <Checkbox
-        bind:checked={accept}
-        text=""
-      />
+      <Checkbox bind:checked={accept} text="" />
       <div class="action-info">
-        Saya telah membaca dan menyetujui  <a
-        href
-        on:click={(e) => {
-          e.preventDefault();
-          showModal = true;
-        }}
-        class="tnc-link">Ketentuan Layanan</a> penyambungan akun LinkAja
+        Saya telah membaca dan menyetujui <a
+          href
+          on:click={(e) => {
+            e.preventDefault();
+            showModal = true;
+          }}
+          class="tnc-link">Ketentuan Layanan</a
+        > penyambungan akun LinkAja
       </div>
     </div>
     <Button disabled={!accept} onClick={onSubmit}>Lanjut</Button>
@@ -163,7 +164,6 @@
   >
     <TncContent />
   </Modal>
-  
 {:else if showLoaderFirst}
   <LoaderBlocking />
 {/if}
@@ -190,7 +190,7 @@
     margin: 0 0 16px;
   }
   .f-label {
-    color: #9CA4AC;
+    color: #9ca4ac;
   }
   .input-wrap {
     padding-bottom: 16px;
@@ -215,8 +215,8 @@
     -moz-appearance: textfield;
   }
   .input-info {
-  padding: 4px 0;
-    color: #9CA4AC;
+    padding: 4px 0;
+    color: #9ca4ac;
     font-size: 12px;
   }
   .action-wrap {

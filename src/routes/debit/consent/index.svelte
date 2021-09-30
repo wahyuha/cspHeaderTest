@@ -22,12 +22,11 @@
   let partnerName = "merchant LinkAja";
   let loaded = false;
   let showModal = false;
-  const consentInfo = !isRegister ?
-    "Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke"
-    : "Dengan daftar dan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke Livin’ Mandiri"
+  const consentInfo = !isRegister
+    ? "Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke"
+    : "Dengan daftar dan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke Livin’ Mandiri";
 
   onMount(async () => {
-    console.log('init consent...');
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
       await fetchCheck();
     } else {
@@ -37,25 +36,21 @@
           clearInterval(loadedInt);
           return true;
         }
-      }, 300)
+      }, 300);
     }
   });
 
   async function fetchCheck() {
-    console.log('JSEn loaded');
     await clientHttp(sessionClient)
       .post("/check")
       .then((response) => {
-        console.log('check response 200');
         const { data, status } = response.data;
         if (status === "00") {
-          console.log('status 00');
           partnerName = data.partnerName;
           isRegister = data.isRegister;
           if (data.tnc && data.tnc.length) {
             tnc = data.tnc;
           }
-          console.log('TnC updated');
           setCustomer({
             customerNumber: data.customerNumber,
             backToStoreUri: data.backToStoreUri,
@@ -65,39 +60,33 @@
             name: data.name,
             email: data.email,
           });
-          console.log('update customer');
         } else {
-          console.log('status not 00');
           const queryCode = status ? `?code=${status}` : "";
           goto(`${baseUrl}/debit/error${queryCode}`);
         }
       })
       .catch((e) => {
-        console.log('error fetch');
         console.error(e);
         goto(`${baseUrl}/debit/error?code=999`);
       })
       .then(() => {
-        console.log('isLoaded?');
         loaded = true;
-        console.log('loaded true?');
       });
   }
 
   async function handleNextStep() {
     if (isRegister) {
       await clientHttp(sessionClient)
-      .post("/otp/request")
-      .then(() => {
-        return goto(`${baseUrl}/register/otp`)
-      })
-      .then(() => {
-        loaded = true;
-      });
+        .post("/otp/request")
+        .then(() => {
+          return goto(`${baseUrl}/register/otp`);
+        })
+        .then(() => {
+          loaded = true;
+        });
       return false;
     }
-    console.log('go to pin');
-    return goto(`${baseUrl}/debit/pin`)
+    return goto(`${baseUrl}/debit/pin`);
   }
 </script>
 
@@ -111,9 +100,8 @@
       use:lazy={{ src: "images/logo-main.png" }}
     />
     <p class="info">
-      {consentInfo} <span
-        class={loaded ? "ff-b" : "text-blur"}>{partnerName}</span
-      >
+      {consentInfo}
+      <span class={loaded ? "ff-b" : "text-blur"}>{partnerName}</span>
     </p>
   </div>
 
@@ -121,18 +109,16 @@
 
   <div class="action-wrap">
     <div class="tnc-section">
-      <Checkbox
-        bind:checked={accept}
-        text=""
-      />
+      <Checkbox bind:checked={accept} text="" />
       <div class="action-info">
-        Saya telah membaca dan menyetujui  <a
-        href
-        on:click={(e) => {
-          e.preventDefault();
-          showModal = true;
-        }}
-        class="tnc-link">Ketentuan Layanan</a> penyambungan akun LinkAja
+        Saya telah membaca dan menyetujui <a
+          href
+          on:click={(e) => {
+            e.preventDefault();
+            showModal = true;
+          }}
+          class="tnc-link">Ketentuan Layanan</a
+        > penyambungan akun LinkAja
       </div>
     </div>
     <Button disabled={!accept} onClick={handleNextStep}>Lanjut</Button>
