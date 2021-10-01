@@ -2,7 +2,8 @@
   import { goto, stores } from "@sapper/app";
   import clientHttp from "@utils/http/client";
   import { onMount } from "svelte";
-  import { setCustomer } from "@stores/customer";
+  import { customer, setCustomer } from "@stores/customer";
+  import { setIdentity } from "@stores/identity";
   import { fade } from "svelte/transition";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
@@ -20,7 +21,9 @@
   const sessionClient = $session;
 
   let otp;
-  let customerNumber;
+  let { customerNumber, name, email } = $customer;
+  let isRedirected = !customerNumber;
+  let { editable } = $customer || false;
 
   let loading = false;
   let error;
@@ -29,7 +32,47 @@
 
   onMount(async () => {
     customerNumber = $session.customerNumber;
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        checkIdentity();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300);
   });
+
+  async function checkIdentity() {
+    if (isRedirected) {
+      await clientHttp(sessionClient)
+        .post("/check/general")
+        .then((response) => {
+          const { data, status } = response.data;
+          if (status === "00") {
+            customerNumber = data.customerNumber;
+            name = data.name;
+            email = data.email;
+
+            setCustomer({
+              customerNumber,
+              backToStoreUri: data.backToStoreUri,
+              backToStoreFailedUri: data.backToStoreFailedUri,
+              editable,
+              partnerName: data.partnerName,
+              isRegister: data.isRegister,
+              name,
+              email,
+            });
+            setIdentity({
+              name,
+              email,
+            });
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
+  }
 
   const onSubmit = async () => {
     loading = true;

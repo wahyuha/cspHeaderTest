@@ -5,7 +5,7 @@
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { publicError } from "@utils/error";
+  import { publicError, invalidPIN } from "@utils/error";
   import { customer, setCustomer } from "@stores/customer";
   import { setIdentity } from "@stores/identity";
   import { identity } from "@stores/identity";
@@ -23,12 +23,13 @@
   let loading = false;
   let showLoaderFirst = false;
   let errorSubmit = "";
+  let errorPIN = "";
   let errors = {};
   let pin = "";
   let pinConfirm = "";
   let { customerNumber = "" } = $customer;
   let isRedirected = !customerNumber;
-  let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
+  let blockedError = ["LA910", "LA911"];
 
   const { name = "", email = "" } = $identity;
 
@@ -90,6 +91,7 @@
     if (isEligible()) {
       loading = true;
       errorSubmit = "";
+      errorPIN = "";
       const params = { name, email, pin };
 
       await clientHttp(sessionClient)
@@ -98,13 +100,16 @@
           const { status } = response.data;
           if (status === "00") {
             return goto(`${baseUrl}/register/success`);
-          } else if (errorCodes.includes(status)) {
+          } else if (blockedError.includes(status)) {
             return goto(`${baseUrl}/debit/error/unregistered`);
+          } else if (invalidPIN.status === status) {
+            errorPIN = invalidPIN.message;
           } else {
             errorSubmit = publicError(status);
           }
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           errorSubmit = publicError();
         })
         .then(() => {
@@ -147,6 +152,9 @@
     <div class="input-wrap">
       <div class="ff-b">Konfirmasi PIN</div>
       <InputPIN bind:value={pinConfirm} error={errors.pinConfirm} />
+      {#if errorPIN}
+        <div class="error-text">{errorPIN}</div>
+      {/if}
     </div>
   </div>
 
