@@ -42,7 +42,7 @@
   });
 
   async function checkIdentity() {
-    if (isRedirected) {
+    // if (isRedirected) {
       await clientHttp(sessionClient)
         .post("/check/general")
         .then((response) => {
@@ -66,12 +66,17 @@
               name,
               email,
             });
+          } else if (status === '990') {
+            goto(`${baseUrl}/debit/error/unmatched`);
+          } else {
+            const queryCode = status ? `?code=${status}` : "";
+            goto(`${baseUrl}/debit/error${queryCode}`);
           }
         })
         .catch((e) => {
           console.error(e);
         });
-    }
+    // }
   }
 
   const onSubmit = async () => {
