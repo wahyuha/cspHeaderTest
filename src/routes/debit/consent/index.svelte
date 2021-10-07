@@ -60,7 +60,7 @@
             name: data.name,
             email: data.email,
           });
-        } else if (status === '990') {
+        } else if (status === "990") {
           goto(`${baseUrl}/debit/error/unmatched`);
         } else {
           const queryCode = status ? `?code=${status}` : "";

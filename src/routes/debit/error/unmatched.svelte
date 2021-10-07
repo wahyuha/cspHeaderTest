@@ -13,8 +13,8 @@
 	let animate = false;
 
 	onMount(async () => {
-    setTimeout(() => (animate = true), 100);
-  });
+  setTimeout(() => (animate = true), 100);
+});
 </script>
 
 <Meta title="Halaman Gagal Dimuat" />
