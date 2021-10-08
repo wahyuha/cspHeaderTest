@@ -154,7 +154,7 @@
         > penyambungan akun LinkAja
       </div>
     </div>
-    <Button disabled={!accept} onClick={onSubmit}>Lanjut</Button>
+    <Button disabled={!accept} onClick={onSubmit}>Buat PIN</Button>
   </div>
 </div>
 {#if showModal}

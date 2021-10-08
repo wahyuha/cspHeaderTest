@@ -22,7 +22,7 @@
   let partnerName = "merchant LinkAja";
   let loaded = false;
   let showModal = false;
-  const consentInfo = !isRegister
+  $: consentInfo = !isRegister
     ? "Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke"
     : "Dengan daftar dan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke Livin’ Mandiri";
 
@@ -48,6 +48,7 @@
         if (status === "00") {
           partnerName = data.partnerName;
           isRegister = data.isRegister;
+          console.log("isRegister :", isRegister);
           if (data.tnc && data.tnc.length) {
             tnc = data.tnc;
           }
@@ -102,7 +103,7 @@
       use:lazy={{ src: "images/logo-main.png" }}
     />
     <p class="info">
-      {consentInfo}
+      {loaded ? consentInfo : ""}
       <span class={loaded ? "ff-b" : "text-blur"}>{partnerName}</span>
     </p>
   </div>
