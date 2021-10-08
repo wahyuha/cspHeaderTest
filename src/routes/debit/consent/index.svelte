@@ -22,9 +22,6 @@
   let partnerName = "merchant LinkAja";
   let loaded = false;
   let showModal = false;
-  $: consentInfo = !isRegister
-    ? "Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke"
-    : "Dengan daftar dan menghubungkan LinkAja, kamu akan memberikan info di bawah ini ke Livin’ Mandiri";
 
   onMount(async () => {
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
@@ -103,8 +100,18 @@
       use:lazy={{ src: "images/logo-main.png" }}
     />
     <p class="info">
-      {loaded ? consentInfo : ""}
-      <span class={loaded ? "ff-b" : "text-blur"}>{partnerName}</span>
+      {#if loaded}
+        {#if isRegister}
+          Dengan daftar dan menghubungkan LinkAja, kamu akan memberikan info di
+          bawah ini ke Livin’ Mandiri
+        {:else}
+          Dengan menghubungkan LinkAja, kamu akan memberikan info di bawah ini
+          ke
+          <span class={"ff-b"}>{partnerName}</span>
+        {/if}
+      {:else}
+        <span class={"text-blur"}>{partnerName}</span>
+      {/if}
     </p>
   </div>
 
