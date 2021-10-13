@@ -20,7 +20,8 @@ export async function post(req, res) {
     } = response;
 
     if (status === "00") {
-      req.session.state = "RegisterStateOtpVerified";
+      req.session.state = state;
+      // req.session.state = "RegisterStateOtpRequest";
     }
     res.json({ data, status, message });
   } catch (error) {

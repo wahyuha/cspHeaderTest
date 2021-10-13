@@ -33,6 +33,7 @@ export async function post(req, res) {
         isRegister,
         name,
         email,
+        state,
       },
       status: "00",
     });

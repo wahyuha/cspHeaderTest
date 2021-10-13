@@ -1,7 +1,9 @@
 <script>
+  import { goto } from "@sapper/app";
   import { fade } from "svelte/transition";
   import { lazy } from "@helpers/img.js";
   import Button from "@components/button/index.svelte";
+  import { baseUrl } from "@constants/url";
 
   export let onClick;
 </script>
@@ -19,7 +21,9 @@
       Kamu sudah 3 kali meminta kode verifikasi dan tidak dapat meminta kode
       baru dalam 5 menit ke depan
     </p>
-    <Button type="fit" {onClick}>Tutup</Button>
+    <Button
+      type="fit"
+      onClick={() => goto(`${baseUrl}/debit/exit`)}>Tutup</Button>
   </div>
 </div>
 

@@ -19,6 +19,7 @@
   const sessionClient = $session;
 
   let accept = false;
+  let loading= false;
   let showLoaderFirst = false;
   let showModal = false;
   let errors = {};
@@ -91,6 +92,8 @@
         email,
       });
       return goto(`${baseUrl}/register/pin`);
+    } else {
+      loading = false;
     }
   };
 </script>
@@ -154,7 +157,12 @@
         > penyambungan akun LinkAja
       </div>
     </div>
-    <Button disabled={!accept} onClick={onSubmit}>Buat PIN</Button>
+    <Button
+      bind:loading
+      disabled={!accept}
+      onClick={onSubmit}>
+      Buat PIN
+    </Button>
   </div>
 </div>
 {#if showModal}

@@ -21,8 +21,8 @@
   const sessionClient = $session;
 
   let otp;
-  let { customerNumber, name, email } = $customer;
-  // let isRedirected = !customerNumber;
+  let { customerNumber, name, email, state } = $customer;
+  let isRedirected = !customerNumber;
   let { editable } = $customer || false;
 
   let loading = false;
@@ -31,7 +31,7 @@
   let showModal = false;
 
   onMount(async () => {
-    customerNumber = $session.customerNumber;
+    // customerNumber = $session.customerNumber;
     const loaded = setInterval(() => {
       if (typeof JSEncrypt !== "undefined") {
         checkIdentity();
@@ -42,11 +42,12 @@
   });
 
   async function checkIdentity() {
-    // if (isRedirected) {
+    if (isRedirected) {
     await clientHttp(sessionClient)
       .post("/check/general")
       .then((response) => {
         const { data, status } = response.data;
+        console.log(response);
         if (status === "00") {
           customerNumber = data.customerNumber;
           name = data.name;
@@ -76,7 +77,11 @@
       .catch((e) => {
         console.error(e);
       });
-    // }
+    } else {
+      if (state !== 'RegisterStateOtpRequest') {
+        goto(`${baseUrl}/debit/error/unmatched`);
+      }
+    }
   }
 
   const onSubmit = async () => {
@@ -89,11 +94,10 @@
         const { data, status } = response.data;
         loading = false;
         if (status === "00") {
-          if (data.backToStoreURI) {
-            setCustomer({
-              backToStoreUri: data.backToStoreURI,
-            });
-          }
+          setCustomer({
+            state: "RegisterStateOtpVerified",
+            backToStoreUri: data.backToStoreURI || "",
+          });
           return goto(`${baseUrl}/register/identity`);
         } else if (status === "LA909") {
           return goto(`${baseUrl}/debit/error/unauthorized`);

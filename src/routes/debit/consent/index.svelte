@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
-  import { setCustomer } from "@stores/customer";
+  import { setCustomer, customer } from "@stores/customer";
   import { Checkbox } from "seruni";
   import Meta from "@components/meta/index.svelte";
   import clientHttp from "@utils/http/client";
@@ -45,7 +45,6 @@
         if (status === "00") {
           partnerName = data.partnerName;
           isRegister = data.isRegister;
-          console.log("isRegister :", isRegister);
           if (data.tnc && data.tnc.length) {
             tnc = data.tnc;
           }
@@ -57,6 +56,7 @@
             partnerName: data.partnerName,
             name: data.name,
             email: data.email,
+            state: data.state,
           });
         } else if (status === "990") {
           goto(`${baseUrl}/debit/error/unmatched`);
@@ -79,6 +79,9 @@
       await clientHttp(sessionClient)
         .post("/otp/request")
         .then(() => {
+          setCustomer({
+            state: "RegisterStateOtpRequest",
+          });
           return goto(`${baseUrl}/register/otp`);
         })
         .then(() => {

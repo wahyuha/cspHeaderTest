@@ -22,7 +22,7 @@ const pinConfirmValid = (otherField) => {
         return message;
       }
     },
-    "PIN tidak sama. Mohon cek kembali"
+    "PIN yang kamu masukkan berbeda. Cek lagi, ya!"
   );
 };
 
@@ -55,7 +55,7 @@ const isValidPin = createValidator(
       return message;
     }
   },
-  "PIN terdiri dari kombinasi 6 angka yang berbeda dan tidak berurutan"
+  "Agar lebih aman, hindari kombinasi PIN dengan angka yang sama, ya! (Cth: 111111)"
 );
 
 const isValidName = createValidator(
@@ -84,7 +84,7 @@ export const createAccountValidator = ({ ...props }) => {
 export const createPinValidator = ({ ...props }) => {
   return combineValidators({
     pin: composeValidators(
-      isRequired({ message: "Mohon masukkan PIN anda" }),
+      isRequired({ message: "Mohon buat PIN terlebih dahulu" }),
       isValidPin,
       isNumeric({ message: "Mohon diisi dengan angka" }),
       hasLengthGreaterThan(5)({
@@ -95,7 +95,7 @@ export const createPinValidator = ({ ...props }) => {
     pinConfirm: composeValidators(
       pinConfirmValid("pin", "pinConfirm"),
       isNumeric({ message: "Mohon diisi dengan angka" }),
-      isRequired({ message: "Mohon masukkan konfirmasi PIN anda" }),
+      isRequired({ message: "Masukkan ulang PIN yang telah kamu buat" }),
       hasLengthGreaterThan(5)({
         message:
           "PIN terdiri dari kombinasi 6 angka yang berbeda dan tidak berurutan",
