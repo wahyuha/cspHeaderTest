@@ -1,5 +1,4 @@
 <script>
-  import * as Sentry from "@sentry/browser";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { stores } from "@sapper/app";
@@ -9,12 +8,6 @@
   const sessionClient = $session;
   let color1 = "#FF7475";
   let color2 = "#C2F3FF";
-
-  onMount(() => {
-    if (sessionClient && sessionClient.extSessionId) {
-      Sentry.setUser({ id: sessionClient.extSessionId });
-    }
-  });
 
   var cathError = () => {};
   if (typeof window !== "undefined") {

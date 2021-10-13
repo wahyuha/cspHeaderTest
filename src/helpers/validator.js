@@ -64,7 +64,7 @@ const isValidName = createValidator(
       return message;
     }
   },
-  "Anda tidak dapat menggunakan simbol seperti ,."
+  "Mohon masukkan nama lengkap kamu"
 );
 
 export const createAccountValidator = ({ ...props }) => {

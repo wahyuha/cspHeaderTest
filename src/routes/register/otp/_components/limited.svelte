@@ -4,8 +4,6 @@
   import { lazy } from "@helpers/img.js";
   import Button from "@components/button/index.svelte";
   import { baseUrl } from "@constants/url";
-
-  export let onClick;
 </script>
 
 <div class="wrapper">
