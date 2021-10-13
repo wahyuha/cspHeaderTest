@@ -60,11 +60,11 @@ const isValidPin = createValidator(
 
 const isValidName = createValidator(
   (message) => (value) => {
-    if (value && !/^[a-zA-Z,.'\s]*$/.test(value)) {
+    if (value && !/^[a-zA-Z'\s]*$/.test(value)) {
       return message;
     }
   },
-  "Anda hanya dapat menggunakan simbol . , '"
+  "Anda tidak dapat menggunakan simbol seperti ,."
 );
 
 export const createAccountValidator = ({ ...props }) => {
