@@ -32,7 +32,7 @@ const isValidEmail = createValidator(
       return message;
     }
   },
-  "Masukkan email dengan format yang sesuai. Cth: linkajadid@linkaja.id"
+  "Masukkan email dengan format yang sesuai"
 );
 
 export const cannotEmpty = isRequired({
@@ -70,12 +70,12 @@ const isValidName = createValidator(
 export const createAccountValidator = ({ ...props }) => {
   return combineValidators({
     name: composeValidators(
-      isRequired({ message: "Mohon masukkan nama lengkap Anda" }),
+      isRequired({ message: "Isi terlebih dahulu, ya!" }),
       isValidName,
-      hasLengthGreaterThan(2)({ message: "Mohon masukkan nama lengkap Anda" })
+      hasLengthGreaterThan(2)({ message: "Mohon masukkan nama lengkap kamu" })
     )("name"),
     email: composeValidators(
-      isRequired({ message: "Mohon masukkan email anda" }),
+      isRequired({ message: "Isi terlebih dahulu, ya!" }),
       isValidEmail
     )("email"),
   })(props);
