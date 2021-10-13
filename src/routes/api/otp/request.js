@@ -20,7 +20,8 @@ export async function post(req, res) {
     } = response;
 
     if (status === "00") {
-      req.session.state = state;
+      req.session.state = data.state;
+      req.session.customerNumber = data.customerNumber;
       // req.session.state = "RegisterStateOtpRequest";
     }
     res.json({ data, status, message });

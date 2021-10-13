@@ -28,6 +28,7 @@ export async function post(req, res) {
 
     if (status === "00") {
       req.session.state = data.state;
+      req.session.customerNumber = data.customerNumber;
       // req.session.state = "RegisterStateOtpVerified";
     }
     res.json({ data, status, message });

@@ -95,7 +95,8 @@
         loading = false;
         if (status === "00") {
           setCustomer({
-            state: "RegisterStateOtpVerified",
+            state: data.state,
+            customerNumber: data.customerNumber,
             backToStoreUri: data.backToStoreURI || "",
           });
           return goto(`${baseUrl}/register/identity`);

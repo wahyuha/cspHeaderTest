@@ -78,9 +78,11 @@
     if (isRegister) {
       await clientHttp(sessionClient)
         .post("/otp/request")
-        .then(() => {
+        .then((response) => {
+          const { data, status } = response.data;
           setCustomer({
-            state: "RegisterStateOtpRequest",
+            state: data.state,
+            customerNumber: data.customerNumber,
           });
           return goto(`${baseUrl}/register/otp`);
         })
