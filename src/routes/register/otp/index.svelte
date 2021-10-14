@@ -43,42 +43,42 @@
 
   async function checkIdentity() {
     if (isRedirected) {
-    await clientHttp(sessionClient)
-      .post("/check/general")
-      .then((response) => {
-        const { data, status } = response.data;
-        console.log(response);
-        if (status === "00") {
-          customerNumber = data.customerNumber;
-          name = data.name;
-          email = data.email;
+      await clientHttp(sessionClient)
+        .post("/check/general")
+        .then((response) => {
+          const { data, status } = response.data;
+          console.log(response);
+          if (status === "00") {
+            customerNumber = data.customerNumber;
+            name = data.name;
+            email = data.email;
 
-          setCustomer({
-            customerNumber,
-            backToStoreUri: data.backToStoreUri,
-            backToStoreFailedUri: data.backToStoreFailedUri,
-            editable,
-            partnerName: data.partnerName,
-            isRegister: data.isRegister,
-            name,
-            email,
-          });
-          setIdentity({
-            name,
-            email,
-          });
-        } else if (status === "990") {
-          goto(`${baseUrl}/debit/error/unmatched`);
-        } else {
-          const queryCode = status ? `?code=${status}` : "";
-          goto(`${baseUrl}/debit/error${queryCode}`);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+            setCustomer({
+              customerNumber,
+              backToStoreUri: data.backToStoreUri,
+              backToStoreFailedUri: data.backToStoreFailedUri,
+              editable,
+              partnerName: data.partnerName,
+              isRegister: data.isRegister,
+              name,
+              email,
+            });
+            setIdentity({
+              name,
+              email,
+            });
+          } else if (status === "990") {
+            goto(`${baseUrl}/debit/error/unmatched`);
+          } else {
+            const queryCode = status ? `?code=${status}` : "";
+            goto(`${baseUrl}/debit/error${queryCode}`);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     } else {
-      if (state !== 'RegisterStateOtpRequest') {
+      if (state !== "RegisterStateOtpRequest") {
         goto(`${baseUrl}/debit/error/unmatched`);
       }
     }
@@ -97,7 +97,6 @@
           setCustomer({
             state: data.state,
             customerNumber: data.customerNumber,
-            backToStoreUri: data.backToStoreURI || "",
           });
           return goto(`${baseUrl}/register/identity`);
         } else if (status === "LA909") {

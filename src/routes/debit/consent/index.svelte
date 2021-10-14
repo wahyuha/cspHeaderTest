@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { goto, stores } from "@sapper/app";
-  import { setCustomer, customer } from "@stores/customer";
+  import { setCustomer } from "@stores/customer";
   import { Checkbox } from "seruni";
   import Meta from "@components/meta/index.svelte";
   import clientHttp from "@utils/http/client";
@@ -79,7 +79,7 @@
       await clientHttp(sessionClient)
         .post("/otp/request")
         .then((response) => {
-          const { data, status } = response.data;
+          const { data } = response.data;
           setCustomer({
             state: data.state,
             customerNumber: data.customerNumber,

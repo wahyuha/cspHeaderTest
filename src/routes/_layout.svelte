@@ -1,11 +1,9 @@
 <script>
-  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { stores } from "@sapper/app";
   import PageLoadingBar from "sapper-page-loading-bar/PageLoadingBar.svelte";
 
-  const { preloading, session } = stores();
-  const sessionClient = $session;
+  const { preloading } = stores();
   let color1 = "#FF7475";
   let color2 = "#C2F3FF";
 
