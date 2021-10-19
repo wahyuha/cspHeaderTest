@@ -147,11 +147,19 @@
     </div>
     <div class="input-wrap">
       <div class="ff-b">PIN</div>
-      <InputPIN bind:value={pin} error={errors.pin} />
+      <InputPIN
+        bind:value={pin}
+        placeholder="Buat 6 digit PIN"
+        error={errors.pin}
+      />
     </div>
     <div class="input-wrap">
       <div class="ff-b">Konfirmasi PIN</div>
-      <InputPIN bind:value={pinConfirm} error={errors.pinConfirm} />
+      <InputPIN
+        bind:value={pinConfirm}
+        placeholder="Masukkan ulang 6 digit PIN kamu"
+        error={errors.pinConfirm}
+      />
       {#if errorPIN}
         <div class="error-text">{errorPIN}</div>
       {/if}

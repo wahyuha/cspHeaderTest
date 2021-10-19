@@ -5,6 +5,7 @@
   export let size = 6;
   export let error = null;
   export let autoUnFocus = true;
+  export let placeholder = "Masukkan 6 digit PIN LinkAja";
 
   let input;
   let isShow;
@@ -18,7 +19,9 @@
     if (
       value &&
       `${value}`.length >= size &&
-      !Object.keys(KEYCODE).map((key) => KEYCODE[key]).includes(e.keyCode)
+      !Object.keys(KEYCODE)
+        .map((key) => KEYCODE[key])
+        .includes(e.keyCode)
     ) {
       e.preventDefault();
       return false;
@@ -42,20 +45,20 @@
 
 <div class="input-group">
   <input
-          bind:this={input}
-          bind:value={value}
-          on:keydown={validateByLength}
-          on:keyup={onKeyup}
-          type="password"
-          class={`${styledError} ${styledMask} input-general`}
-          pattern="[0-9]*"
-          inputmode="numeric"
-          placeholder="Masukkan 6 digit PIN LinkAja"
-          id="PIN"
+    bind:this={input}
+    bind:value
+    on:keydown={validateByLength}
+    on:keyup={onKeyup}
+    type="password"
+    class={`${styledError} ${styledMask} input-general`}
+    pattern="[0-9]*"
+    inputmode="numeric"
+    {placeholder}
+    id="PIN"
   />
   {#if value}
     <button type="button" class="button-show" on:click={showPIN}>
-      <img {alt} {src}/>
+      <img {alt} {src} />
     </button>
   {/if}
 </div>
@@ -84,7 +87,7 @@
     margin: 0;
   }
   input.input-general[id="PIN"] {
-    -moz-appearance:textfield;
+    -moz-appearance: textfield;
   }
   .input-group {
     position: relative;
