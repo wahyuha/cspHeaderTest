@@ -58,7 +58,7 @@
     </li>
   </ol>
 
-  <p class="ff-b">B. Layanan Linkaja</p>
+  <p class="ff-b">B. Layanan LinkAja</p>
   <ol>
     <li>
       Uang elektronik LinkAja yang diterbitkan oleh Finarya melalui Aplikasi
