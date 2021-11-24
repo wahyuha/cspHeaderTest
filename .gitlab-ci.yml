@@ -22,6 +22,7 @@ stages:
   stage: build
   image: docker:18.09.7
   before_script:
+    - echo "build at $CI_ENVIRONMENT_NAME"
     - apk upgrade && apk update && apk add make git openssh-client jq curl
     - export VAULT_ADDR=http://vault.linkaja.io:8200;
     - export VAULT_TOKEN="$(curl --request POST --data "{\"role\":\"${JWT_ROLE}\", \"jwt\":\"${CI_JOB_JWT}\"}" ${VAULT_ADDR}/v1/auth/jwt/login|jq -r '.auth.client_token')";
