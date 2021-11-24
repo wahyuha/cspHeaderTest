@@ -1,11 +1,125 @@
 variables:
-  HOME_APP: "/var/www"
-  IGNORE_DIR: "$HOME_APP/$CI_PROJECT_NAME/logs\n
-               $HOME_APP/$CI_PROJECT_NAME\n
-               /var/log/$CI_PROJECT_NAME"
-  BUILD_ARCHIVES: "__sapper__ ; package.json"
+  # general
+  JWT_ROLE: 'gitlab-fe'
+  DEPLOY_TO: 'eks'
+  # for eks only:
+  INGRESS: 'TRUE'
+  NAMESPACE: 'cms'
+
+stages:
+  - check
+  - sast_scan
+  - build
+  - development
+  - staging
+  - production
+  - deployment
+  - config_automation_test
+  - automation_test
+  - alert
+
+.build_4_k8s: &build_4_k8s
+  stage: build
+  image: docker:18.09.7
+  before_script:
+    - apk upgrade && apk update && apk add make git openssh-client jq curl
+    - export VAULT_ADDR=http://vault.linkaja.io:8200;
+    - export VAULT_TOKEN="$(curl --request POST --data "{\"role\":\"${JWT_ROLE}\", \"jwt\":\"${CI_JOB_JWT}\"}" ${VAULT_ADDR}/v1/auth/jwt/login|jq -r '.auth.client_token')";
+    - curl --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/gitlabci/data/ansible > /tmp/vaults.json;
+    - cat /tmp/vaults.json|jq -r '.data.data|with_entries( .key |= sub("";"export "))'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" >> /tmp/values.txt;
+    - source /tmp/values.txt;
+    - |
+      # get config values
+      if [[ ${SUB_ENV} == "uat" ]]
+      then
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config-uat|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      elif [[ ${SUB_ENV} == "uat-two" ]]
+      then
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config-uat-two|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      elif [[ ${SUB_ENV} == "uat-three" ]]
+      then
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config-uat-three|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      else
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      fi
+    - apk upgrade && apk update && apk add make git openssh-client
+    - mkdir -p -m 0600 ~/.ssh
+    - ssh-keyscan -t rsa gitlab.linkaja.com > ~/.ssh/known_hosts
+    - export BUILD_USER
+    - export BUILD_TOKEN
+  services:
+    - docker:dind
+  script:
+    - export CURRENT_COMMIT=${CI_COMMIT_SHA::8}
+    - make build
+
+a_build_dev:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - development
+  when: manual
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  environment:
+    name: development
+
+b_build_uat:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - development
+  when: manual
+  variables:
+    SUB_ENV: "uat"
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  environment:
+    name: development
+
+c_build_uat_two:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - development
+  when: manual
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  variables:
+    SUB_ENV: "uat-two"
+  environment:
+    name: development
+
+d_build_uat_three:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - development
+  when: manual
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  variables:
+    SUB_ENV: "uat-three"
+  environment:
+    name: development
+
+build_prod:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-v([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  environment:
+    name: production
 
 include:
   - project: 'automation/pipelines'
-    ref: master
-    file: 'nodejs-v1-u-gitlab-ci.yml'
+    ref: release-v1.0.5
+    file: 'cd-gitlab-ci.yml'
