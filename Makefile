@@ -9,7 +9,7 @@ install:
 build:
 	echo "machine $(BUILD_MACHINE) login $(BUILD_USER) password $(ACCESS_TOKEN)" > ~/.netrc
 	export GIT_TERMINAL_PROMPT=1
-	docker build --no-cache --build-arg BUILD_MACHINE=$(BUILD_MACHINE) --build-arg BUILD_USER=$(BUILD_USER) --build-arg BUILD_TOKEN=$(ACCESS_TOKEN) -t harbor.linkaja.com/lab/$(CI_PROJECT_NAME):$(CURRENT_COMMIT)  .
+	docker build --no-cache --build-arg CI_ENVIRONMENT_NAME=$(CI_ENVIRONMENT_NAME) --build-arg BUILD_MACHINE=$(BUILD_MACHINE) --build-arg BUILD_USER=$(BUILD_USER) --build-arg BUILD_TOKEN=$(ACCESS_TOKEN) -t harbor.linkaja.com/lab/$(CI_PROJECT_NAME):$(CURRENT_COMMIT)  .
 	docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD) harbor.linkaja.com
 	docker push harbor.linkaja.com/lab/$(CI_PROJECT_NAME):$(CURRENT_COMMIT)
 	docker rmi harbor.linkaja.com/lab/$(CI_PROJECT_NAME):$(CURRENT_COMMIT)
