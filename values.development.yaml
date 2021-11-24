@@ -89,12 +89,12 @@ probes:
   livenessProbe:
     initialDelaySeconds: 30
     httpGet:
-      path: /api/health
+      path: /ping
       port: 3000
   readinessProbe:
     timeoutSeconds: 180
     httpGet:
-      path: /api/health
+      path: /ping
       port: 3000
 
 configMap:
