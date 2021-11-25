@@ -133,5 +133,5 @@ build_prod:
 
 include:
   - project: 'automation/pipelines'
-    ref: release-v1.0.5
+    ref: pipelines-v1.0.5
     file: 'cd-gitlab-ci.yml'
