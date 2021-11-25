@@ -52,8 +52,8 @@ ports:
 # host name to this service on the ports and protocols defined in the 'ports' section
 # above.
 ingressGateway:
-  name: istio-system/ingressgateway-internal
-  host: cms-ops-dev.linkaja.com
+  name: istio-system/ingress-private-https
+  host: linkage-dev.linkaja.com
   matchPrefix:
     - '/'
     # - "/bar"
