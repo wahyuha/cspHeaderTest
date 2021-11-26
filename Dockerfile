@@ -5,6 +5,6 @@ ADD . /app/sempu
 WORKDIR /app/sempu
 
 RUN npm install && npm run build-${CI_ENVIRONMENT_NAME}
-EXPOSE 4019
+EXPOSE 3000
 
 CMD ["sh", "-c", "npm run ${CI_ENVIRONMENT_NAME}"]
