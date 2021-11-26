@@ -90,12 +90,12 @@ probes:
     initialDelaySeconds: 30
     httpGet:
       path: /ping
-      port: 3000
+      port: 4019
   readinessProbe:
     timeoutSeconds: 180
     httpGet:
       path: /ping
-      port: 3000
+      port: 4019
 
 configMap:
   enabled: false
