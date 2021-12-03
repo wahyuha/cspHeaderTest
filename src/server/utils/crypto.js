@@ -1,4 +1,4 @@
-import CryptoES from "crypto-es";
+import CryptoJS from "crypto-js";
 import NodeRSA from "node-rsa";
 import sshKeyDecrypt from "ssh-key-decrypt";
 
@@ -27,11 +27,11 @@ const rsaDecryptPub = (cipherText) => {
 };
 
 export const md5 = (plain, salt) => {
-  return CryptoES.MD5(`${salt}${plain}`).toString();
+  return CryptoJS.MD5(`${salt}${plain}`).toString();
 };
 
 export const aesEncrypt = (plainText, aesKey) => {
-  var aesCiphertext = CryptoES.AES.encrypt(plainText, aesKey);
+  var aesCiphertext = CryptoJS.AES.encrypt(plainText, aesKey);
   var aesk = aesCiphertext.key.toString();
   var aesi = aesCiphertext.iv.toString();
   var aesCt = aesCiphertext.toString();
@@ -40,10 +40,10 @@ export const aesEncrypt = (plainText, aesKey) => {
 };
 
 export const aesDecrypt = (cipherText, aesKey, aesIv) => {
-  const aesk = CryptoES.enc.Hex.parse(aesKey);
-  const aesi = CryptoES.enc.Hex.parse(aesIv);
-  return CryptoES.AES.decrypt(cipherText, aesk, { iv: aesi }).toString(
-    CryptoES.enc.Utf8
+  const aesk = CryptoJS.enc.Hex.parse(aesKey);
+  const aesi = CryptoJS.enc.Hex.parse(aesIv);
+  return CryptoJS.AES.decrypt(cipherText, aesk, { iv: aesi }).toString(
+    CryptoJS.enc.Utf8
   );
 };
 
