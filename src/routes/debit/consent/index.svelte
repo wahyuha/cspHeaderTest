@@ -21,7 +21,7 @@
   let isRegister = false;
   let partnerName = "merchant LinkAja";
   let loaded = false;
-  let showModal = false;
+  $: showModal = false;
 
   onMount(async () => {
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {

@@ -25,7 +25,9 @@
 
   const calcOtp = (otps) => {
     if (Object.keys(otps).length) {
-      return Object.keys(otps).map((key) => otps[key]).join("");
+      return Object.keys(otps)
+        .map((key) => otps[key])
+        .join("");
     } else return "";
   };
 

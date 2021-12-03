@@ -1,11 +1,11 @@
 import crypto from "crypto";
-import CryptoES from "crypto-es";
+import CryptoJS from "crypto-js";
 
 const ALGORITHM = "aes-256-cbc";
 const BLOCK_SIZE = 16;
 
 export const encrypt = (plain, fingerprint) => {
-  const key = CryptoES.MD5(fingerprint).toString();
+  const key = CryptoJS.MD5(fingerprint).toString();
   const cipher = aesEncrypt(plain, key);
 
   return cipher;

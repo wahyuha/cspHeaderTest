@@ -1,14 +1,12 @@
 import { basePath } from "@constants/url";
 import httpServer from "@utils/http/server";
-import { cookieConfigRemove, cookieName } from "@server/utils/env";
 
 export async function post(req, res) {
   const pgptoken = req.body.Message ? req.body.Message : req.body.message;
   if (!pgptoken) {
-    res.redirect(302, `${basePath}/debit/error?code=992`);
+    res.redirect(`${basePath}/debit/error?code=992`);
     return false;
   }
-  let location = "";
   try {
     const { data } = await httpServer(req.session).postLoko(
       "/loko/binding/verify",
@@ -16,30 +14,19 @@ export async function post(req, res) {
         ID: pgptoken,
       }
     );
-    
     const {
       data: { refNum },
       status,
     } = data;
     if (status === "00") {
-      location = `${basePath}/debit/init?s=${refNum}`;
+      res.redirect(`${basePath}/debit/init?s=${refNum}`);
+      return false;
     }
-    else {
-      location = `${basePath}/debit/error/unverified?code=${status}`;
-    }
+    res.redirect(`${basePath}/debit/error?code=${status}`);
+    return false;
   } catch (error) {
     console.process(error);
-    location = `${basePath}/debit/error/unverified?code=992`;
+    res.redirect(`${basePath}/debit/error?code=992`);
+    return false;
   }
-
-  await req.session.destroy();
-  await res.cookie(cookieName.main, "", cookieConfigRemove);
-  await res.cookie(cookieName.rid, "", cookieConfigRemove);
-  await res.cookie(cookieName.trans, "", cookieConfigRemove);
-
-  res.writeHead(302, {
-    location,
-  });
-  res.end();
-  return true;
 }

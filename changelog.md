@@ -1,22 +1,5 @@
 # Kiluan Webview Release Notes
 
-# v1.2.3 06 Sep 2021
-
-### Fixed
-
-- Fix slow network issue
-### Added
-- Add sentry identify
-
-# v1.2.2 03 Sep 2021
-
-### Fixed
-
-- Support old android OS >= 5
-
-### Added
-- Add sentry
-
 # v1.2.1 29 July 2021
 
 ### Fixed

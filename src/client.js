@@ -11,6 +11,16 @@ if (process.env.ENABLE_ERUDA === "true") {
   });
 }
 
+if (process.env.SENTRY_ENABLED === "true") {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    release: process.env.npm_package_version,
+    integrations: [new Integrations.BrowserTracing()],
+    tracesSampleRate: 1.0,
+    environment: process.env.NODE_ENV === "development" ? "development" : "production",
+  });
+}
+
 sapper.start({
   target: document.querySelector("#sapper"),
 });
