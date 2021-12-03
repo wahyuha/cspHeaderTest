@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/browser";
+import { Integrations } from "@sentry/tracing";
 import * as sapper from "@sapper/app";
 import { injectVendor } from "@helpers/vendor";
 
@@ -17,7 +19,8 @@ if (process.env.SENTRY_ENABLED === "true") {
     release: process.env.npm_package_version,
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
-    environment: process.env.NODE_ENV === "development" ? "development" : "production",
+    environment:
+      process.env.NODE_ENV === "development" ? "development" : "production",
   });
 }
 
