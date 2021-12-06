@@ -1,6 +1,11 @@
 import axios from "axios";
-import { apiUrlServer, apiUrlServerLoko, mockApiUrl, mockPaths } from "@constants/url";
-import { logStartOutbond, logEndOutbond } from "@constants/logger";
+import {
+  apiUrlServer,
+  apiUrlServerLoko,
+  mockApiUrl,
+  mockPaths,
+} from "@constants/url";
+import { logStartOutbond, logEndOutbond, tdr } from "@constants/logger";
 
 class httpServer {
   constructor(session) {
@@ -77,7 +82,8 @@ class httpServer {
           session.tid,
           logStartOutbond,
           path,
-          mts
+          mts,
+          tdr
         );
         return config;
       },
@@ -104,7 +110,8 @@ class httpServer {
           session.tid,
           logStartOutbond,
           path,
-          mts
+          mts,
+          tdr
         );
 
         return Promise.reject(error);
@@ -139,7 +146,14 @@ class httpServer {
             data: "html file",
           };
         }
-        console.end(session.requestId, session.tid, logEndOutbond, path, mte);
+        console.end(
+          session.requestId,
+          session.tid,
+          logEndOutbond,
+          path,
+          mte,
+          tdr
+        );
 
         return response;
       },
@@ -162,7 +176,14 @@ class httpServer {
           message: message,
           rawMessage: error.Error,
         };
-        console.end(session.requestId, session.tid, logEndOutbond, path, mte);
+        console.end(
+          session.requestId,
+          session.tid,
+          logEndOutbond,
+          path,
+          mte,
+          tdr
+        );
 
         return Promise.reject(error);
       }

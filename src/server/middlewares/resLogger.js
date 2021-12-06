@@ -1,5 +1,5 @@
 import { isFileRoute, getPathName, isSkipPath } from "@server/utils/common";
-import { logEnd } from "@constants/logger";
+import { logEnd, sys } from "@constants/logger";
 import { decryptResp } from "@server/utils/crypto";
 import { cookieConfigRemove, cookieName } from "@server/utils/env";
 
@@ -51,8 +51,15 @@ const resLogger = () => {
           pathname: pathName,
         };
 
-        console.tdr(req.session.requestId, req.session.tid, pth, mtdr);
-        console.end(req.session.requestId, req.session.tid, logEnd, pth, mte);
+        console.tdr(req.session.requestId, req.session.tid, pth, mtdr, sys);
+        console.end(
+          req.session.requestId,
+          req.session.tid,
+          logEnd,
+          pth,
+          mte,
+          sys
+        );
 
         // destroy sesion after finish deliver page general error
         if (req.url === "/debit/error") {

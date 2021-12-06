@@ -12,7 +12,7 @@ const os = require("os");
 const hostname = os.hostname();
 const transport = new DailyRotateFile({
   dirname: process.env.SAPPER_APP_LOGS_PATH,
-  filename: path.join("logs", `AUTH_TDR_${hostname}_%DATE%.log`),
+  filename: path.join("logs", `TDR_${hostname}_%DATE%.log`),
   datePattern: "YYYY-MM-DD",
   zippedArchive: true,
   maxFiles: "14d",
