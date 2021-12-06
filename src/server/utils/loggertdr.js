@@ -19,6 +19,7 @@ const transport = new DailyRotateFile({
   level: "info",
   timestamp: true,
 });
+const isLogToFile = process.env.SAPPER_APP_LOG_TO_FILE === "true";
 
 const loggerTdr = winston.createLogger({
   format: combine(
@@ -26,7 +27,7 @@ const loggerTdr = winston.createLogger({
       return `${info.message}`;
     })
   ),
-  transports: [transport],
+  transports: [isLogToFile ? transport : new winston.transports.Console()],
 });
 
 export default loggerTdr;
