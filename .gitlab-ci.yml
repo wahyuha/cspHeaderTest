@@ -8,7 +8,7 @@ variables:
   CLUSTER: "OFF"
   CLEAR_NODEMODULES: "OFF"
   ANSIBLE_PROJECT_PATH: "devops/ansible_linkaja.git"
-  INSTALL_ONSITE: "OFF"
+  INSTALL_ONSITE: "ON"
   PROC_MAN: "supervisor"
   USE_SERVER_NAME: "OFF"
   SKIP_NGINX_CONFIG: "off"
