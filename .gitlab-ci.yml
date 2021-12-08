@@ -237,7 +237,7 @@ cache:
                   echo -e "running $BUILD_CMD";
                   $BUILD_CMD;
               fi;
-              cat $CI_PROJECT_DIR/.env
+              cat $CI_PROJECT_DIR/.env;
           fi;
       else
           if [[ "$INSTALL_ONSITE" == "ON" ]];
