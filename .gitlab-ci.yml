@@ -8,7 +8,7 @@ variables:
   CLUSTER: "OFF"
   CLEAR_NODEMODULES: "OFF"
   ANSIBLE_PROJECT_PATH: "devops/ansible_linkaja.git"
-  INSTALL_ONSITE: "ON"
+  # INSTALL_ONSITE: "ON"
   PROC_MAN: "supervisor"
   USE_SERVER_NAME: "OFF"
   SKIP_NGINX_CONFIG: "off"
@@ -18,7 +18,7 @@ variables:
                $HOME_APP/$CI_PROJECT_NAME\n
                /var/log/$CI_PROJECT_NAME"
   # BUILD_ARCHIVES: "__sapper__ ; package.json"
-  ADD_COMMAND: "npm run build-$CI_ENVIRONMENT_NAME"
+  # ADD_COMMAND: "npm run build-$CI_ENVIRONMENT_NAME"
 
 stages:
   - code_quality
@@ -200,7 +200,7 @@ stages:
 #########################
 .build: &build
   image:
-    name: harbor.linkaja.com/devops/node:$NODEJS_VERSION
+    name: harbor.linkaja.com/devops/node:${NODEJS_VERSION}-1
     entrypoint: [""]
   stage: build
   script:
