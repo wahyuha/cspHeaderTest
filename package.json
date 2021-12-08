@@ -11,7 +11,7 @@
     "build-development": "npm run replace-env && npm run build && npm run install && npm run sm-upload && npm run sm-clean",
     "build-staging": "pm run replace-env && npm run build && npm run install",
     "build-production": "cp .env.production.j2 .env && npm run replace-env && npm run build && npm run install && npm run sm-upload && npm run sm-clean",
-    "build-local-development": "cp .env.development.j2 .env && npm run replace-env && npm run build && npm run sm-upload",
+    "build-local-development": "cp .env.development.j2 .env && npm run replace-env && npm run build",
     "build-local-staging": "cp .env.staging.j2 .env && npm run replace-env && npm run build && npm run install",
     "build-local-production": "cp .env.production.j2 .env && npm run replace-env && npm run build && npm run install && npm run sm-upload && npm run sm-clean",
     "development": "npm run start",

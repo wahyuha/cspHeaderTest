@@ -18,6 +18,11 @@ const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 const projectRootDir = path.resolve(__dirname);
 
+const commitHash = require("child_process")
+  .execSync("git rev-parse --short HEAD")
+  .toString()
+  .trim();
+
 const onwarn = (warning, onwarn) =>
   (warning.code === "MISSING_EXPORT" && /'preload'/.test(warning.message)) ||
   (warning.code === "CIRCULAR_DEPENDENCY" &&
@@ -34,6 +39,8 @@ export default {
     input: config.client.input(),
     output: {
       ...config.client.output(),
+      entryFileNames: `[name].${commitHash}.js`,
+      chunkFileNames: `[name].${commitHash}.js`,
       sourcemap: true,
     },
     plugins: [
