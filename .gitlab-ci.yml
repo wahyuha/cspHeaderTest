@@ -18,6 +18,8 @@ variables:
                $HOME_APP/$CI_PROJECT_NAME\n
                /var/log/$CI_PROJECT_NAME"
   # BUILD_ARCHIVES: "__sapper__ ; package.json"
+  ADD_COMMAND: "npm run build-$CI_ENVIRONMENT_NAME"
+
 stages:
   - code_quality
   - build
@@ -263,7 +265,7 @@ stages:
       else
           if test -z "$BUILD_ARCHIVES";
           then
-              cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/$CONFIG_FILE*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
+              cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
           else
               BUILD_ARCH=$(echo $BUILD_ARCHIVES|sed 's/ //g'|sed 's/;/ /g');
               tar -czf ../$ARTIFACT_DIR.tar.gz package.json $BUILD_ARCH;
