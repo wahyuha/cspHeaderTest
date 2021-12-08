@@ -28,11 +28,11 @@ stages:
   - alert
 
 
-cache:
-#  untracked: true
-#  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
+# cache:
+# #  untracked: true
+# #  key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#     - node_modules/
 
 .code_quality: &code_quality
   stage: check
