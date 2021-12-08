@@ -261,7 +261,7 @@ stages:
       fi
     - if [[ "$INSTALL_ONSITE" == "ON" ]];
       then
-          cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/$CONFIG_FILE*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
+          cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
       else
           if test -z "$BUILD_ARCHIVES";
           then
