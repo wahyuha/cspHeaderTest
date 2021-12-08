@@ -14,25 +14,26 @@ export async function post(req, res) {
 
   const sessionID = req.session.extSessionId;
   const requestId = req.session.requestId;
-  const otp = req.body.otp || "";
-  const encryptedOtp = encrypt(`${otp}`, requestId);
+  const pin = req.body.pin || "";
+  const name = req.body.name || "";
+  const email = req.body.email || "";
+  
+  const encryptedPin = encrypt(`${pin}`, requestId);
 
   try {
-    const response = await httpServer(req.session).post("/1.0/bind/otp", {
+    const response = await httpServer(req.session).post("/1.0/bind/register", {
+      requestId,
       sessionID,
-      otp: encryptedOtp,
+      pin: encryptedPin,
+      name,
+      email,
     });
     const {
       data: { data, status, message },
     } = response;
-
-    if (status === "00") {
-      req.session.state = data.state;
-      req.session.customerNumber = data.customerNumber;
-      // req.session.state = "RegisterStateOtpVerified";
-    }
     res.json({ data, status, message });
   } catch (error) {
+    console.process(error);
     res.json({ error });
   }
 }

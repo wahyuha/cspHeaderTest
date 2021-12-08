@@ -3,6 +3,7 @@
   import clientHttp from "@utils/http/client";
   import { onMount } from "svelte";
   import { customer, setCustomer } from "@stores/customer";
+  import { setIdentity } from "@stores/identity";
   import { fade } from "svelte/transition";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
@@ -20,8 +21,9 @@
   const sessionClient = $session;
 
   let otp;
-  let { customerNumber } = $customer;
+  let { customerNumber, name, email, state } = $customer;
   let isRedirected = !customerNumber;
+  let { editable } = $customer || false;
 
   let loading = false;
   let error;
@@ -29,45 +31,56 @@
   let showModal = false;
 
   onMount(async () => {
-    customerNumber = $session.customerNumber;
+    // customerNumber = $session.customerNumber;
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        checkIdentity();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300);
   });
 
-  onMount(async () => {
-    if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
-      checkAccount();
-    } else {
-      const loadedInt = setInterval(() => {
-        if (typeof JSEncrypt !== "undefined") {
-          checkAccount();
-          clearInterval(loadedInt);
-          return;
-        }
-      }, 300);
-    }
-  });
-
-  async function checkAccount() {
+  async function checkIdentity() {
     if (isRedirected) {
       await clientHttp(sessionClient)
         .post("/check/general")
         .then((response) => {
           const { data, status } = response.data;
+          console.log(response);
           if (status === "00") {
             customerNumber = data.customerNumber;
+            name = data.name;
+            email = data.email;
 
             setCustomer({
               customerNumber,
               backToStoreUri: data.backToStoreUri,
               backToStoreFailedUri: data.backToStoreFailedUri,
-              editable: data.editable,
+              editable,
               partnerName: data.partnerName,
               isRegister: data.isRegister,
+              name,
+              email,
             });
+            setIdentity({
+              name,
+              email,
+            });
+          } else if (status === "990") {
+            goto(`${baseUrl}/debit/error/unmatched`);
+          } else {
+            const queryCode = status ? `?code=${status}` : "";
+            goto(`${baseUrl}/debit/error${queryCode}`);
           }
         })
         .catch((e) => {
           console.error(e);
         });
+    } else {
+      if (state !== "RegisterStateOtpRequest") {
+        goto(`${baseUrl}/debit/error/unmatched`);
+      }
     }
   }
 
@@ -79,21 +92,23 @@
       .post("/otp", params)
       .then((response) => {
         const { data, status } = response.data;
+        loading = false;
         if (status === "00") {
-          if (data.backToStoreURI) {
-            setCustomer({
-              backToStoreUri: data.backToStoreURI,
-            });
-          }
-          goto(`${baseUrl}/debit/success`);
+          setCustomer({
+            state: data.state,
+            customerNumber: data.customerNumber,
+          });
+          return goto(`${baseUrl}/register/identity`);
         } else if (status === "LA909") {
-          goto(`${baseUrl}/debit/error/unauthorized`);
+          return goto(`${baseUrl}/debit/error/unauthorized`);
         } else {
           error = publicError(status);
         }
       })
-      .catch(() => (error = publicError()));
-    loading = false;
+      .catch(() => (error = publicError()))
+      .then(() => {
+        loading = false;
+      });
   };
 
   const autoSubmit = async () => {
@@ -108,12 +123,13 @@
     <img
       class="banner-img"
       alt="OTP LinkAja"
-      src="images/login-banner.png"
-      use:lazy={{ src: "images/login-banner.png" }}
+      src="images/otp-banner-sm.png"
+      use:lazy={{ src: "images/otp-banner.png" }}
     />
   </div>
 
   <div class="form-wrap">
+    <div class="tt-info ff-b">Konfirmasi OTP Kamu</div>
     <p class="pin-info" in:fade={{ duration: 300 }}>
       Masukkan kode verifikasi yang dikirim melalui SMS ke nomor {customerNumber ||
         "*************"}
@@ -156,6 +172,11 @@
   }
   .form-wrap {
     padding: 16px;
+  }
+  .tt-info {
+    padding: 0 0 8px;
+    font-weight: 700;
+    font-size: 16px;
   }
   .pin-info {
     margin: 0 0 16px;

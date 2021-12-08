@@ -11,3 +11,8 @@ export function publicError(status) {
   const errorObj = errorMap.find((e) => e.status === status) || {};
   return errorObj.message || defaultMessage;
 }
+
+export const invalidPIN = {
+  status: "LA912",
+  message: "Format PIN tidak sesuai ketentuan",
+};

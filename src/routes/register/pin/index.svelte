@@ -5,44 +5,44 @@
   import clientHttp from "@utils/http/client";
   import { baseUrl } from "@constants/url";
   import { lazy } from "@helpers/img.js";
-  import { publicError, pinLengthMessage } from "@utils/error";
+  import { publicError, invalidPIN } from "@utils/error";
   import { customer, setCustomer } from "@stores/customer";
+  import { setIdentity } from "@stores/identity";
+  import { identity } from "@stores/identity";
+  import { createPinValidator } from "@helpers/validator";
   import Meta from "@components/meta/index.svelte";
-  import InputPIN from "@components/input/pin.svelte";
   import Button from "@components/button/index.svelte";
-  import Counter from "@components/counter/index.svelte";
+  import InputPIN from "@components/input/pin.svelte";
   import Modal from "@components/modal/full.svelte";
-  import ForgotTrigger from "@components/forgot/trigger.svelte";
   import ForgotContent from "@components/forgot/index.svelte";
   import LoaderBlocking from "@components/loader/blocking.svelte";
 
   const { session } = stores();
   const sessionClient = $session;
 
-  let value;
   let loading = false;
   let showLoaderFirst = false;
-  let error;
-  let { customerNumber } = $customer;
+  let errorSubmit = "";
+  let errorPIN = "";
+  let errors = {};
+  let pin = "";
+  let pinConfirm = "";
+  let { customerNumber = "" } = $customer;
   let isRedirected = !customerNumber;
-  let errorCodes = ["05", "77", "78", "79", "80", "90", "99"];
+  let blockedError = ["LA910", "LA911"];
 
-  const { editable } = $customer || false;
+  const { name = "", email = "" } = $identity;
 
   $: forgotModal = false;
 
   onMount(async () => {
-    if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
-      await checkAccount();
-    } else {
-      const loadedInt = setInterval(() => {
-        if (typeof JSEncrypt !== "undefined") {
-          checkAccount();
-          clearInterval(loadedInt);
-          return true;
-        }
-      }, 300);
-    }
+    const loaded = setInterval(() => {
+      if (typeof JSEncrypt !== "undefined") {
+        checkAccount();
+        clearInterval(loaded);
+        return;
+      }
+    }, 300);
   });
 
   async function checkAccount() {
@@ -61,6 +61,12 @@
               editable: data.editable,
               partnerName: data.partnerName,
               isRegister: data.isRegister,
+              name,
+              email,
+            });
+            setIdentity({
+              name,
+              email,
             });
           }
         })
@@ -70,37 +76,46 @@
     }
   }
 
-  const onSubmit = async () => {
-    loading = true;
-    error = "";
-    const params = { pin: value, customerNumber };
+  const isEligible = () => {
+    loading = false;
 
-    if (`${value}`.length < 6) {
-      error = pinLengthMessage;
-      loading = false;
-      return;
+    const values = { pin, pinConfirm };
+    errors = createPinValidator(values);
+    if (!Object.keys(errors).length) {
+      return true;
     }
+    return false;
+  };
 
-    await clientHttp(sessionClient)
-      .post("/pin", params)
-      .then((response) => {
-        const { data, status } = response.data;
-        if (status === "00") {
-          $session.customerNumber = data.customerNumber;
-          goto(`${baseUrl}/debit/otp`);
-        } else if (errorCodes.includes(status)) {
-          goto(`${baseUrl}/debit/error/blocked`);
-        } else {
-          error = publicError(status);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        error = publicError();
-      })
-      .then(() => {
-        loading = false;
-      });
+  const onSubmit = async () => {
+    if (isEligible()) {
+      loading = true;
+      errorSubmit = "";
+      errorPIN = "";
+      const params = { name, email, pin };
+
+      await clientHttp(sessionClient)
+        .post("/register", params)
+        .then((response) => {
+          const { status } = response.data;
+          if (status === "00") {
+            return goto(`${baseUrl}/register/success`);
+          } else if (blockedError.includes(status)) {
+            return goto(`${baseUrl}/debit/error/unregistered`);
+          } else if (invalidPIN.status === status) {
+            errorPIN = invalidPIN.message;
+          } else {
+            errorSubmit = publicError(status);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          errorSubmit = publicError();
+        })
+        .then(() => {
+          loading = false;
+        });
+    }
   };
 </script>
 
@@ -115,31 +130,44 @@
     />
   </div>
   <div class="form-wrap" in:fade={{ duration: 300 }}>
-    <p class="login-info">Masukkan nomor dan PIN LinkAja kamu</p>
+    <div class="tt-info ff-b">Buat PIN, Yuk!</div>
+    <p class="login-info">PIN LinkAja terdiri dari 6 digit, rahasiakan ya!</p>
     <div class="input-wrap">
-      <div class="ff-b">Nomor Handphone</div>
+      {#if errorSubmit}
+        <div class="error-text">{errorSubmit}</div>
+      {/if}
+      <div class="f-label ff-b">Nomor Handphone</div>
       <input
         type="tel"
-        disabled={!editable}
-        bind:value={customerNumber}
+        disabled
+        value={customerNumber}
         class="input-general"
         placeholder="Masukkan nomor handphone kamu"
       />
     </div>
     <div class="input-wrap">
-      <div class="ff-b">PIN LinkAja</div>
-      <InputPIN bind:value {error} />
+      <div class="ff-b">PIN</div>
+      <InputPIN
+        bind:value={pin}
+        placeholder="Buat 6 digit PIN"
+        error={errors.pin}
+      />
+    </div>
+    <div class="input-wrap">
+      <div class="ff-b">Konfirmasi PIN</div>
+      <InputPIN
+        bind:value={pinConfirm}
+        placeholder="Masukkan ulang 6 digit PIN kamu"
+        error={errors.pinConfirm}
+      />
+      {#if errorPIN}
+        <div class="error-text">{errorPIN}</div>
+      {/if}
     </div>
   </div>
 
   <div class="action-wrap">
-    <ForgotTrigger on:close={() => (forgotModal = true)} />
     <Button disabled={loading} onClick={onSubmit} bind:loading>Lanjut</Button>
-    <Counter
-      on:limit={() => {
-        showLoaderFirst = true;
-      }}
-    />
   </div>
 </div>
 {#if forgotModal}
@@ -166,8 +194,16 @@
     background-color: #ffffff;
     padding: 16px;
   }
+  .tt-info {
+    padding: 0 0 8px;
+    font-weight: 700;
+    font-size: 16px;
+  }
   .login-info {
     margin: 0 0 16px;
+  }
+  .f-label {
+    color: #9ca4ac;
   }
   .input-wrap {
     padding-bottom: 16px;
@@ -192,8 +228,14 @@
     -moz-appearance: textfield;
   }
   .action-wrap {
-    margin-top: 8px;
     padding: 16px;
+    padding-top: 0px;
     background-color: #ffffff;
+  }
+
+  .error-text {
+    color: #d90102;
+    font-size: 12px;
+    padding: 4px 0;
   }
 </style>

@@ -1,5 +1,5 @@
 import { isFileRoute, getPathName, isSkipPath } from "@server/utils/common";
-import { logStart } from "@constants/logger";
+import { logStart, sys } from "@constants/logger";
 
 const reqLogger = () => {
   return function (req, res, next) {
@@ -16,7 +16,15 @@ const reqLogger = () => {
         domain: req.headers["host"],
         pathname: pathName,
       };
-      console.start(req.session.requestId, req.session.tid, logStart, pth, mts);
+      // console.start(req.session.requestId, req.session.tid, logStart, pth, mts);
+      console.start(
+        req.session.requestId,
+        req.session.tid,
+        logStart,
+        pth,
+        mts,
+        sys
+      );
     }
     next();
   };

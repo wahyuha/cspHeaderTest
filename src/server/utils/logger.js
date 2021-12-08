@@ -12,12 +12,13 @@ const os = require("os");
 const hostname = os.hostname();
 const transport = new DailyRotateFile({
   dirname: process.env.SAPPER_APP_LOGS_PATH,
-  filename: path.join("logs", `AUTH_${hostname}_%DATE%.log`),
+  filename: path.join("logs", `SYS_${hostname}_%DATE%.log`),
   datePattern: "YYYY-MM-DD",
   zippedArchive: true,
   maxFiles: "14d",
   level: "info",
 });
+const isLogToFile = process.env.SAPPER_APP_LOG_TO_FILE === "true";
 
 const logger = winston.createLogger({
   format: combine(
@@ -25,7 +26,7 @@ const logger = winston.createLogger({
       return `${info.message}`;
     })
   ),
-  transports: [transport],
+  transports: [isLogToFile ? transport : new winston.transports.Console()],
 });
 
 export default logger;

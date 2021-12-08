@@ -5,6 +5,7 @@
   export let size = 6;
   export let error = null;
   export let autoUnFocus = true;
+  export let placeholder = "Masukkan 6 digit PIN LinkAja";
 
   let input;
   let isShow;
@@ -45,14 +46,14 @@
 <div class="input-group">
   <input
     bind:this={input}
-    bind:value={value}
+    bind:value
     on:keydown={validateByLength}
     on:keyup={onKeyup}
     type="password"
     class={`${styledError} ${styledMask} input-general`}
     pattern="[0-9]*"
     inputmode="numeric"
-    placeholder="Masukkan 6 digit PIN LinkAja"
+    {placeholder}
     id="PIN"
   />
   {#if value}

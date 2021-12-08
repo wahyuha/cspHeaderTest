@@ -1,5 +1,4 @@
 import httpServer from "@utils/http/server";
-import { encrypt } from "@utils/crypto";
 import { isValidSession } from "@utils/session";
 
 export async function post(req, res) {
@@ -13,15 +12,9 @@ export async function post(req, res) {
   }
 
   const sessionID = req.session.extSessionId;
-  const requestId = req.session.requestId;
-  const otp = req.body.otp || "";
-  const encryptedOtp = encrypt(`${otp}`, requestId);
 
   try {
-    const response = await httpServer(req.session).post("/1.0/bind/otp", {
-      sessionID,
-      otp: encryptedOtp,
-    });
+    const response = await httpServer(req.session).post("/1.0/bind/cc", { sessionID });
     const {
       data: { data, status, message },
     } = response;
@@ -29,7 +22,7 @@ export async function post(req, res) {
     if (status === "00") {
       req.session.state = data.state;
       req.session.customerNumber = data.customerNumber;
-      // req.session.state = "RegisterStateOtpVerified";
+      // req.session.state = "RegisterStateOtpRequest";
     }
     res.json({ data, status, message });
   } catch (error) {

@@ -53,8 +53,11 @@
     }
 
     loading = true;
-    await clientHttp(sessionClient).post("/otp/resend");
-    loading = false;
+    await clientHttp(sessionClient)
+      .post("/otp/resend")
+      .then(() => {
+        loading = false;
+      });
     decreaseRemain();
     runTimer();
     eligibleRequest = true;
