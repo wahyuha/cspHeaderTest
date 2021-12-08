@@ -1,542 +1,138 @@
 image: alpine:latest
 variables:
-  GIT_CLEAN_FLAGS: ""
-  NODEJS_VERSION: "12.14.0"
-  ANSIBLE_TAG: "setup"
-  ARTIFACT_DIR: "${CI_PROJECT_NAME}_artifact"
-  CONFIG_FILE: ".env"
-  CLUSTER: "OFF"
-  CLEAR_NODEMODULES: "OFF"
-  ANSIBLE_PROJECT_PATH: "devops/ansible_linkaja.git"
-  INSTALL_ONSITE: "OFF"
-  PROC_MAN: "supervisor"
-  USE_SERVER_NAME: "OFF"
-  SKIP_NGINX_CONFIG: "off"
-  DIST_DIR: ""
-  HOME_APP: "/var/www"
-  IGNORE_DIR: "$HOME_APP/$CI_PROJECT_NAME/logs\n
-               $HOME_APP/$CI_PROJECT_NAME\n
-               /var/log/$CI_PROJECT_NAME"
-  BUILD_ARCHIVES: "__sapper__ ; package.json"
+  # general
+  JWT_ROLE: 'gitlab-fe'
+  DEPLOY_TO: 'eks'
+  # for eks only:
+  INGRESS: 'TRUE'
+  NAMESPACE: 'cms'
+
 stages:
-  - code_quality
+  - check
+  - sast_scan
   - build
+  - development
+  - staging
+  - production
   - deployment
   - config_automation_test
   - automation_test
-  - dependency_scanner
   - alert
 
-
-cache:
-#  untracked: true
-#  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
-
-.code_quality: &code_quality
-  stage: check
-  image: emeraldsquad/sonar-scanner:latest
-  script:
-    - tar -xzf $ARTIFACT_DIR.tar.gz
-    - sonar-scanner -Dsonar.projectKey="$PROJECT_NAME" -Dsonar.sources=. -Dsonar.host.url="$SONAR_HOST" -Dsonar.login="$SONAR_LOGIN"
-  artifacts:
-    paths:
-      - $ARTIFACT_DIR.tar.gz
-  only:
-    refs:
-      - development
-      - master
-      - refs
-
-.before: &before
-  before_script:
-    - echo -e "$IGNORE_DIR" > /tmp/ignore_dir.txt
-    - if [[ $CI_BUILD_REF_NAME !=  "development" && $CI_BUILD_REF_NAME !=  "master" ]];
-      then
-         if [[ -z "$CI_BUILD_TAG" ]];
-         then
-            echo "working on feature branch";
-            export "PROJECT_NAME=$(echo $CI_BUILD_REF_NAME|sed 's/\//_/g'|sed 's/-/_/g')";
-            sed -i s@$CI_PROJECT_NAME@$PROJECT_NAME@g /tmp/ignore_dir.txt;
-         else
-            echo "working on not feature branch";
-            export "PROJECT_NAME=$CI_PROJECT_NAME";
-         fi;
-      else
-          if [[ "$CROSS_ENV" == "ON" ]];
-          then
-             echo "working on cross environment";
-             export "PROJECT_NAME=$(echo $CI_BUILD_REF_NAME|sed 's/\//_/g'|sed 's/-/_/g')";
-             sed -i s@$CI_PROJECT_NAME@$PROJECT_NAME@g /tmp/ignore_dir.txt;
-          else
-             echo "working on not feature branch";
-             export "PROJECT_NAME=$CI_PROJECT_NAME";
-          fi;
-      fi;
-    - sed -i "s/ //g" /tmp/ignore_dir.txt;
-    - cat /tmp/ignore_dir.txt | grep "$HOME_APP/$PROJECT_NAME/"|sed s@$HOME_APP/$PROJECT_NAME/@@g > /tmp/exclude_list;
-    - cat /tmp/exclude_list;
-    - echo -e "PROJECT_NAME=$PROJECT_NAME"
-    - echo "machine gitlab.linkaja.com" "login anonymous" "password $ACCESS_TOKEN" > ~/.netrc
-    - BUILD=$(cat $CI_PROJECT_DIR/package.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["scripts"]["build-'"$CI_ENVIRONMENT_NAME"'"])')
-    - if test -z "$BUILD"; then export build=off;echo "build=off"; else export build=on;echo "build=on"; fi
-    - ReactJs=$(cat package.json| python3 -c 'import json,sys,os;obj=json.load(sys.stdin);print(obj["dependencies"]["react"])' 2>/dev/null || true)
-    - if test -z "${ReactJs}"; then export ReactJs_pkg=OFF;echo "ReactJs_pkg=OFF"; else export ReactJs_pkg=ON;echo "ReactJs_pkg=ON"; fi
-    - git clone -b $CI_PROJECT_NAME $ANSIBLE_ACCESS/automation/config-files.git /tmp/config_files;
-    - N_CONF_FILES=$(echo -e $CONFIG_FILE|wc -l)
-    - CONFIG_FILE_INT=$CI_PROJECT_DIR/$CONFIG_FILE.$CI_ENVIRONMENT_NAME.j2
-    - CONFIG_FILE_EXT=/tmp/config_files/$CONFIG_FILE.$CI_ENVIRONMENT_NAME.j2
-    - if [[ "$N_CONF_FILES" -gt "1" ]];
-      then
-          if test -f "$CONFIG_FILE_INT";
-          then
-              echo "Use internal files";
-          else
-              echo "file config is not found";
-              exit 1;
-          fi;
-      else
-          if test -f "$CONFIG_FILE_INT" || test -f "$CONFIG_FILE_EXT";
-          then
-                if test -f "$CONFIG_FILE_INT";
-                then
-                    echo "use internal";
-                else
-                    echo "use external";
-                    if [[ "$SERVICE_KEY" =~ uat ]] && test -n "$SERVICE_KEY";
-                    then
-                        cp -f /tmp/config_files/$CONFIG_FILE.uat.j2 $CI_PROJECT_DIR/$CONFIG_FILE.$CI_ENVIRONMENT_NAME.j2;
-                    else
-                        cp -f /tmp/config_files/$CONFIG_FILE.$CI_ENVIRONMENT_NAME.j2 $CI_PROJECT_DIR/$CONFIG_FILE.$CI_ENVIRONMENT_NAME.j2;
-                    fi;
-                fi;
-            else
-                export NGINX=off;
-                echo "nginx off";
-            fi;
-      fi
-    - if test -f "$CONFIG_FILE_EXT";
-      then
-          export CONSUL=OFF;
-      else
-          export CONSUL=ON;
-      fi
-    - FILE=$CI_PROJECT_DIR/nginx.yml
-    - FILE_EXT=/tmp/config_files/nginx.yml
-    - if test -f "$FILE" || test -f "$FILE_EXT";
-      then
-          if test -f "$FILE";
-          then
-              echo "use nginx inside repo apps";
-          else
-              echo "use nginx outside repo apps";
-              cp -f /tmp/config_files/nginx.yml $CI_PROJECT_DIR/nginx.yml;
-          fi;
-          export NGINX=on;
-          echo SERVER_NAME=$SERVER_NAME;
-          echo "nginx on";
-      else
-          export NGINX=off;
-          echo "nginx off";
-      fi
-    - START=$(cat $CI_PROJECT_DIR/package.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["scripts"]["'"$CI_ENVIRONMENT_NAME"'"])')
-    - export start=$START
-    - if test -z "$START";
-      then
-          SVISOR=off;
-          echo "supervisor off";
-      else
-          SVISOR=on;
-          echo "supervisor on";
-      fi
-    - if [[ "$ANSIBLE_TAG" == "setup" ]] || [[ "$ANSIBLE_TAG" == "deploy" ]];
-      then
-          if [[ "$NGINX" == "on" ]] && [[ "$SVISOR" == "on" ]] && [[ "$ANSIBLE_TAG" == "setup" ]];
-          then
-              ANSIBLE_GROUPTAG="setup-svisor,setup-nginx,setup-app";
-           elif [[ "$NGINX" == "on" ]] && [[ "$SVISOR" == "off" ]] && [[ "$ANSIBLE_TAG" == "setup" ]];
-           then
-               ANSIBLE_GROUPTAG="setup-nginx,setup-app";
-           elif [[ "$NGINX" == "off" ]] && [[ "$SVISOR" == "on" ]] && [[ "$ANSIBLE_TAG" == "setup" ]];
-           then
-               ANSIBLE_GROUPTAG="setup-svisor,setup-app";
-           elif [[ "$NGINX" == "on" ]] && [[ "$SVISOR" == "on" ]] && [[ "$ANSIBLE_TAG" == "deploy" ]];
-           then
-               ANSIBLE_GROUPTAG="reload-svisor,reload-nginx,deploy-app";
-           elif [[ "$NGINX" == "on" ]] && [[ "$SVISOR" == "off" ]] && [[ "$ANSIBLE_TAG" == "deploy" ]];
-           then
-               ANSIBLE_GROUPTAG="reload-nginx,deploy-app";
-           elif [[ "$NGINX" == "off" ]] && [[ "$SVISOR" == "on" ]] && [[ "$ANSIBLE_TAG" == "deploy" ]];
-           then
-               ANSIBLE_GROUPTAG="reload-svisor,deploy-app";
-           elif [[ "$NGINX" == "off" ]] && [[ "$SVISOR" == "off" ]] && [[ "$ANSIBLE_TAG" == "setup" ]];
-           then
-               ANSIBLE_GROUPTAG="setup-app";
-           fi
-      elif [[ "$ANSIBLE_TAG" == "setup-nginx" ]];
-      then
-          ANSIBLE_GROUPTAG="setup-nginx";
-      elif [[ "$ANSIBLE_TAG" == "setup-app" ]];
-      then
-          ANSIBLE_GROUPTAG="setup-app";
-      elif [[ "$ANSIBLE_TAG" == "setup-svisor" ]];
-      then
-          ANSIBLE_GROUPTAG="setup-svisor";
-      elif [[ "$ANSIBLE_TAG" == "config-nginx" ]];
-      then
-          ANSIBLE_GROUPTAG="config-nginx";
-      elif [[ "$ANSIBLE_TAG" == "config-app" ]];
-      then
-          ANSIBLE_GROUPTAG="config-app";
-      elif [[ "$ANSIBLE_TAG" == "config-svisor" ]];
-      then
-          ANSIBLE_GROUPTAG="config-svisor";fi
-    - echo $ANSIBLE_GROUPTAG
-
-## THIS IS BUILD BLOCK ##
-#########################
-.build: &build
-  image:
-    name: harbor.linkaja.com/devops/node:$NODEJS_VERSION
-    entrypoint: [""]
+.build_4_k8s: &build_4_k8s
   stage: build
-  script:
-    - rm -rf $ARTIFACT_DIR.tar.gz build.tar.gz
-    - BASE_URL=`echo $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
-    - git clone $BASE_URL/devops/helper-scripts.git $HOME/scripts
-    - $HOME/scripts/bash/converter $CI_PROJECT_DIR/$CONFIG_FILE.$CI_ENVIRONMENT_NAME.j2 $CI_PROJECT_DIR/$CONFIG_FILE
-    - echo $CONFIG_FILE
-    - node -v && npm -v
-    - if [[ $CLEAR_NODEMODULES == "ON" ]];
-      then
-          echo "clear node_modules";
-          rm -rf $CI_PROJECT_DIR/node_modules;
-      fi
-    - if [[ "$build" == "on" ]];
-      then
-          if [[ "$INSTALL_ONSITE" == "ON" ]];
-          then
-              echo "prepare in server";
-              rm -rf $CI_PROJECT_DIR/node_modules;
-          else
-              if test -z "$INSTALL_CMD";
-              then
-                  echo "running npm install";
-                  npm install;
-                  npm install mquery;
-              else
-                  echo -e "running $INSTALL_CMD";
-                  $INSTALL_CMD;
-              fi;
-              if test -z "$BUILD_CMD";
-              then
-                  echo -e "running npm run build-$CI_ENVIRONMENT_NAME";
-                  npm run build-$CI_ENVIRONMENT_NAME;
-              else
-                  echo -e "running $BUILD_CMD";
-                  $BUILD_CMD;
-              fi;
-          fi;
-      else
-          if [[ "$INSTALL_ONSITE" == "ON" ]];
-          then
-              echo "prepare in server";
-              rm -rf $CI_PROJECT_DIR/node_modules;
-          else
-              if test -z "$INSTALL_CMD";
-              then
-                  echo -e "running npm install";
-                  npm install;
-                  npm install mquery;
-              else
-                  echo -e "running $INSTALL_CMD";
-                  eval $INSTALL_CMD;
-              fi;
-          fi;
-
-      fi
-    - if [[ "$INSTALL_ONSITE" == "ON" ]];
-      then
-          cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/$CONFIG_FILE*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
-      else
-          if test -z "$BUILD_ARCHIVES";
-          then
-              cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/$CONFIG_FILE*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
-          else
-              BUILD_ARCH=$(echo $BUILD_ARCHIVES|sed 's/ //g'|sed 's/;/ /g');
-              tar -czf ../$ARTIFACT_DIR.tar.gz package.json $BUILD_ARCH;
-              cd ../;
-          fi;
-      fi;
-    - mv $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR
-  artifacts:
-    expire_in: 1 month
-    paths:
-      - $ARTIFACT_DIR.tar.gz
-
-development_build:
-  <<: *before
-  <<: *build
-  only:
-    - development
-    - /^release/.*$
-    - /^feature/.*$
-    - /^feature/([A-Za-z0-9\-\_]+)
-    - /hotfix/v([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  allow_failure: false
-  environment:
-    name: development
-
-feature_build:
-  <<: *before
-  <<: *build
-  only:
-    - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))/(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  allow_failure: false
-  environment:
-    name: development
-
-production_build:
-  <<: *before
-  <<: *build
-  allow_failure: false
-  only:
-    - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-v([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  except:
-    - /release-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-    - master
-    - merge
-    - development
-  environment:
-    name: production
-
-staging_build:
-  <<: *before
-  <<: *build
-  allow_failure: false
-  only:
-    - /release-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-    - staging
-    - master
-  environment:
-    name: staging
-
-## THIS IS DEPLOYMENT BLOCK ##
-#########################
-.deployment: &deployment
-  stage: deployment
-  image:
-    name: harbor.linkaja.com/devops/ansible:2.9.6-uhc
-    entrypoint: [""]
-  script:
-    - mkdir $HOME/.aws
-    - mkdir $HOME/.ssh
-    - echo -e $AWS_CFG > $HOME/.aws/config
-    - echo -e $PRIVATE_KEY > $HOME/.ssh/id_rsa
-    - echo -e $PRIVATE_KEY > $HOME/.ssh/deployer.pem
-    - chmod 0600 $HOME/.ssh/deployer.pem
-    - REPO_URL="$ANSIBLE_ACCESS/$ANSIBLE_PROJECT_PATH"
-    - git clone $REPO_URL $HOME/ansible
-    - cd $HOME/ansible
-    - cat /dev/null > $HOME/.ssh/known_hosts
-    - export ANSIBLE_HOST_KEY_CHECKING=False
-    - if test -n "$SERVER_NAME";
-      then
-         export SERVER_NAME=`echo $SERVER_NAME|sed "s/ //g"`;
-      fi
-    - if [[ "$DIST_DIR" != "" ]];
-      then
-          export "DIST_DIR=$DIST_DIR/";
-      else
-          export "DIST_DIR=""";
-      fi
-    - echo "DIST_DIR=$DIST_DIR"
-    - if test -n "$SERVER_IP";
-      then
-          echo -e "$PROJECT_NAME uses static";
-          echo -e "[$PROJECT_NAME]\n$PROJECT_NAME ansible_host=$SERVER_IP" > hosts;
-          ansible-playbook -i hosts playbooks/ansible-deploy/deploy-app-nodejs-v3-1.yml --tags "$ANSIBLE_GROUPTAG"
-          -e "ansible_ssh_private_key_file=$HOME/.ssh/deployer.pem"
-          -e "ansible_ssh_user=deployer"
-          -e "server=$PROJECT_NAME"
-          -e "REACTJS_PKG=$ReactJs_pkg"
-          -e "APP_PORT=$APP_PORT"
-          -e "DIST_DIR=$DIST_DIR"
-          -e "@$CI_PROJECT_DIR/package.json"
-          -e "home_app=$HOME_APP";
-      elif test -n "$SERVICE_KEY";
-      then
-          echo -e "use defined tag service";
-          SERVICE_KEY=$(echo $SERVICE_KEY|sed 's/-/_/g');
-          ansible-playbook -i inventories/$CI_ENVIRONMENT_NAME.aws_ec2.yml playbooks/ansible-deploy/deploy-app-nodejs-v3-1.yml --tags "$ANSIBLE_GROUPTAG"
-            -e "ansible_ssh_private_key_file=$HOME/.ssh/deployer.pem"
-            -e "ansible_ssh_user=deployer"
-            -e "server=tag_Service_$SERVICE_KEY"
-            -e "REACTJS_PKG=$ReactJs_pkg"
-            -e "APP_PORT=$APP_PORT"
-            -e "DIST_DIR=$DIST_DIR"
-            -e "@$CI_PROJECT_DIR/package.json"
-            -e "home_app=$HOME_APP";
-      else
-          echo -e "$PROJECT_NAME uses dinamis";
-          SERVER_TARGET=$(echo $PROJECT_NAME|sed 's/-/_/g');
-          ansible-playbook -i inventories/$CI_ENVIRONMENT_NAME.aws_ec2.yml playbooks/ansible-deploy/deploy-app-nodejs-v3-1.yml --tags "$ANSIBLE_GROUPTAG"
-            -e "ansible_ssh_private_key_file=$HOME/.ssh/deployer.pem"
-            -e "ansible_ssh_user=deployer"
-            -e "server=tag_Service_$SERVER_TARGET"
-            -e "REACTJS_PKG=$ReactJs_pkg"
-            -e "APP_PORT=$APP_PORT"
-            -e "DIST_DIR=$DIST_DIR"
-            -e "@$CI_PROJECT_DIR/package.json"
-            -e "home_app=$HOME_APP";
-      fi
-    - rm -f $CI_PROJECT_DIR/nginx.yml && rm -f $CI_PROJECT_DIR/$CONFIG_FILE.$CI_ENVIRONMENT_NAME.j2
-
-.debug_var: &debug_var
-  stage: deployment
-  image:
-    name: harbor.linkaja.com/devops/ansible:2.9.6-uhc
-    entrypoint: [""]
-  script:
-    - echo "SERVER_NAME=${SERVER_NAME}"
-
-webdev_linkaja_com:
-  <<: *before
-  <<: *deployment
-  only:
-    refs:
-      - development
-      - /^release/.*$
-      - /^feature/.*$
-      - release
-      - /release/(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-      - /release/(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))/
-      - /release/(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))/
-      - /^feature/([A-Za-z0-9\-\_]+)
-      - /hotfix/v([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  environment:
-    name: development
-  variables:
-    SERVER_NAME: 'webdev.linkaja.com'
-
-webdev1_linkaja_com:
-  <<: *before
-  <<: *deployment
-  when: manual
-  only:
-    refs:
-      - development
-      - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))/(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  environment:
-    name: development
-  variables:
-    SERVER_NAME: 'webdev1.linkaja.com'
-
-webdev2_linkaja_com:
-  <<: *before
-  <<: *deployment
-  when: manual
-  only:
-    refs:
-      - development
-      - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))/(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  environment:
-    name: development
-  variables:
-    SERVER_NAME: 'webdev2.linkaja.com'
-
-feature_deployment:
-  <<: *before
-  <<: *deployment
-  only:
-    - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))/(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  when: manual
-  environment:
-    name: development
-
-production_deployment:
-  <<: *before
-  <<: *deployment
-  only:
-    - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-v([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  except:
-    - /release-.*$
-    - /^release/.*$
-    - /^feature/.*$
-    - master
-    - merge
-    - development
-  when: manual
-  environment:
-    name: production
-
-staging_deployment:
-  <<: *before
-  <<: *deployment
-  only:
-    - staging
-    - master
-    - /release-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  environment:
-    name: staging
-
-.notify: &notify
-  stage: alert
-  image:
-    name: harbor.linkaja.com/devops/ansible:2.9.6-uhc
-    entrypoint: [""]
+  image: docker:18.09.7
   before_script:
-    - echo "machine gitlab.linkaja.com" "login anonymous" "password $ACCESS_TOKEN" > ~/.netrc
-    - mkdir $HOME/.aws
-    - mkdir $HOME/.ssh
-    - echo -e $AWS_CFG > $HOME/.aws/config
-    - echo -e $PRIVATE_KEY > $HOME/.ssh/id_rsa
-    - echo -e $PRIVATE_KEY > $HOME/.ssh/deployer.pem
-    - chmod 0600 $HOME/.ssh/deployer.pem
-    - REPO_URL="$ANSIBLE_ACCESS/$ANSIBLE_PROJECT_PATH"
-    - git clone $REPO_URL $HOME/ansible
+    - echo "build at $CI_ENVIRONMENT_NAME"
+    - apk upgrade && apk update && apk add make git openssh-client jq curl
+    - export VAULT_ADDR=http://vault.linkaja.io:8200;
+    - export VAULT_TOKEN="$(curl --request POST --data "{\"role\":\"${JWT_ROLE}\", \"jwt\":\"${CI_JOB_JWT}\"}" ${VAULT_ADDR}/v1/auth/jwt/login|jq -r '.auth.client_token')";
+    - curl --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/gitlabci/data/ansible > /tmp/vaults.json;
+    - cat /tmp/vaults.json|jq -r '.data.data|with_entries( .key |= sub("";"export "))'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" >> /tmp/values.txt;
+    - source /tmp/values.txt;
+    - |
+      # get config values
+      if [[ ${SUB_ENV} == "uat" ]]
+      then
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config-uat|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      elif [[ ${SUB_ENV} == "uat-two" ]]
+      then
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config-uat-two|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      elif [[ ${SUB_ENV} == "uat-three" ]]
+      then
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config-uat-three|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      else
+          curl --connect-timeout 30 --retry 300 --retry-delay 5 --header "X-Vault-Token:${VAULT_TOKEN}" ${VAULT_ADDR}/v1/${CI_ENVIRONMENT_NAME}/data/${CI_PROJECT_NAME}/config|jq -r '.data.data'|jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" > .env
+      fi
+    - apk upgrade && apk update && apk add make git openssh-client
+    - mkdir -p -m 0600 ~/.ssh
+    - ssh-keyscan -t rsa gitlab.linkaja.com > ~/.ssh/known_hosts
+    - export BUILD_USER
+    - export BUILD_TOKEN
+  services:
+    - docker:dind
   script:
-    - cd $HOME/ansible
-    - cat /dev/null > $HOME/.ssh/known_hosts
-    - export ANSIBLE_HOST_KEY_CHECKING=False
-    - SERVER_TARGET=$(echo $PROJECT_NAME|sed 's/-/_/g')
-    - ansible-playbook -i inventories/$CI_ENVIRONMENT_NAME.aws_ec2.yml playbooks/ansible-deploy/failure-msteam.yml --tags $ANSIBLE_TAG
-      -e "ansible_ssh_private_key_file=$HOME/.ssh/deployer.pem"
-      -e "ansible_ssh_user=deployer"
-      -e "server=tag_Service_$SERVER_TARGET"
-      -e "is_success= \"false\""
-  when: on_failure
+    - export CURRENT_COMMIT=${CI_COMMIT_SHA::8}
+    - make build
 
-development_notify:
-  <<: *before
-  <<: *notify
+
+a_build_dev:
+  <<: *build_4_k8s
   only:
-    - development
+    refs:
+      - development
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
   environment:
     name: development
 
-production_notify:
-  <<: *before
-  <<: *notify
+a_build_feature:
+  <<: *build_4_k8s
   only:
-    - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-v([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-    - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  except:
-    - /release-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-    - master
-    - merge
-    - development
+    refs:
+      - development
+  when: manual
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  environment:
+    name: development
+
+b_build_uat:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - development
+  when: manual
+  variables:
+    SUB_ENV: "uat"
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  environment:
+    name: development
+
+c_build_uat_two:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - development
+  when: manual
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  variables:
+    SUB_ENV: "uat-two"
+  environment:
+    name: development
+
+d_build_uat_three:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - development
+  when: manual
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "development"
+      - $CI_COMMIT_REF_NAME =~ /feature-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
+  variables:
+    SUB_ENV: "uat-three"
+  environment:
+    name: development
+
+build_prod:
+  <<: *build_4_k8s
+  only:
+    refs:
+      - /(([a-zA-Z0-99]+)(\W)?([a-zA-Z0-99]+))-v([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
   environment:
     name: production
 
-
-staging_notify:
-  <<: *before
-  <<: *notify
-  only:
-    - staging
-    - master
-    - /release-([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9]).([0-9]|[1-9][0-9]|[1-9][0-9][0-9])/
-  environment:
-    name: staging
+include:
+  - project: 'automation/pipelines'
+    ref: pipelines-v1.0.5
+    file: 'cd-gitlab-ci.yml'

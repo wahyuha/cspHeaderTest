@@ -6,8 +6,6 @@ export async function post(req, res) {
       data: {},
       status: "999",
     });
-
-    return false;
   }
   const session = req.session || {};
   const {
@@ -18,9 +16,12 @@ export async function post(req, res) {
     backToStoreUri,
     backToStoreFailedUri,
     tnc,
+    isRegister,
+    name,
+    email,
   } = session;
 
-  if (state === "BindingStateAgreement" && partnerName) {
+  if (state === "BindingStateAgreement" || state === "RegisterStateAgreement") {
     res.json({
       data: {
         partnerName,
@@ -29,6 +30,10 @@ export async function post(req, res) {
         backToStoreUri,
         backToStoreFailedUri,
         tnc,
+        isRegister,
+        name,
+        email,
+        state,
       },
       status: "00",
     });

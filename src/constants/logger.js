@@ -1,9 +1,11 @@
 export const jid = "jid";
-export const tid = "tid";
-export const logStart = "TS";
-export const logEnd = "TE";
-export const logProcess = "TP";
+export const sys = "SYS";
+export const tdr = "TDR";
+
+export const logStart = "TS"; //SYS
+export const logEnd = "TE"; //SYS
+export const logProcess = "TP"; //SYS
 export const logStartProcess = "TSP";
 export const logEndProcess = "TEP";
-export const logStartOutbond = "TSO";
-export const logEndOutbond = "TEO";
+export const logStartOutbond = "TSO"; //TDR
+export const logEndOutbond = "TEO"; //TDR

@@ -37,10 +37,10 @@ const static_path = dev
   : "../../../__sapper__/build/static";
 
 // security header
-// app.use(cors(corsConfig));
-// enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
-// app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
-// app.use(helmet.noSniff());
+app.use(cors(corsConfig));
+enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
+app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
+app.use(helmet.noSniff());
 app.use(helmet.hidePoweredBy());
 app.use(
   helmet.frameguard({

@@ -1,6 +1,11 @@
 import axios from "axios";
-import { apiUrlServer, apiUrlServerLoko } from "@constants/url";
-import { logStartOutbond, logEndOutbond } from "@constants/logger";
+import {
+  apiUrlServer,
+  apiUrlServerLoko,
+  mockApiUrl,
+  mockPaths,
+} from "@constants/url";
+import { logStartOutbond, logEndOutbond, tdr } from "@constants/logger";
 
 class httpServer {
   constructor(session) {
@@ -56,6 +61,11 @@ class httpServer {
         const headers = config.headers;
         remHead.forEach((header) => delete headers[header]);
 
+        const mockPathArr = mockPaths.split(",");
+        if (mockPathArr.includes(config.url)) {
+          config.baseURL = mockApiUrl;
+        }
+
         const mts = {
           headers: headers,
           query: config.query || {},
@@ -72,7 +82,8 @@ class httpServer {
           session.tid,
           logStartOutbond,
           path,
-          mts
+          mts,
+          tdr
         );
         return config;
       },
@@ -99,7 +110,8 @@ class httpServer {
           session.tid,
           logStartOutbond,
           path,
-          mts
+          mts,
+          tdr
         );
 
         return Promise.reject(error);
@@ -134,7 +146,14 @@ class httpServer {
             data: "html file",
           };
         }
-        console.end(session.requestId, session.tid, logEndOutbond, path, mte);
+        console.end(
+          session.requestId,
+          session.tid,
+          logEndOutbond,
+          path,
+          mte,
+          tdr
+        );
 
         return response;
       },
@@ -157,7 +176,14 @@ class httpServer {
           message: message,
           rawMessage: error.Error,
         };
-        console.end(session.requestId, session.tid, logEndOutbond, path, mte);
+        console.end(
+          session.requestId,
+          session.tid,
+          logEndOutbond,
+          path,
+          mte,
+          tdr
+        );
 
         return Promise.reject(error);
       }

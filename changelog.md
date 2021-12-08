@@ -1,8 +1,19 @@
-# Kiluan Webview Release Notes
+# Sempu Webview Release Notes
 
-# v1.2.5 29 Sep 2021
+# v2.0.0 8 Dec 2021
+
+### Changed
+
+- Rebrand to Sempu
+
+### Added
+
+- Add sentry
+
 ### Fixed
-- Fix mandiri issue for iOS 14.7 above
+
+- Separate TDR and sys log
+- Stdout log in development mode
 
 # v1.2.1 29 July 2021
 
