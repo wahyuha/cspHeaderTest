@@ -17,7 +17,7 @@ variables:
   IGNORE_DIR: "$HOME_APP/$CI_PROJECT_NAME/logs\n
                $HOME_APP/$CI_PROJECT_NAME\n
                /var/log/$CI_PROJECT_NAME"
-  BUILD_ARCHIVES: "__sapper__ ; package.json"
+  # BUILD_ARCHIVES: "__sapper__ ; package.json"
 stages:
   - code_quality
   - build
@@ -237,6 +237,7 @@ cache:
                   echo -e "running $BUILD_CMD";
                   $BUILD_CMD;
               fi;
+              cat $CI_PROJECT_DIR/.env;
           fi;
       else
           if [[ "$INSTALL_ONSITE" == "ON" ]];
