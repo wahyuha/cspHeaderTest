@@ -8,7 +8,7 @@ variables:
   CLUSTER: "OFF"
   CLEAR_NODEMODULES: "OFF"
   ANSIBLE_PROJECT_PATH: "devops/ansible_linkaja.git"
-  INSTALL_ONSITE: "ON"
+  INSTALL_ONSITE: "OFF"
   PROC_MAN: "supervisor"
   USE_SERVER_NAME: "OFF"
   SKIP_NGINX_CONFIG: "off"
@@ -17,8 +17,7 @@ variables:
   IGNORE_DIR: "$HOME_APP/$CI_PROJECT_NAME/logs\n
                $HOME_APP/$CI_PROJECT_NAME\n
                /var/log/$CI_PROJECT_NAME"
-  # BUILD_ARCHIVES: "__sapper__ ; package.json"
-
+  BUILD_ARCHIVES: "__sapper__ ; package.json"
 stages:
   - code_quality
   - build
@@ -29,11 +28,11 @@ stages:
   - alert
 
 
-# cache:
-# #  untracked: true
-# #  key: ${CI_COMMIT_REF_SLUG}
-#   paths:
-#     - node_modules/
+cache:
+#  untracked: true
+#  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
 
 .code_quality: &code_quality
   stage: check
@@ -199,7 +198,7 @@ stages:
 #########################
 .build: &build
   image:
-    name: harbor.linkaja.com/devops/node:${NODEJS_VERSION}
+    name: harbor.linkaja.com/devops/node:$NODEJS_VERSION
     entrypoint: [""]
   stage: build
   script:
@@ -238,7 +237,6 @@ stages:
                   echo -e "running $BUILD_CMD";
                   $BUILD_CMD;
               fi;
-              cat $CI_PROJECT_DIR/.env;
           fi;
       else
           if [[ "$INSTALL_ONSITE" == "ON" ]];
@@ -260,11 +258,11 @@ stages:
       fi
     - if [[ "$INSTALL_ONSITE" == "ON" ]];
       then
-          cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
+          cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/$CONFIG_FILE*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
       else
           if test -z "$BUILD_ARCHIVES";
           then
-              cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
+              cd ../ && tar --exclude-from=/tmp/exclude_list --exclude="$CI_PROJECT_DIR/.git*" --exclude="$CI_PROJECT_DIR/$CONFIG_FILE*" --exclude="$CI_PROJECT_DIR/env*" -czf $ARTIFACT_DIR.tar.gz $CI_PROJECT_DIR;
           else
               BUILD_ARCH=$(echo $BUILD_ARCHIVES|sed 's/ //g'|sed 's/;/ /g');
               tar -czf ../$ARTIFACT_DIR.tar.gz package.json $BUILD_ARCH;
