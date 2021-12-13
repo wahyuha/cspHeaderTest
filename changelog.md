@@ -1,4 +1,19 @@
-# Kiluan Webview Release Notes
+# Sempu Webview Release Notes
+
+# v2.0.0 8 Dec 2021
+
+### Changed
+
+- Rebrand to Sempu
+
+### Added
+
+- Add sentry
+
+### Fixed
+
+- Separate TDR and sys log
+- Stdout log in development mode
 
 # v1.2.1 29 July 2021
 
