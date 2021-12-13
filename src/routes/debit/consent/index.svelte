@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import * as Sentry from "@sentry/browser";
   import { goto, stores } from "@sapper/app";
   import { setCustomer } from "@stores/customer";
   import { Checkbox } from "seruni";
@@ -25,20 +24,13 @@
   $: showModal = false;
 
   onMount(async () => {
-    Sentry.captureMessage("Register Page Mounted");
     if (process.env.SAPPER_APP_CRYPTO_MODE === "false") {
-      Sentry.captureMessage("SAPPER_APP_CRYPTO_MODE is false");
       await fetchCheck();
     } else {
-      Sentry.captureMessage("SAPPER_APP_CRYPTO_MODE is true");
       const loadedInt = setInterval(() => {
-        Sentry.captureMessage("Waiting for crypto to load");
         if (typeof JSEncrypt !== "undefined") {
-          Sentry.captureMessage("JSEncrypt loaded");
           fetchCheck();
-          Sentry.captureMessage("fetchCheck loaded");
           clearInterval(loadedInt);
-          Sentry.captureMessage("clearInterval cleared");
           return true;
         }
       }, 300);
@@ -49,10 +41,8 @@
     await clientHttp(sessionClient)
       .post("/check")
       .then((response) => {
-        Sentry.captureMessage("Register Page FetchCheck Success");
         const { data, status } = response.data;
         if (status === "00") {
-          Sentry.captureMessage("Register Page FetchCheck 00");
           partnerName = data.partnerName;
           isRegister = data.isRegister;
           if (data.tnc && data.tnc.length) {
@@ -68,24 +58,18 @@
             email: data.email,
             state: data.state,
           });
-          Sentry.captureMessage("setCustomer");
         } else if (status === "990") {
-          Sentry.captureMessage("Register Page FetchCheck 990");
           goto(`${baseUrl}/debit/error/unmatched`);
         } else {
-          Sentry.captureMessage("Register Page FetchCheck else");
           const queryCode = status ? `?code=${status}` : "";
           goto(`${baseUrl}/debit/error${queryCode}`);
         }
-        Sentry.captureMessage("Register Page FetchCheck end");
       })
       .catch((e) => {
-        Sentry.captureException(e);
         console.error(e);
         goto(`${baseUrl}/debit/error?code=999`);
       })
       .then(() => {
-        Sentry.captureMessage("Register Page FetchCheck then loaded");
         loaded = true;
       });
   }
