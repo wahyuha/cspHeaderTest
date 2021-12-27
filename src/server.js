@@ -77,9 +77,9 @@ app.use(
   compression({ threshold: 0 }),
   initSession(),
   reqDecrypt(),
-  reqLogger(),
+  // reqLogger(),
   resEncrypt(),
-  resLogger(),
+  // resLogger(),
   sapper.middleware({
     session: (req) => {
       return {

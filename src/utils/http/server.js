@@ -130,6 +130,13 @@ class httpServer {
           pathname: config.url,
         };
 
+        const headers = response.headers;
+        const req = {
+          query: response.query || {},
+          params: response.params || {},
+          body: config.data,
+        };
+
         let mte = {
           code: response.status,
           message: response.statusText,
@@ -147,12 +154,13 @@ class httpServer {
           };
         }
         console.end(
-          session.requestId,
           session.tid,
           logEndOutbond,
           path,
+          headers,
+          req,
           mte,
-          tdr
+          response.request?.method
         );
 
         return response;
@@ -176,13 +184,20 @@ class httpServer {
           message: message,
           rawMessage: error.Error,
         };
+        const headers = response.headers;
+        const req = {
+          query: error.query || {},
+          params: error.params || {},
+          body: config.data,
+        };
         console.end(
-          session.requestId,
           session.tid,
           logEndOutbond,
           path,
+          headers,
+          req,
           mte,
-          tdr
+          error.request?.method
         );
 
         return Promise.reject(error);

@@ -37,6 +37,8 @@ const resLogger = () => {
           data: bufString,
         };
 
+        const req = {};
+
         const mtdr = {
           headers: req.headers,
           request: {
@@ -53,7 +55,6 @@ const resLogger = () => {
 
         console.tdr(req.session.requestId, req.session.tid, pth, mtdr, sys);
         console.end(
-          req.session.requestId,
           req.session.tid,
           logEnd,
           pth,
