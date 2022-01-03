@@ -2,10 +2,10 @@ import axios from "axios";
 import {
   apiUrlServer,
   apiUrlServerLoko,
-  mockApiUrl,
-  mockPaths,
+  // mockApiUrl,
+  // mockPaths,
 } from "@constants/url";
-import { logStartOutbond, logEndOutbond, tdr } from "@constants/logger";
+import { logEndOutbond } from "@constants/logger";
 
 class httpServer {
   constructor(session) {
@@ -55,64 +55,50 @@ class httpServer {
 
   requestInterceptor() {
     const session = this.session;
-    const remHead = ["common", "get", "post", "head", "put", "patch", "delete"];
+    // const remHead = ["common", "get", "post", "head", "put", "patch", "delete"];
     this.instance.interceptors.request.use(
       function (config) {
-        const headers = config.headers;
-        remHead.forEach((header) => delete headers[header]);
+        // const headers = config.headers;
+        // remHead.forEach((header) => delete headers[header]);
 
-        const mockPathArr = mockPaths.split(",");
-        if (mockPathArr.includes(config.url)) {
-          config.baseURL = mockApiUrl;
-        }
+        // const mockPathArr = mockPaths.split(",");
+        // if (mockPathArr.includes(config.url)) {
+        //   config.baseURL = mockApiUrl;
+        // }
 
-        const mts = {
-          headers: headers,
-          query: config.query || {},
-          params: config.params || {},
-          body: config.data,
-        };
-        const path = {
-          domain: config.baseURL,
-          pathname: config.url,
-        };
+        // const mts = {
+        //   headers: headers,
+        //   query: config.query || {},
+        //   params: config.params || {},
+        //   body: config.data,
+        // };
+        // const path = {
+        //   domain: config.baseURL,
+        //   pathname: config.url,
+        // };
 
-        console.start(
-          session.requestId,
-          session.tid,
-          logStartOutbond,
-          path,
-          mts,
-          tdr
-        );
+        console.start(session.tid);
         return config;
       },
       function (error) {
-        const config = error.config;
-        const headers = config.headers;
-        const path = {
-          domain: config.baseURL,
-          pathname: config.url,
-        };
-        const remHead = [
-          "common",
-          "get",
-          "post",
-          "head",
-          "put",
-          "patch",
-          "delete",
-        ];
-        remHead.forEach((header) => delete headers[header]);
-        const mts = { error: true, headers: headers, errors: error };
-        console.start(
-          session.requestId,
-          session.tid,
-          logStartOutbond,
-          path,
-          mts,
-          tdr
-        );
+        // const config = error.config;
+        // const headers = config.headers;
+        // const path = {
+        //   domain: config.baseURL,
+        //   pathname: config.url,
+        // // };
+        // const remHead = [
+        //   "common",
+        //   "get",
+        //   "post",
+        //   "head",
+        //   "put",
+        //   "patch",
+        //   "delete",
+        // ];
+        // remHead.forEach((header) => delete headers[header]);
+        // const mts = { error: true, headers: headers, errors: error };
+        console.start(session.tid);
 
         return Promise.reject(error);
       }

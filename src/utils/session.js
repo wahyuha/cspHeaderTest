@@ -5,7 +5,7 @@ export const isValidSession = (req) => {
   const extsId = s.extSessionId !== undefined && s.extSessionId !== "";
   const tId = s.tid === req.cookies.tid;
 
-  console.process(s.requestId, s.tid, "isValidSession ", {
+  console.process("isValidSession", {
     url: `${req.headers["host"]}${getPathName(req.url)}`,
     tid: tId,
     extsId: extsId,
@@ -13,7 +13,7 @@ export const isValidSession = (req) => {
     transId: s.tid,
     cookieTal: req.cookies.tal,
     extSessionId: s.extSessionId,
-  });
+  }, req);
 
   return extsId && tId;
 };

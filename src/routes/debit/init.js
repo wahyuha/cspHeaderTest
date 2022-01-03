@@ -44,7 +44,7 @@ export async function get(req, res) {
       }
     }
   } catch (error) {
-    console.process(error);
+    console.process("errorHttp", error, req);
     res.writeHead(302, {
       location: `${basePath}/debit/error?code=992`,
     });

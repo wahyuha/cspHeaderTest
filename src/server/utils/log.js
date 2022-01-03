@@ -10,20 +10,8 @@ const mapMetadata = new Map();
 const intruder = "intruders";
 const appname = "sempu";
 
-export const ts = (rid, tid, tag, path, msg, logType = "") => {
+export const ts = (tid) => {
   let logTime = new Date();
-  let messageLog = {
-    requestId: rid,
-    transId: tid || intruder,
-    tag: tag,
-    logType,
-    domain: path.domain,
-    path: path.pathname,
-    logTime: logTime.toISOString(),
-    datas: msg,
-  };
-  console.log(messageLog);
-
   mapMetadata.set(tid, logTime);
 };
 
@@ -77,14 +65,26 @@ export const tdr = (rid, tid, path, msg, logType = "") => {
   loggertdr.info(JSON.stringify(messageLog));
 };
 
-export const tp = (rid, tid, pname, msg, logType = "") => {
+export const tp = (pname, msg, req) => {
+  const session = req.session || {};
+  const rid = session.requestId;
+  const tid = session.tid;
+
   let logTime = new Date();
+  const config = msg.config || {};
+  delete msg.config;
+  const url = config.url || "";
+  const headers = config.headers || {};
+  delete config.url;
+  delete config.headers;
   let messageLog = {
     requestId: rid,
     transId: tid,
     tag: logProcess,
-    logType,
     processName: pname,
+    config,
+    url,
+    headers,
     datas: msg,
     logTime: logTime.toISOString(),
   };

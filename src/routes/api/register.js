@@ -33,7 +33,7 @@ export async function post(req, res) {
     } = response;
     res.json({ data, status, message });
   } catch (error) {
-    console.process(error);
+    console.process("httpError", error, req);
     res.json({ error });
   }
 }
