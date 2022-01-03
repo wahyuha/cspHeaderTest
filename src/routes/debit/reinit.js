@@ -8,7 +8,7 @@ export async function get(req, res) {
   try {
     await httpServer(req.session).post("/1.0/bind/reagreement", { sessionID });
   } catch (error) {
-    console.process(error);
+    console.process("httpError", error, req);
   }
 
   await req.session.destroy();
