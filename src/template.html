@@ -28,6 +28,36 @@
 <body>
 	<!-- The application will be rendered inside this element,
 	     because `src/client.js` references it -->
-	<div id="sapper">%sapper.html%</div>
+	<noscript>
+		<div
+			style="
+				max-width: 420px;
+				margin: 0 auto;
+				background-color: #eff1f6;
+			"
+		>
+			<div class="wrapper">
+				<div
+					style="
+						padding: 16px;
+						background-color: #FFFFFF;
+						padding-top: 20%;
+						text-align: center;
+						min-height: 100vh;
+					"
+				>
+					<img
+						style="width: 100%; margin: 8px auto;"
+						alt="LinkAja"
+						src="images/general-error.png"
+					/>
+					<h2 style="font-size: 16px; line-height: 24px;" class="ff-b">
+						Browser yang Anda gunakan tidak didukung, gunakan browser lain atau update browser Anda
+					</h2>
+				</div>
+			</div>
+		</div>
+	</noscript>
+	<div id="sapper" style="display: none;">%sapper.html%</div>
 </body>
 </html>

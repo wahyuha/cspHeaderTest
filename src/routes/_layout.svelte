@@ -1,7 +1,12 @@
 <script>
+  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { stores } from "@sapper/app";
   import PageLoadingBar from "sapper-page-loading-bar/PageLoadingBar.svelte";
+
+  onMount(() => {
+    window.document.getElementById("sapper").style.display = "block";
+  });
 
   const { preloading } = stores();
   let color1 = "#FF7475";
