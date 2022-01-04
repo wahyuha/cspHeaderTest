@@ -10,7 +10,7 @@ const mapMetadata = new Map();
 const intruder = "intruders";
 const appname = "sempu";
 
-export const ts = (rid, tid, tag, path, msg, logType = "") => {
+export const ts = (rid, tid) => {
   let logTime = new Date();
   // let messageLog = {
   //   requestId: rid,
