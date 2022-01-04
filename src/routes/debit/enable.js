@@ -25,7 +25,7 @@ export async function post(req, res) {
     res.redirect(`${basePath}/debit/error?code=${status}`);
     return false;
   } catch (error) {
-    console.process(error);
+    console.process("httpError", error, req);
     res.redirect(`${basePath}/debit/error?code=992`);
     return false;
   }

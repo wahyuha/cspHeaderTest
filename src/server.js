@@ -13,8 +13,8 @@ import { sessionConfig } from "@middlewares/store";
 import initSession from "@middlewares/sessionConfig";
 import reqDecrypt from "@middlewares/reqDecrypt";
 import resEncrypt from "@middlewares/resEncrypt";
-import reqLogger from "@middlewares/reqLogger";
-import resLogger from "@middlewares/resLogger";
+// import reqLogger from "@middlewares/reqLogger";
+// import resLogger from "@middlewares/resLogger";
 import { cspConfig, corsConfig } from "@configs/header";
 import {
   initDebugLog,
@@ -77,9 +77,9 @@ app.use(
   compression({ threshold: 0 }),
   initSession(),
   reqDecrypt(),
-  reqLogger(),
+  // reqLogger(),
   resEncrypt(),
-  resLogger(),
+  // resLogger(),
   sapper.middleware({
     session: (req) => {
       return {

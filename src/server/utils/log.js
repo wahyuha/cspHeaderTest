@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import loggertdr from "@server/utils/loggertdr";
 import logger from "@server/utils/logger";
 import { logProcess, logStartProcess, logEndProcess } from "@constants/logger";
@@ -11,47 +12,44 @@ const appname = "sempu";
 
 export const ts = (rid, tid, tag, path, msg, logType = "") => {
   let logTime = new Date();
-  let messageLog = {
-    requestId: rid,
-    transId: tid || intruder,
-    tag: tag,
-    logType,
-    domain: path.domain,
-    path: path.pathname,
-    logTime: logTime.toISOString(),
-    datas: msg,
-  };
-
-  if (logType === "SYS") {
-    logger.info(JSON.stringify(messageLog));
-  } else {
-    loggertdr.info(JSON.stringify(messageLog));
-  }
+  // let messageLog = {
+  //   requestId: rid,
+  //   transId: tid || intruder,
+  //   tag: tag,
+  //   logType,
+  //   domain: path.domain,
+  //   path: path.pathname,
+  //   logTime: logTime.toISOString(),
+  //   datas: msg,
+  // };
+  // console.log(messageLog);
 
   mapMetadata.set(tid, logTime);
 };
 
-export const te = (rid, tid, tag, path, msg, logType = "") => {
+export const te = (tid, tag, path, headers, req, resp, method) => {
   let logStartTime = mapMetadata.get(tid);
   let logTime = new Date();
   let diff = Math.abs(logTime - logStartTime); // difference in milliseconds
+  console.log(logTime, logStartTime);
+  const requestId = uuidv4();
   let messageLog = {
-    requestId: rid,
+    requestId,
     transId: tid || intruder,
-    tag: tag,
-    logType,
+    // tag: tag,
+    headers,
+    logType: "TDR",
     domain: path.domain,
     path: path.pathname,
     logTime: logTime.toISOString(),
     responseTime: diff,
-    datas: msg,
+    req,
+    resp,
+    method,
+    error: "",
   };
 
-  if (logType === "SYS") {
-    logger.info(JSON.stringify(messageLog));
-  } else {
-    loggertdr.info(JSON.stringify(messageLog));
-  }
+  loggertdr.info(JSON.stringify(messageLog));
 
   mapMetadata.delete(tid);
 };
@@ -76,30 +74,34 @@ export const tdr = (rid, tid, path, msg, logType = "") => {
     resp: msg.response,
   };
 
-  if (logType === "SYS") {
-    logger.info(JSON.stringify(messageLog));
-  } else {
-    loggertdr.info(JSON.stringify(messageLog));
-  }
+  loggertdr.info(JSON.stringify(messageLog));
 };
 
-export const tp = (rid, tid, pname, msg, logType = "") => {
+export const tp = (pname, msg, req) => {
+  const session = req.session || {};
+  const rid = session.requestId;
+  const tid = session.tid;
+
   let logTime = new Date();
+  const config = msg?.config || {};
+  delete msg.config;
+  const url = config.url || "";
+  const headers = config.headers || {};
+  delete config.url;
+  delete config.headers;
   let messageLog = {
     requestId: rid,
     transId: tid,
     tag: logProcess,
-    logType,
     processName: pname,
+    config,
+    url,
+    headers,
     datas: msg,
     logTime: logTime.toISOString(),
   };
 
-  if (logType === "SYS") {
-    logger.info(JSON.stringify(messageLog));
-  } else {
-    loggertdr.info(JSON.stringify(messageLog));
-  }
+  logger.info(JSON.stringify(messageLog));
 };
 
 export const tps = (rid, tid, pname, msg) => {

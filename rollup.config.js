@@ -18,12 +18,6 @@ const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 const projectRootDir = path.resolve(__dirname);
 
-// const commitHash = require("child_process")
-//   .execSync("git rev-parse --short HEAD")
-//   .toString()
-//   .trim();
-const commitHash = "af2f24f";
-
 const onwarn = (warning, onwarn) =>
   (warning.code === "MISSING_EXPORT" && /'preload'/.test(warning.message)) ||
   (warning.code === "CIRCULAR_DEPENDENCY" &&
