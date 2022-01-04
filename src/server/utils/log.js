@@ -10,20 +10,8 @@ const mapMetadata = new Map();
 const intruder = "intruders";
 const appname = "sempu";
 
-export const ts = (rid, tid) => {
+export const ts = (tid) => {
   let logTime = new Date();
-  // let messageLog = {
-  //   requestId: rid,
-  //   transId: tid || intruder,
-  //   tag: tag,
-  //   logType,
-  //   domain: path.domain,
-  //   path: path.pathname,
-  //   logTime: logTime.toISOString(),
-  //   datas: msg,
-  // };
-  // console.log(messageLog);
-
   mapMetadata.set(tid, logTime);
 };
 
@@ -83,7 +71,7 @@ export const tp = (pname, msg, req) => {
   const tid = session.tid;
 
   let logTime = new Date();
-  const config = msg?.config || {};
+  const config = msg.config || {};
   delete msg.config;
   const url = config.url || "";
   const headers = config.headers || {};
