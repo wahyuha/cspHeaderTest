@@ -10,9 +10,9 @@ import session from "express-session";
 import compression from "compression";
 import * as sapper from "@sapper/server";
 import { sessionConfig } from "@middlewares/store";
-import initSession from "@middlewares/sessionConfig";
-import reqDecrypt from "@middlewares/reqDecrypt";
-import resEncrypt from "@middlewares/resEncrypt";
+// import initSession from "@middlewares/sessionConfig";
+// import reqDecrypt from "@middlewares/reqDecrypt";
+// import resEncrypt from "@middlewares/resEncrypt";
 // import reqLogger from "@middlewares/reqLogger";
 // import resLogger from "@middlewares/resLogger";
 import { cspConfig, corsConfig } from "@configs/header";
@@ -75,23 +75,24 @@ app.use(
   urlencoded({ limit: "2mb", extended: true }),
   session(sessionConfig),
   compression({ threshold: 0 }),
-  initSession(),
-  reqDecrypt(),
+  sapper.middleware()
+  // initSession(),
+  // reqDecrypt(),
   // reqLogger(),
-  resEncrypt(),
+  // resEncrypt(),
   // resLogger(),
-  sapper.middleware({
-    session: (req) => {
-      return {
-        sessionId: req.session.sessionId,
-        extSessionId: req.session.extSessionId,
-        requestId: req.session.requestId,
-        aesKey: req.session.aesKey,
-        aesDel: req.session.aesDel,
-        rsaDel: req.session.rsaDel,
-      };
-    },
-  })
+  // sapper.middleware({
+  //   session: (req) => {
+  //     return {
+  //       sessionId: req.session.sessionId,
+  //       extSessionId: req.session.extSessionId,
+  //       requestId: req.session.requestId,
+  //       aesKey: req.session.aesKey,
+  //       aesDel: req.session.aesDel,
+  //       rsaDel: req.session.rsaDel,
+  //     };
+  //   },
+  // })
 );
 
 app.listen(PORT, (err) => {

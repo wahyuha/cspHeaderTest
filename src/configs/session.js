@@ -5,13 +5,6 @@ export const sessionOptions = {
   ttl: parseInt(process.env.SESSION_TTL || 1800),
 };
 
-export const sessionRedis = {
-  host: process.env.SESSION_REDIS_HOST,
-  port: process.env.SESSION_REDIS_PORT,
-  password: process.env.SESSION_REDIS_PASSWORD,
-  prefix: process.env.SESSION_REDIS_PREFIX,
-};
-
 export const sessionFile = {
   path: process.env.SESSION_FILE_PATH || ".sessions",
 };

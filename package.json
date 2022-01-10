@@ -1,35 +1,32 @@
 {
-  "name": "@linkaja/wco",
-  "description": "Webview for Direct Debit",
+  "name": "@sandbox/csp",
+  "description": "Project testing for CSP",
   "private": true,
-  "version": "2.0.0",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "cp .env.dev .env && npm run replace-env && sapper dev -p 5000",
+    "dev": "sapper dev -p 5000",
     "build": "sapper build -p 3000 --legacy && cp package.json __sapper__/build && cp -r static __sapper__/build && npm run make-package",
     "start": "node __sapper__/build",
     "replace-env": "bash bash/replace-env.sh .env",
-    "build-development": "npm run replace-env && npm run build && npm run install-server && npm run sm-upload && npm run sm-clean",
+    "build-development": "npm run replace-env && npm run build && npm run install-server",
     "build-staging": "pm run replace-env && npm run build && npm run install-server",
-    "build-production": "cp .env.production.j2 .env && npm run replace-env && npm run build && npm run install-server && npm run sm-upload && npm run sm-clean",
+    "build-production": "cp .env.production.j2 .env && npm run replace-env && npm run build && npm run install-server",
     "build-local-development": "cp .env.development.j2 .env && npm run replace-env && npm run build",
     "build-local-staging": "cp .env.staging.j2 .env && npm run replace-env && npm run build && npm run install-server",
-    "build-local-production": "cp .env.production.j2 .env && npm run replace-env && npm run build && npm run install-server && npm run sm-upload && npm run sm-clean",
+    "build-local-production": "cp .env.production.j2 .env && npm run replace-env && npm run build && npm run install-server",
     "development": "npm run start",
     "staging": "npm run start",
     "production": "npm run start",
     "install-server": "npm --prefix __sapper__/build install --only=production --no-optional __sapper__/build",
     "make-package": "mkdir -p __sapper__/build/__sapper__/build && cp package.json __sapper__/build/__sapper__/build",
     "lint": "npx eslint --fix \"{,src/**/}*.{js,svelte,json}\"",
-    "format": "npx prettier --write \"{,src/**/}{*,\\[slug\\]}.{js,json}\"",
-    "sm-upload": "bash bash/upload-sourcemap.sh",
-    "sm-clean": "rm __sapper__/build/client/*.map"
+    "format": "npx prettier --write \"{,src/**/}{*,\\[slug\\]}.{js,json}\""
   },
   "dependencies": {
     "@sentry/cli": "^1.68.0",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.1",
-    "connect-redis": "^5.1.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "crypto-es": "1.2.5",
@@ -44,7 +41,6 @@
     "moment-timezone": "^0.5.33",
     "nocache": "^2.1.0",
     "node-rsa": "^1.1.1",
-    "redis": "^3.0.2",
     "sapper-page-loading-bar": "^1.0.0",
     "serve-static": "^1.14.1",
     "session-file-store": "^1.5.0",
@@ -87,13 +83,14 @@
     "prettier-plugin-svelte": "^2.1.6",
     "revalidate": "^1.2.0",
     "rollup": "^2.3.4",
-    "rollup-plugin-aliasexternal": "^1.0.0",
     "rollup-plugin-svelte": "^6.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "sapper": "^0.28.0",
-    "seruni": "git+https://ari:taUzrGja3yetuwSydQ8Z@gitlab.linkaja.com/fe/seruni.git#seruni-v1.0.2",
     "svelte": "^3.17.3"
   },
+  "browserslist": [
+    "last 2 versions"
+  ],
   "optionalDependencies": {
     "eruda": "^2.4.1"
   },

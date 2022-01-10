@@ -7,7 +7,7 @@ import url from "@rollup/plugin-url";
 import svelte from "rollup-plugin-svelte";
 import babel from "@rollup/plugin-babel";
 import json from "@rollup/plugin-json";
-import { aliasExternal } from "rollup-plugin-aliasexternal";
+// import { aliasExternal } from "rollup-plugin-aliasexternal";
 import { terser } from "rollup-plugin-terser";
 import loadDotEnv from "./src/configs/envar";
 import config from "sapper/config/rollup.js";
@@ -16,7 +16,6 @@ import pkg from "./package.json";
 const mode = process.env.NODE_ENV;
 const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
-const projectRootDir = path.resolve(__dirname);
 
 const onwarn = (warning, onwarn) =>
   (warning.code === "MISSING_EXPORT" && /'preload'/.test(warning.message)) ||
@@ -57,43 +56,43 @@ export default {
         dedupe: ["svelte"],
       }),
       commonjs(),
-      aliasExternal("seruni", [
-        {
-          find: "@components",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/components"
-          ),
-        },
-        {
-          find: "@constants",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/constants"
-          ),
-        },
-        {
-          find: "@stores",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/stores"
-          ),
-        },
-        {
-          find: "@utils",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/utils"
-          ),
-        },
-        {
-          find: "@helpers",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/helpers"
-          ),
-        },
-      ]),
+      // aliasExternal("seruni", [
+      //   {
+      //     find: "@components",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/components"
+      //     ),
+      //   },
+      //   {
+      //     find: "@constants",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/constants"
+      //     ),
+      //   },
+      //   {
+      //     find: "@stores",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/stores"
+      //     ),
+      //   },
+      //   {
+      //     find: "@utils",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/utils"
+      //     ),
+      //   },
+      //   {
+      //     find: "@helpers",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/helpers"
+      //     ),
+      //   },
+      // ]),
       alias({
         resolve: [".jsx", ".js", ".svelte", ".json"],
         entries: {
@@ -120,7 +119,7 @@ export default {
             [
               "@babel/preset-env",
               {
-                targets: "> 0.25%, not dead",
+                targets: "last 2 versions",
               },
             ],
           ],
@@ -152,43 +151,43 @@ export default {
       sourcemap: true,
     },
     plugins: [
-      aliasExternal("seruni", [
-        {
-          find: "@components",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/components"
-          ),
-        },
-        {
-          find: "@constants",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/constants"
-          ),
-        },
-        {
-          find: "@stores",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/stores"
-          ),
-        },
-        {
-          find: "@utils",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/utils"
-          ),
-        },
-        {
-          find: "@helpers",
-          replacement: path.resolve(
-            projectRootDir,
-            "node_modules/seruni/src/helpers"
-          ),
-        },
-      ]),
+      // aliasExternal("seruni", [
+      //   {
+      //     find: "@components",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/components"
+      //     ),
+      //   },
+      //   {
+      //     find: "@constants",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/constants"
+      //     ),
+      //   },
+      //   {
+      //     find: "@stores",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/stores"
+      //     ),
+      //   },
+      //   {
+      //     find: "@utils",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/utils"
+      //     ),
+      //   },
+      //   {
+      //     find: "@helpers",
+      //     replacement: path.resolve(
+      //       projectRootDir,
+      //       "node_modules/seruni/src/helpers"
+      //     ),
+      //   },
+      // ]),
       alias({
         resolve: [".jsx", ".js", ".svelte", ".json"],
         entries: {
