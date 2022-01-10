@@ -23,7 +23,6 @@
     "format": "npx prettier --write \"{,src/**/}{*,\\[slug\\]}.{js,json}\""
   },
   "dependencies": {
-    "@sentry/cli": "^1.68.0",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.1",
@@ -64,8 +63,6 @@
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-replace": "^2.2.0",
     "@rollup/plugin-url": "^5.0.0",
-    "@sentry/browser": "^6.13.2",
-    "@sentry/tracing": "^6.13.2",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
     "browser-image-compression": "^1.0.14",

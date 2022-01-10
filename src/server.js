@@ -6,10 +6,10 @@ import helmet from "helmet";
 import cors from "cors";
 import { json, urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
-import session from "express-session";
+// import session from "express-session";
 import compression from "compression";
 import * as sapper from "@sapper/server";
-import { sessionConfig } from "@middlewares/store";
+// import { sessionConfig } from "@middlewares/store";
 // import initSession from "@middlewares/sessionConfig";
 // import reqDecrypt from "@middlewares/reqDecrypt";
 // import resEncrypt from "@middlewares/resEncrypt";
@@ -72,7 +72,7 @@ app.use(
   cookieParser(),
   json({ limit: "2mb" }),
   urlencoded({ limit: "2mb", extended: true }),
-  session(sessionConfig),
+  // session(sessionConfig),
   compression({ threshold: 0 }),
   sapper.middleware()
   // initSession(),
