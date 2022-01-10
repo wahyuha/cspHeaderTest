@@ -15,10 +15,7 @@ import * as sapper from "@sapper/server";
 // import resEncrypt from "@middlewares/resEncrypt";
 // import reqLogger from "@middlewares/reqLogger";
 // import resLogger from "@middlewares/resLogger";
-import {
-  // cspConfig,
-  corsConfig,
-} from "@configs/header";
+import { cspConfig, corsConfig } from "@configs/header";
 
 const enableCsp = process.env.CSP_ENABLE === "true";
 
