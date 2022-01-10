@@ -2,7 +2,7 @@ import serveStatic from "serve-static";
 import path from "path";
 import nocache from "nocache";
 import express from "express";
-import helmet from "helmet";
+// import helmet from "helmet";
 // import cors from "cors";
 import { json, urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
@@ -15,12 +15,12 @@ import * as sapper from "@sapper/server";
 // import resEncrypt from "@middlewares/resEncrypt";
 // import reqLogger from "@middlewares/reqLogger";
 // import resLogger from "@middlewares/resLogger";
-import {
-  cspConfig,
-  // corsConfig
-} from "@configs/header";
+// import {
+//   cspConfig,
+//   corsConfig
+// } from "@configs/header";
 
-const enableCsp = process.env.CSP_ENABLE === "true";
+// const enableCsp = process.env.CSP_ENABLE === "true";
 
 const app = (module.exports = express());
 
@@ -32,8 +32,17 @@ const static_path = dev
   : "../../../__sapper__/build/static";
 
 // security header
+const ContentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.vercel.app;
+  style-src 'self' 'unsafe-inline' *.googleapis.com;
+  img-src * blob: data:;
+  media-src 'none';
+  connect-src *;
+  font-src 'self' data: https:;
+`;
 // app.use(cors(corsConfig));
-enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
+// enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
 // app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
 // app.use(helmet.noSniff());
 // app.use(helmet.hidePoweredBy());
@@ -48,7 +57,11 @@ enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
 //   })
 // );
 app.use((req, res, next) => {
-  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader(
+    "Content-Security-Policy",
+    ContentSecurityPolicy.replace(/\n/g, "")
+  );
+  // res.setHeader("X-XSS-Protection", "1; mode=block");
   next();
 });
 
