@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 // import session from "express-session";
 import compression from "compression";
 import * as sapper from "@sapper/server";
+import { cspConfig } from "@configs/header";
 // import { sessionConfig } from "@middlewares/store";
 // import initSession from "@middlewares/sessionConfig";
 // import reqDecrypt from "@middlewares/reqDecrypt";
@@ -43,22 +44,7 @@ const static_path = dev
 // `;
 
 // app.use(cors(corsConfig));
-enableCsp &&
-  app.use(
-    helmet.contentSecurityPolicy({
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: [
-          "'self'",
-          "'unsafe-eval'",
-          "'unsafe-inline'",
-          "*.vercel.app",
-        ],
-        objectSrc: ["'none'"],
-        imgSrc: ["'self'", "data:", "blob:"],
-      },
-    })
-  );
+enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
 // app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
 // app.use(helmet.noSniff());
 // app.use(helmet.hidePoweredBy());
