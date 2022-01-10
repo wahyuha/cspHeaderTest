@@ -20,7 +20,7 @@ import {
   corsConfig,
 } from "@configs/header";
 
-// const enableCsp = process.env.CSP_ENABLE === "true";
+const enableCsp = process.env.CSP_ENABLE === "true";
 
 const app = (module.exports = express());
 
