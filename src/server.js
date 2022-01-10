@@ -2,7 +2,7 @@ import serveStatic from "serve-static";
 import path from "path";
 import nocache from "nocache";
 import express from "express";
-// import helmet from "helmet";
+import helmet from "helmet";
 import cors from "cors";
 import { json, urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
@@ -33,7 +33,7 @@ const static_path = dev
 
 // security header
 app.use(cors(corsConfig));
-// enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
+enableCsp && app.use(helmet.contentSecurityPolicy(cspConfig));
 // app.use(helmet.referrerPolicy({ policy: "strict-origin-when-cross-origin" }));
 // app.use(helmet.noSniff());
 // app.use(helmet.hidePoweredBy());
