@@ -18,16 +18,15 @@ import { sessionConfig } from "@middlewares/store";
 import { cspConfig, corsConfig } from "@configs/header";
 import {
   initDebugLog,
-  enableDebugLog,
-  disableDebugLog,
+  // enableDebugLog,
+  // disableDebugLog,
 } from "@server/utils/console";
 
 initDebugLog();
-process.env.DEBUG_MODE_FILE === "true" ? enableDebugLog() : disableDebugLog();
 
 const enableCsp = process.env.CSP_ENABLE === "true";
 
-const app = express();
+const app = (module.exports = express());
 
 const basePath = process.env.BASE_PATH || "";
 const { PORT, NODE_ENV } = process.env;
@@ -98,3 +97,5 @@ app.use(
 app.listen(PORT, (err) => {
   if (err) console.log("error", err);
 });
+
+// export default app;
