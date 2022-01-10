@@ -55,7 +55,6 @@ enableCsp &&
           "*.vercel.app",
         ],
         objectSrc: ["'none'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:", "blob:"],
       },
     })
