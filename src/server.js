@@ -16,13 +16,6 @@ import * as sapper from "@sapper/server";
 // import reqLogger from "@middlewares/reqLogger";
 // import resLogger from "@middlewares/resLogger";
 import { cspConfig, corsConfig } from "@configs/header";
-import {
-  initDebugLog,
-  // enableDebugLog,
-  // disableDebugLog,
-} from "@server/utils/console";
-
-initDebugLog();
 
 const enableCsp = process.env.CSP_ENABLE === "true";
 
