@@ -32,6 +32,7 @@ export const cspConfig = {
     "connect-src": cspEnv.connectSrc,
     "script-src": cspEnv.scriptSrc,
     "img-src": cspEnv.imgSrc,
+    "style-src": cspEnv.styleSrc,
     "font-src": cspEnv.fontSrc,
     "object-src": cspEnv.objectSrc,
   },
