@@ -10,16 +10,6 @@ import cookieParser from "cookie-parser";
 import compression from "compression";
 import * as sapper from "@sapper/server";
 import { cspConfig } from "@configs/header";
-// import { sessionConfig } from "@middlewares/store";
-// import initSession from "@middlewares/sessionConfig";
-// import reqDecrypt from "@middlewares/reqDecrypt";
-// import resEncrypt from "@middlewares/resEncrypt";
-// import reqLogger from "@middlewares/reqLogger";
-// import resLogger from "@middlewares/resLogger";
-// import {
-//   cspConfig,
-//   corsConfig
-// } from "@configs/header";
 
 const enableCsp = process.env.CSP_ENABLE === "true";
 
@@ -76,7 +66,19 @@ app.use(
     maxAge: "7d",
   })
 );
-// app.use(nocache());
+
+app.use(function (req, res, next) {
+  const userAgent = req.get("User-Agent");
+  const chrome = userAgent.match(/Chrome\/([0-9.]+)/);
+  // const chromeVersion = chrome && chrome[1];
+  const versionMajor = Number(chrome[1].substr(0, 2));
+  if (versionMajor <= 53) {
+    res.send("Silahakan ganti browser");
+    res.end();
+    return;
+  }
+  next();
+});
 
 app.use(
   basePath,
