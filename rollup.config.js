@@ -55,44 +55,6 @@ export default {
         browser: true,
         dedupe: ["svelte"],
       }),
-      commonjs(),
-      // aliasExternal("seruni", [
-      //   {
-      //     find: "@components",
-      //     replacement: path.resolve(
-      //       projectRootDir,
-      //       "node_modules/seruni/src/components"
-      //     ),
-      //   },
-      //   {
-      //     find: "@constants",
-      //     replacement: path.resolve(
-      //       projectRootDir,
-      //       "node_modules/seruni/src/constants"
-      //     ),
-      //   },
-      //   {
-      //     find: "@stores",
-      //     replacement: path.resolve(
-      //       projectRootDir,
-      //       "node_modules/seruni/src/stores"
-      //     ),
-      //   },
-      //   {
-      //     find: "@utils",
-      //     replacement: path.resolve(
-      //       projectRootDir,
-      //       "node_modules/seruni/src/utils"
-      //     ),
-      //   },
-      //   {
-      //     find: "@helpers",
-      //     replacement: path.resolve(
-      //       projectRootDir,
-      //       "node_modules/seruni/src/helpers"
-      //     ),
-      //   },
-      // ]),
       alias({
         resolve: [".jsx", ".js", ".svelte", ".json"],
         entries: {
@@ -109,21 +71,30 @@ export default {
           "@utils": __dirname + "/src/utils",
         },
       }),
-
+      commonjs(),
       legacy &&
         babel({
           extensions: [".js", ".mjs", ".html", ".svelte"],
           babelHelpers: "runtime",
-          exclude: ["node_modules/@babel/**"],
+          exclude: [
+            "node_modules/@babel/**",
+            // 'node_modules/core-js/**',
+            // 'node_modules/svelte-**',
+            // 'node_modules/svelte/**',
+            // 'node_modules/svelte-scrollto/**',
+          ],
           presets: [
             [
               "@babel/preset-env",
               {
-                targets: "last 2 versions",
+                targets: {
+                  chrome: "40",
+                },
               },
             ],
           ],
           plugins: [
+            // '@babel/plugin-proposal-optional-chaining',
             "@babel/plugin-syntax-dynamic-import",
             [
               "@babel/plugin-transform-runtime",
@@ -133,6 +104,29 @@ export default {
             ],
           ],
         }),
+      // legacy &&
+      //   babel({
+      //     extensions: [".js", ".mjs", ".html", ".svelte"],
+      //     babelHelpers: "runtime",
+      //     exclude: ["node_modules/@babel/**"],
+      //     presets: [
+      //       [
+      //         "@babel/preset-env",
+      //         {
+      //           targets: "last 2 versions",
+      //         },
+      //       ],
+      //     ],
+      //     plugins: [
+      //       "@babel/plugin-syntax-dynamic-import",
+      //       [
+      //         "@babel/plugin-transform-runtime",
+      //         {
+      //           useESModules: true,
+      //         },
+      //       ],
+      //     ],
+      //   }),
 
       !dev &&
         terser({
